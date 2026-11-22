@@ -43,7 +43,7 @@ function eventText(row, mode = "replay") {
 
 /** A field stripped from a share card. */
 const strippedText = (field, whose, reason) =>
-  `Removed ${whose === "your" ? "your" : "B's"} ${fieldWords(field)} before sharing the card${demo(reason)}`;
+  `Removed ${whose === "your" ? "your" : "the other side's"} ${fieldWords(field)} before sharing the card${demo(reason)}`;
 
 /** fit@k evaluations → "Run 2: 5 of 5 now match (was 4 of 5)". */
 function runLabelText(runCount, evaluation, comparedTo) {

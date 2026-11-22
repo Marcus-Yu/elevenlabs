@@ -22,7 +22,7 @@ const DEMO_HIRE_CRITERIA = {
 };
 
 const { eventText, strippedText, runLabelText } = require("./humanize");
-const { briefFromNeed, newSend, runSend } = require("../../shared/contract");
+const { briefFromNeed, newSend, runSend, displayName, namedProposal } = require("../../shared/contract");
 
 const ALIASES = ["A", "B", "C"];
 const SOURCE_LABELS = { fiber: "People search (Fiber)", ploid: "People search (Ploid)", web: "Public web pages", synthetic: "Synthetic profiles" };
@@ -74,7 +74,7 @@ function mapResearch(ranked, runs) {
 /** Replaces the candidate's name and employer in text with the alias, so it can't identify them. */
 function anonymise(text, candidate, alias) {
   let out = text;
-  if (candidate?.fullName) out = out.split(candidate.fullName).join(`Candidate ${alias}`);
+  if (candidate?.fullName) out = out.split(candidate.fullName).join(displayName(alias));
   if (candidate?.currentCompany) out = out.split(candidate.currentCompany).join("a company");
   return out;
 }
@@ -104,6 +104,7 @@ function mapShortlist(ranked, runs, criteria) {
     const years = c.yearsExperience !== undefined ? `${Math.round(c.yearsExperience)} yrs` : null;
     return {
       alias,
+      displayName: displayName(alias), // fictional pseudonym, shown with an "alias" tag
       headline: [c.title || "Candidate", years].filter(Boolean).join(" · "),
       fit: fitOf(entry, criteria),
       sourceCount: (entry.citedSources ?? c.sources ?? []).length,
@@ -133,7 +134,7 @@ const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 function mapMatch(md, revealRows) {
   if (!md) return { events: [], introStatus: "none" };
   const events = [];
-  for (const [card, whose] of [[md.cardA, "your"], [md.cardB, "B's"]]) {
+  for (const [card, whose] of [[md.cardA, "your"], [md.cardB, "other"]]) {
     for (const field of card?.stripped ?? []) {
       events.push({ ruleId: "card_fields", kind: "stripped", text: strippedText(field, whose, card.logReason) });
     }
@@ -379,7 +380,7 @@ function createProvider(env = process.env, deps = {}) {
         // The server drops the rejected candidate from later rankings; mirror that until the rerun.
         s.ranked = s.ranked.filter((r) => r.matchId !== entry.matchId);
         const snap = await read();
-        return proposedChange ? { ...snap, proposedChange: { explanation: anonymise(proposedChange.explanation, entry.candidate, action.alias), changes: proposedChange.changes } } : snap;
+        return proposedChange ? { ...snap, proposedChange: { explanation: namedProposal(anonymise(proposedChange.explanation, entry.candidate, action.alias), action.alias), changes: proposedChange.changes } } : snap;
       }
       case "confirm_change":
         if (!s.proposedChange) throw new AtlasProviderError("No criteria change is waiting for confirmation; reject a candidate with a reason first");

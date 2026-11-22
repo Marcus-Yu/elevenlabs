@@ -23,3 +23,13 @@ test("mock walks statuses forward and stays labelled synthetic", async () => {
   s = await p.act({ type: "open_intro" });
   assert.equal(s.gateway.introStatus, "approved");
 });
+
+test("candidates carry fictional display names; the proposal names the person", async () => {
+  const p = createProvider({});
+  await p.act({ type: "set_need", text: "I need to hire an engineer" });
+  const s = await p.act({ type: "approve_brief" });
+  assert.deepEqual(s.shortlist.candidates.map((c) => [c.alias, c.displayName]), [["A", "Maya Chen"], ["B", "Jordan Ellis"], ["C", "Priya Raman"]]);
+  const r = await p.act({ type: "reject_candidate", alias: "B", reason: "too junior" });
+  assert.equal(r.proposedChange.explanation, "Jordan Ellis looks too junior. Raise the minimum to 5 years?");
+  assert.ok(!JSON.stringify(s).includes("Sam Rivera"));
+});
