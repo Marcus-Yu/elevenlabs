@@ -9,6 +9,24 @@ export function candidateLabel(index: number): string {
   return `Candidate ${letters}`;
 }
 
+// Fictional display names for real public profiles (AGENTS.md rule 5: shown with an "alias" tag).
+// A, B, C are fixed by the demo script; "Sam Rivera" is reserved for the synthetic /match user.
+const ALIAS_NAMES = ['Maya Chen', 'Jordan Ellis', 'Priya Raman', 'Theo Marsh', 'Lena Okafor', 'Ravi Kapoor',
+  'Nora Lindqvist', 'Diego Salas', 'Hana Mori', 'Owen Brooks', 'Iris Novak', 'Kofi Mensah'];
+
+/** Fictional display name for the internal alias at this position; falls back to the letter alias. */
+export function candidateDisplayName(index: number): string {
+  return ALIAS_NAMES[index] ?? candidateLabel(index);
+}
+
+/** "Jordan Ellis looks too junior. Raise the minimum to 4 years?" for a proposed criteria change. */
+export function proposalSentence(name: string, change: { field: string; to: unknown } | undefined): string {
+  if (change?.field === 'minYearsExperience') return `${name} looks too junior. Raise the minimum to ${String(change.to)} years?`;
+  if (change?.field === 'maxYearsExperience') return `${name} looks too senior. Cap experience at ${String(change.to)} years?`;
+  if (change?.field === 'mustHaveSkills' && Array.isArray(change.to)) return `${name} is missing ${String(change.to.at(-1))}. Make it a must-have?`;
+  return `You rejected ${name}. Apply this change?`;
+}
+
 type CandidateIdentity = Pick<HireShortlistEntry['candidate'], 'fullName' | 'currentCompany' | 'linkedinUrl'>;
 
 export function hideCandidateIdentity(text: string, entries: { candidate: CandidateIdentity }[]): string {
