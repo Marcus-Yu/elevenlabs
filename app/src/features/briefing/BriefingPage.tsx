@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 // "/" lands on the demo script so the click path is obvious.
 const STEPS: { to: string; label: string; detail: string }[] = [
-  { to: "/thread", label: "1. Hiring goal", detail: "Load the robotics demo criteria, show calibration profiles, react, apply." },
+  { to: "/thread", label: "1. State a need", detail: "Say who you need to meet. For this example, load \"hire a robotics engineer\", show calibration profiles, react, apply." },
   { to: "/thread", label: "2. Sourced shortlist", detail: "Create goal, then Research shortlist (replayed Fiber results with sources)." },
   { to: "/thread", label: "3. Reject “too junior”", detail: "Type the reason on a candidate and press Reject." },
   { to: "/thread", label: "4. Confirm and rerank", detail: "Confirm the proposed preference; the better rerun shows before/after fit." },
@@ -15,8 +15,8 @@ export function BriefingPage() {
   return (
     <main className="space-y-6">
       <header>
-        <h1 className="text-2xl font-semibold">Atlas demo</h1>
-        <p>A hiring manager's goal, through a sourced shortlist, to a double opt-in introduction that is never sent.</p>
+        <h1 className="text-2xl font-semibold">Meet the right people</h1>
+        <p>Tell Atlas who you need: customers, investors, manufacturers, partners or a hire. This demo walks through one example: hiring a robotics engineer.</p>
       </header>
       <ol className="space-y-3">
         {STEPS.map((s) => (

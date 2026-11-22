@@ -37,7 +37,7 @@ export function ThreadPage() {
     }
   }, [location, navigate]);
   return <main className="space-y-8">
-    <header><h1 className="text-2xl font-semibold">Hire a robotics engineer</h1><p>Describe the hire, calibrate, find sourced candidates, and tell Atlas what to change.</p></header>
+    <header><h1 className="text-2xl font-semibold">New goal</h1><p>Tell Atlas who you need to meet: customers, investors, manufacturers, partners, collaborators or a hire.</p></header>
     <ModelProcessingConsent description="Allow Atlas to send assistant messages to Anthropic. This setting also allows ElevenLabs to process audio and briefing text when you use Voice." />
     <AssistantThread canSend={consent.data?.granted === true && !consent.error} onReviewHiringGoal={need => setReviewedDraft({ need })} />
     <HiringWorkflow initialDraft={voiceDraft} reviewedDraft={reviewedDraft} shortlistReplay={settings?.shortlistReplay} transport={hiringTransport} />

@@ -101,7 +101,7 @@ export function AssistantThread({ canSend, onReviewHiringGoal }: { canSend: bool
   const runtime = useChatRuntime({ transport, onError: (error) => setError(chatErrorMessage(error)) });
   return <AssistantRuntimeProvider runtime={runtime}><section aria-label="Assistant conversation" className="space-y-3">
     <h2 className="text-xl font-semibold">Assistant</h2>
-    <p>Chat uses the configured model. Hiring research and synthetic calibration below remain available separately.</p>
+    <p>Chat uses the configured model. Goal research and synthetic calibration below remain available separately.</p>
     <ThreadPrimitive.Root><ThreadPrimitive.Viewport className="max-h-96 overflow-y-auto space-y-3">
       <ThreadPrimitive.Messages>{({ message }) => <MessagePrimitive.Root className="rounded border p-2">
         <strong>{message.role === 'user' ? 'You' : 'Atlas'}</strong>

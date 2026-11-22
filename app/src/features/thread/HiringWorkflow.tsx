@@ -174,11 +174,11 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
     });
   }
   return <section aria-label="Hiring research" className="space-y-4">
-    <h2 className="text-xl font-semibold">Hiring research</h2>
+    <h2 className="text-xl font-semibold">Find the right people</h2>
     <p>Enter criteria you approve. Research results carry the sources returned by the search.</p>
-    {shortlistReplay && (!goalId || (error && !entries)) && <button type="button" disabled={busy} onClick={loadDemoCriteria}>Load robotics demo criteria</button>}
+    {shortlistReplay && (!goalId || (error && !entries)) && <button type="button" disabled={busy} onClick={loadDemoCriteria}>Load example: hire a robotics engineer</button>}
     {!goalId ? <form onSubmit={(e) => void create(e)} className="space-y-2">
-      <label htmlFor="hiring-need">Hiring need (optional)</label><br /><textarea id="hiring-need" className="w-full border p-1" value={need} onChange={(e) => { setNeed(e.target.value); setProfiles([]); setProfileSource(null); setCriteriaDraft(null); setEvidence([]); }} disabled={busy} maxLength={2000} /><br />
+      <label htmlFor="hiring-need">Who do you need to meet?</label><br /><textarea id="hiring-need" className="w-full border p-1" value={need} onChange={(e) => { setNeed(e.target.value); setProfiles([]); setProfileSource(null); setCriteriaDraft(null); setEvidence([]); }} disabled={busy} maxLength={2000} /><br />
       <label>Role <input className="border p-1" value={role} onChange={(e) => { setRole(e.target.value); setProfiles([]); setProfileSource(null); setCriteriaDraft(null); setEvidence([]); }} disabled={busy} required minLength={2} maxLength={120} /></label><br />
       <label>Search job titles, comma separated <input className="border p-1" value={titleTerms} onChange={(e) => setTitleTerms(e.target.value)} disabled={busy} placeholder="Uses the role when blank" /></label><br />
       <label>Must-have skills, comma separated <input className="border p-1" value={skills} onChange={(e) => { setSkills(e.target.value); setEvidence([]); }} disabled={busy} /></label><br />
