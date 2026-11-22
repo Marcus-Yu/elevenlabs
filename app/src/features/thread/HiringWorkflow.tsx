@@ -10,6 +10,7 @@ import { ThreadApprovalCard } from './ThreadApprovalCard';
 import type { CalibrationCriteria } from './calibration-contracts';
 import { parseHiringCriteria, roboticsDemoCriteria } from './hiring-criteria';
 import type { GatewayDisplay } from './gateway-result';
+import { fitAtK } from '../../shared/humanize';
 
 export type HiringTransport = {
   startCalibration(input: { goalSummary: string }): Promise<GatewayDisplay<{ profiles: CalibrationProfile[]; source: 'live' | 'replay' }>>;
@@ -186,7 +187,7 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
       <label>Minimum years of experience (optional) <input className="border p-1" type="number" min="0" max="40" value={minimum} onChange={(e) => { setMinimum(e.target.value); setEvidence([]); }} disabled={busy} /></label><br />
       <button type="button" disabled={busy || (!need.trim() && role.trim().length < 2)} onClick={() => void startCalibration()}>Show calibration profiles</button>{' '}
       <button type="submit" disabled={busy || role.trim().length < 2}>Create goal</button>
-    </form> : <><p>Goal created: {role}</p><button type="button" disabled={busy || !!proposal} onClick={() => void research()}>{entries ? 'Research again' : 'Research shortlist'}</button>{' '}<Link to={`/voice?goalId=${encodeURIComponent(goalId)}`} className="underline">Open spoken briefing</Link></>}
+    </form> : <><p>Goal created: {role}</p><button type="button" disabled={busy || !!proposal} onClick={() => void research()}>{entries ? 'Find candidates again' : 'Find candidates'}</button>{' '}<Link to={`/voice?goalId=${encodeURIComponent(goalId)}`} className="underline">Open spoken briefing</Link></>}
     {!goalId && profiles.length > 0 && <section><p>{profileSource === 'replay' ? 'Curated synthetic replay profiles.' : 'Live-generated synthetic profiles.'}</p>
       <CalibrationCard key={calibrationKey} profiles={profiles} onSubmit={submitCalibration} disabled={busy} /></section>}
     {!goalId && criteriaDraft && <CalibrationCriteriaReview criteria={criteriaDraft.criteria} profiles={profiles} reactions={criteriaDraft.reactions}>
@@ -199,12 +200,12 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
       <p>Review the proposed criteria change based on your rejection.</p><p>Based on rejection: “{safe(proposal.basedOn.reason)}”</p>
       {proposal.basedOn.source && <p><Evidence source={proposal.basedOn.source} /></p>}
       <ul>{proposal.changes.map((change, i) => <li key={i}>{change.field}: {safe(JSON.stringify(change.from))} → {safe(JSON.stringify(change.to))}</li>)}</ul>
-      <button type="button" disabled={busy} onClick={() => void confirm()}>Confirm and rerank</button>{' '}
+      <button type="button" disabled={busy} onClick={() => void confirm()}>Confirm and rerank (better run)</button>{' '}
       <button type="button" disabled={busy} onClick={() => setProposal(null)}>Not now</button>
     </section>}
-    {comparison?.comparedTo && <p>Fit in the top {comparison.evaluation.k}, evaluated using the updated criteria: before {comparison.comparedTo.fitAtK} candidates, after {comparison.evaluation.fitAtK} candidates.</p>}
+    {comparison?.comparedTo && <p><b>Better run:</b> {fitAtK(comparison.evaluation.fitAtK, comparison.evaluation.k)} (was {comparison.comparedTo.fitAtK} of {comparison.evaluation.k}).</p>}
     {comparisonError && <p>Reranking completed, but its comparison could not be loaded.</p>}
-    {entries && <section><h3 className="font-semibold">Shortlist</h3>
+    {entries && <section><h3 className="font-semibold">Candidates</h3>
       {shortlistReplay && <p>Replay of recorded Fiber results from public sources.</p>}
       {entries.length === 0 && <p>No candidates returned.</p>}
       <ol className="space-y-4">{entries.map((entry) => <li key={entry.matchId} className="rounded border p-3 space-y-2">
