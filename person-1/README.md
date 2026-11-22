@@ -31,7 +31,7 @@ The [team notes vault](https://github.com/Dante-Bravi/Eleven-labs-Obsidian) chan
 ## Handoffs
 
 - After WP0, share the feature spec registration pattern, shared schemas, seed command and replay fixture format with everyone.
-- After WP1, give Person 2 the handler registration interface and give Person 4 the approval, log and stub contracts. Give Person 3 the shared approval operation and verified-phone rule before voice work.
+- After WP1, give Person 2 the handler registration interface and give Person 3 (WP4 thread, moved from Person 4) and Person 4 (WP6, WP13) the approval, log and stub contracts. Give Person 3 the shared approval operation and verified-phone rule before voice work.
 - Own the gateway engine and approval/activity operations. Other owners register their handlers through the agreed interface. In `src/features/connect/`, own provider connection and leave `cards/` to Person 4.
 - Give Person 4 a trace link and a sandbox approval result for the demo. Coordinate real denial cases with Persons 2 and 3 before it is recorded.
 
