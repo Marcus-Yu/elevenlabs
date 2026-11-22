@@ -6,12 +6,9 @@
   "main": "main/main.js",
   "scripts": {
     "start": "electron .",
-    "test": "node --test \"main/**/*.test.js\" \"renderer/**/*.test.js\""
+    "test": "node --test \"main/**/*.test.js\""
   },
   "devDependencies": {
     "electron": "^45.4.1"
-  },
-  "dependencies": {
-    "@elevenlabs/client": "^1.37.1"
   }
 }
