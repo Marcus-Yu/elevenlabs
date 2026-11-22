@@ -5,7 +5,7 @@ import { toolResult } from "./voice-summary.js";
 const snap = { shortlist: { candidates: [{ alias: "A" }, { alias: "B" }, { alias: "C" }] } };
 
 test("approve reads back the anonymous shortlist", () => {
-  assert.equal(toolResult("approve_brief", snap), "Approved. Shortlist has A, B and C.");
+  assert.equal(toolResult("approve_brief", snap), "Approved. Shortlist has Maya Chen, Jordan Ellis and Priya Raman.");
 });
 
 test("errors become a denial the agent must explain", () => {
@@ -16,8 +16,10 @@ test("errors become a denial the agent must explain", () => {
 });
 
 test("reject includes the proposed change and asks for confirmation", () => {
-  const out = toolResult("reject_candidate", { ...snap, proposedChange: { explanation: "Raise seniority." } }, { alias: "C" });
-  assert.equal(out, "Rejected C. Proposed criteria change: Raise seniority. Ask the user to confirm the change.");
+  const explanation = "You rejected a Robotics Software Engineer II (about 3.6 years) as too junior. Raise the minimum to 4 years?";
+  const out = toolResult("reject_candidate", { ...snap, proposedChange: { explanation } }, { alias: "B", reason: "too junior" });
+  assert.equal(out, "Rejected Jordan Ellis. Proposed change: Jordan Ellis looks too junior. Raise the minimum to 4 years? Ask the user to confirm the change.");
+  assert.equal(toolResult("reject_candidate", snap, { alias: "A" }), "Rejected Maya Chen. Ask the user to confirm the change.");
 });
 
 test("empty shortlist and intro states", () => {
