@@ -70,6 +70,11 @@ export const MemoryWritePayload = z.object({
 });
 export const MemoryDeletePayload = z.object({ id });
 
+/** What the rules read from contact.reveal_email; the handler (WP2) owns the rest of the shape. */
+export const RevealEmailCore = z.looseObject({ companyDomain: z.string().min(1), matchId: id.optional() });
+/** What preference_confirm reads from memory.write; the handler (WP12) owns the rest of the shape. */
+export const MemoryWriteCore = z.looseObject({ kind: z.enum(["preference", "objection", "outcome", "fact"]) });
+
 /** Payload contracts the engine enforces in addition to the handler's own schema. */
 export const CORE_PAYLOADS = {
   "outreach.send": OutreachSendPayload,
@@ -78,4 +83,6 @@ export const CORE_PAYLOADS = {
   "match.submit": MatchSubmitPayload,
   "card.publish": CardPublishPayload,
   "card.reveal": CardRevealPayload,
+  "contact.reveal_email": RevealEmailCore,
+  "memory.write": MemoryWriteCore,
 } as const;
