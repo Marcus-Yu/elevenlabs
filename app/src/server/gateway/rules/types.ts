@@ -26,6 +26,8 @@ export interface RuleInput {
   usedFactIds: string[];
   /** Text that leaves the workspace (draft text, email subject and body, share card fields). */
   outgoingText: string[];
+  /** Every string in a provider-bound or watcher payload (provider_minimum). */
+  providerText: string[];
   /** Lower-cased email recipient for outreach.send. */
   recipient: string | null;
   recipientOptedOut: boolean;
@@ -33,6 +35,8 @@ export interface RuleInput {
   draft: DraftSnapshot | null;
   /** draft.create: the match named in the payload. */
   match: MatchSnapshot | null;
+  /** contact.reveal_email: the goal's match for the payload's company. */
+  revealMatch: MatchSnapshot | null;
   sendsToday: number;
   priorApprovedSend: boolean;
   env: GatewayEnv;
