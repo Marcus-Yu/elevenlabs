@@ -50,19 +50,22 @@ async function start() {
         if (source === "user") window.atlas.voiceState("thinking");
       },
       // Don't dismiss when the session ends: return the ball to idle; the next summon reconnects.
-      onDisconnect: () => {
+      onDisconnect: (details) => {
         if (!conv) return; // we ended it (leaving/hidden)
+        console.warn(`[atlas] voice disconnected: ${details?.reason ?? "unknown"}${details?.message ? ` (${details.message})` : ""}`);
         conv = null;
         ended = true;
         stopBars();
         window.atlas.voiceState("listening");
       },
-      onError: (message) => console.error("[atlas] voice error", message),
+      onError: (message, context) => console.error(`[atlas] voice error: ${message}${context ? ` ${JSON.stringify(context).slice(0, 300)}` : ""}`),
     });
     if (state === "leaving" || state === "hidden") return end();
     startBars();
   } catch (err) {
-    console.error("[atlas] voice session failed; click flow still works", err);
+    // e.g. close 3000 "The AI agent you are trying to reach is not available." = ElevenLabs quota/plan exhausted
+    const reason = err?.closeReason || err?.message || String(err);
+    console.error(`[atlas] voice session failed (click flow still works): ${reason}${err?.closeCode ? ` [close ${err.closeCode}]` : ""}`);
   } finally {
     starting = false;
   }

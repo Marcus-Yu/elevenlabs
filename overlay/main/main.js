@@ -132,6 +132,12 @@ function createWindow() {
   win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
   win.setIgnoreMouseEvents(true, { forward: true });
   win.setMenu(null);
+  // Renderer console → main stdout (/tmp/atlas-overlay.out), so voice failures are visible.
+  win.webContents.on("console-message", (event, ...legacy) => {
+    const level = event.level ?? ["debug", "info", "warning", "error"][legacy[0]] ?? "info";
+    const message = event.message ?? legacy[1];
+    (level === "error" ? console.error : level === "warning" ? console.warn : console.log)(`[renderer:${level}] ${message}`);
+  });
   win.loadFile(path.join(__dirname, "..", "renderer", "index.html"));
   win.once("ready-to-show", () => {
     win.setBounds({ x, y, width, height });
