@@ -22,7 +22,7 @@ const DEMO_HIRE_CRITERIA = {
 };
 
 const { eventText, strippedText, runLabelText } = require("./humanize");
-const { briefFromNeed } = require("../../shared/contract");
+const { briefFromNeed, newSend, runSend } = require("../../shared/contract");
 
 const ALIASES = ["A", "B", "C"];
 const SOURCE_LABELS = { fiber: "People search (Fiber)", ploid: "People search (Ploid)", web: "Public web pages", synthetic: "Synthetic profiles" };
@@ -201,11 +201,11 @@ function createProvider(env = process.env, deps = {}) {
   const password = env.ATLAS_PASSWORD || "atlas-demo-1";
 
   let token = null;
-  const s = { goalId: null, criteria: DEMO_HIRE_CRITERIA, ranked: [], runs: [], proposedChange: null, need: null, otherApproved: false };
+  const s = { goalId: null, criteria: DEMO_HIRE_CRITERIA, ranked: [], runs: [], proposedChange: null, need: null, otherApproved: false, send: newSend(), last: null };
   const isHire = () => s.need && briefFromNeed(s.need).kind === "hire";
   /** Fresh session: no need, no goal (called on every new summon and on a stale goal). */
   function reset() {
-    Object.assign(s, { goalId: null, criteria: DEMO_HIRE_CRITERIA, ranked: [], runs: [], proposedChange: null, need: null, otherApproved: false });
+    Object.assign(s, { goalId: null, criteria: DEMO_HIRE_CRITERIA, ranked: [], runs: [], proposedChange: null, need: null, otherApproved: false, send: newSend(), last: null });
   }
   /** A stale-goal reset returns the neutral snapshot instead of an error. */
   async function guarded(fn) {
@@ -278,6 +278,30 @@ function createProvider(env = process.env, deps = {}) {
   }
 
   /** null when the server predates /match (PR #26), so the hire flow still works on older builds. */
+  /** Keeps the last full snapshot (with the finale progress) so polling during the send is cheap. */
+  function remember(snap) {
+    const withSend = snap.gateway ? { ...snap, gateway: { ...snap.gateway, send: JSON.parse(JSON.stringify(s.send)) } } : snap;
+    s.last = withSend;
+    return withSend;
+  }
+
+  const SEND_OPS = {
+    publish: async () => { await op("runMatchStep", { step: "publishA" }); await op("runMatchStep", { step: "publishB" }); },
+    match: () => op("runMatchStep", { step: "match" }),
+    acceptA: () => op("runMatchStep", { step: "acceptA" }),
+    acceptB: () => op("runMatchStep", { step: "acceptB" }),
+    reveal: async () => {
+      await op("runMatchStep", { step: "revealA", fields: ["name", "company"] });
+      await op("runMatchStep", { step: "revealB", fields: ["name", "email"] });
+    },
+    // The gateway's opt_in_only rule forbids outreach.send on hire goals: people are contacted only
+    // through the double-opt-in introduction. So this step confirms the intro draft exists (never sent).
+    send: async () => {
+      const md = await op("getMatchDemo", {});
+      if (!md?.intro) throw new AtlasProviderError("introduction draft not ready");
+    },
+  };
+
   async function readMatch() {
     try {
       const [md, reveals] = await Promise.all([op("getMatchDemo", {}), op("getActivityLog", { actionType: "card.reveal", limit: 5 })]);
@@ -309,7 +333,7 @@ function createProvider(env = process.env, deps = {}) {
       const need = briefFromNeed(s.need);
       return { ...meta, brief: { ...mapBrief(s.criteria, null), role: need.role, goalKind: need.goalKind }, research: null, shortlist: null, gateway: null };
     }
-    return {
+    return remember({
       brief: mapBrief(s.criteria, s.goalId),
       research: mapResearch(s.ranked, s.runs),
       shortlist: mapShortlist(s.ranked, s.runs, s.criteria),
@@ -318,7 +342,7 @@ function createProvider(env = process.env, deps = {}) {
       // The seeded demo user's profile and the demo criteria are synthetic; replay data is recorded, not live.
       synthetic: username === "demo" || modeOf(rows) !== "live",
       updatedAt: new Date().toISOString(),
-    };
+    });
   }
 
   /**
@@ -327,6 +351,8 @@ function createProvider(env = process.env, deps = {}) {
    * Pass { state } to restrict it to state === "speaking".
    */
   async function snapshot(opts = {}) {
+    // While the finale runs, return the cached snapshot with live progress (no extra server load).
+    if (s.send.status === "running" && s.last) return remember(s.last);
     const speaking = opts.state === undefined || opts.state === "speaking";
     if (speaking && s.goalId && !s.ranked.length && !s.runs.length) await runResearch();
     return read();
@@ -364,6 +390,12 @@ function createProvider(env = process.env, deps = {}) {
         const snap = await read();
         return { ...snap, introUrl: `${clientUrl}/match` };
       }
+      case "approve_send":
+        if (s.send.status !== "running") {
+          if (s.send.status === "done") s.send = newSend();
+          await runSend(s.send, (id) => SEND_OPS[id]());
+        }
+        return read();
       case "refresh":
         return read();
       default:

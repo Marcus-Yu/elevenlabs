@@ -1,6 +1,6 @@
 // Mock provider: serves the labelled synthetic sample from the contract and walks
 // its statuses forward when the overlay acts. No network, no real people.
-const { SAMPLE_SNAPSHOT, briefFromNeed } = require("../../shared/contract");
+const { SAMPLE_SNAPSHOT, briefFromNeed, newSend, runSend } = require("../../shared/contract");
 
 const clone = (value) => JSON.parse(JSON.stringify(value));
 
@@ -18,6 +18,7 @@ function createProvider(_env = {}) {
   const pendingRejects = new Set();
 
   let need = null; // null until set_need: Atlas stays neutral
+  let send = newSend();
   let approved = false;
   const current = () => {
     const full = { ...clone(snap), mode: "mock", synthetic: true, updatedAt: new Date().toISOString() };
@@ -25,7 +26,7 @@ function createProvider(_env = {}) {
     const brief = { ...briefFromNeed(need, SAMPLE_SNAPSHOT.brief.criteria), status: approved ? "approved" : "needs_ok" };
     if (brief.kind === "hire") {
       const hireBrief = { ...full.brief, ...brief, criteria: brief.criteria };
-      return approved ? { ...full, brief: hireBrief } : { ...full, brief: hireBrief, research: null, shortlist: null, gateway: null };
+      return approved ? { ...full, brief: hireBrief, gateway: { ...full.gateway, send: clone(send) } } : { ...full, brief: hireBrief, research: null, shortlist: null, gateway: null };
     }
     const research = approved ? { status: "done", sources: [], note: `Research for "${brief.goalKind.toLowerCase()}" isn't wired in this demo yet` } : null;
     return { ...full, brief, research, shortlist: null, gateway: null };
@@ -75,11 +76,20 @@ function createProvider(_env = {}) {
     reset() {
       need = null;
       approved = false;
+      send = newSend();
     },
     async snapshot() {
       return current();
     },
     async act(action = {}) {
+      if (action.type === "approve_send") {
+        // Demo data: same steps, short delays so the checklist visibly ticks (labelled synthetic).
+        if (send.status !== "running") {
+          if (send.status === "done") send = newSend();
+          await runSend(send, () => new Promise((r) => setTimeout(r, Number(_env.ATLAS_MOCK_STEP_MS ?? 450))));
+        }
+        return current();
+      }
       const handler = handlers[action.type];
       if (handler) handler(action);
       // Mirror the live provider: a reject proposes a criteria change to confirm.

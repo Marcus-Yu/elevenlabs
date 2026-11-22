@@ -130,6 +130,24 @@ export function shortlist(snap, ui) {
   ];
 }
 
+// Finale checklist: each real step goes from "…" to "✓" as it completes.
+function sendChecklist(send) {
+  const mark = { pending: "…", running: "…", done: "✓", failed: "!" };
+  return h("ul", { class: "checklist" },
+    send.steps.map((st) => h("li", { class: `step ${st.status}` },
+      h("span", { class: "mark" }, mark[st.status] ?? "…"),
+      h("span", { class: "clamp", title: st.label }, st.label))));
+}
+
+/** One primary action for the finale, a plain retry on failure, then "All done ✓". */
+function finale(ui, send, ready) {
+  if (!send) return actionBtn(ui, { type: "open_intro" }, "Review intro", { enabled: ready });
+  if (send.status === "done") return h("div", { class: "done-line" }, "All done ✓");
+  if (send.status === "failed") return actionBtn(ui, { type: "approve_send" }, `Couldn't finish: ${send.failedStep}. Retry`);
+  if (send.status === "running") return h("div", { class: "small" }, "Sending through the gateway…");
+  return actionBtn(ui, { type: "approve_send" }, "Approve and send", { enabled: ready });
+}
+
 const EVENT_ICON = {
   stripped: ["solid", "check", 3],
   allowed: ["solid", "check", 3],
@@ -147,11 +165,12 @@ export function gateway(snap, ui) {
   });
   // Last step: review the intro once the shortlist has been refined (Run 2).
   const ready = ui.confirmed || rerun(snap);
+  const send = g.send;
   return [
     head([icon("shield"), "Gateway"], snap, h("span", { class: "meta" }, "Rules, not the model")),
     h("h3", { class: "title" }, TITLES.gateway),
-    h("ul", { class: "events" }, events),
-    actionBtn(ui, { type: "open_intro" }, "Review intro", { enabled: ready }),
+    send && send.status !== "idle" ? sendChecklist(send) : h("ul", { class: "events" }, events),
+    finale(ui, send, ready),
     errorLine(ui, "gateway"),
   ];
 }
