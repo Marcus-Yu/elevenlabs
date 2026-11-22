@@ -39,6 +39,12 @@ export interface HttpResponse<T = unknown> {
   body: T;
   mode: AdapterMode;
   fixturePath?: string;
+  /**
+   * When the data was fetched from the provider: the fixture's recordedAt in replay and record
+   * mode, the response time in live mode. Use it for SourceRef.fetchedAt. Always set by
+   * createHttpClient; optional so hand-built test fakes stay valid.
+   */
+  recordedAt?: string;
 }
 
 /** On-disk format of fixtures/<provider>/<hash>.json. */
@@ -105,7 +111,7 @@ export function createHttpClient(options: HttpClientOptions = {}): HttpClient {
         throw new FixtureMissError(req.provider, hash, fixturePath, `${req.method} ${recordable.url}`);
       }
       const { status, body } = fixture.response;
-      return { status, ok: isOk(status), body: body as T, mode, fixturePath };
+      return { status, ok: isOk(status), body: body as T, mode, fixturePath, recordedAt: fixture.recordedAt };
     }
 
     const response = await doFetch(req.url, {
@@ -118,22 +124,23 @@ export function createHttpClient(options: HttpClientOptions = {}): HttpClient {
     });
     const contentType = response.headers.get("content-type");
     const body = parseBody(await response.text(), contentType);
+    const recordedAt = new Date().toISOString();
 
     if (mode === "record" && response.ok) {
       const fixture: Fixture = {
         version: FIXTURE_VERSION,
         provider: req.provider,
         hash,
-        recordedAt: new Date().toISOString(),
+        recordedAt,
         request: recordable,
         response: { status: response.status, contentType, body },
       };
       await mkdir(path.dirname(fixturePath), { recursive: true });
       await writeFile(fixturePath, scrubSecrets(JSON.stringify(fixture, null, 2), secrets) + "\n");
-      return { status: response.status, ok: true, body: body as T, mode, fixturePath };
+      return { status: response.status, ok: true, body: body as T, mode, fixturePath, recordedAt };
     }
 
-    return { status: response.status, ok: response.ok, body: body as T, mode };
+    return { status: response.status, ok: response.ok, body: body as T, mode, recordedAt };
   }
 
   return { mode, request };
