@@ -5,7 +5,8 @@
   "description": "Atlas desktop overlay: invisible until summoned, then the ball and four cards.",
   "main": "main/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "test": "node --test \"main/**/*.test.js\""
   },
   "devDependencies": {
     "electron": "^45.4.1"
