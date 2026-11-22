@@ -20,7 +20,7 @@ export class MemoryGatewayStore implements GatewayStore {
   users = new Map<string, UserSnapshot>();
   consents = new Map<string, ConsentKind[]>();
   facts = new Map<string, FactSnapshot[]>();
-  matches = new Map<string, MatchSnapshot>();
+  matches = new Map<string, MatchSnapshot & { domain?: string }>();
   drafts = new Map<string, Omit<DraftSnapshot, "refs">>();
   sourceRefs = new Map<string, SourceRefSnapshot>();
   optOuts = new Set<string>();
@@ -44,6 +44,10 @@ export class MemoryGatewayStore implements GatewayStore {
   }
   async getMatch(matchId: string) {
     return this.matches.get(matchId) ?? null;
+  }
+  async findMatchByDomain(goalId: string, domain: string) {
+    const lower = domain.trim().toLowerCase();
+    return [...this.matches.values()].find((m) => m.goalId === goalId && m.domain === lower) ?? null;
   }
   async getDraft(draftId: string) {
     const draft = this.drafts.get(draftId);
