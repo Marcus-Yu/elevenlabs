@@ -14,7 +14,16 @@ const mounted = {}; // card name → <article>, created once per summon
 // Shortlist UI state that outlives a single snapshot: rows the user rejected
 // (keyed by alias + headline, since live aliases shift after a reject) and the
 // pending criteria change waiting for "Confirm change".
-const ui = { rejected: new Set(), pendingConfirm: false, explanation: null, act };
+const ui = { rejected: new Set(), pendingConfirm: false, explanation: null, confirmed: false, busy: null, errors: {}, act, refresh: () => refreshAll() };
+// Which card shows the result (and any error) of each action.
+const ACT_CARD = { approve_brief: "brief", run_research: "research", reject_candidate: "shortlist", confirm_change: "shortlist", open_intro: "gateway" };
+
+/** Short, human error text for a card; never a stack trace. */
+function friendly(err) {
+  const raw = String(err?.message ?? err).replace(/^Error invoking remote method '[^']+': /, "").replace(/^(AtlasProvider)?Error: /, "");
+  if (/unreachable|timed out|fetch failed|ECONN|login failed/i.test(raw)) return "Couldn't reach Atlas.";
+  return raw.length > 140 ? `${raw.slice(0, 137)}…` : raw;
+}
 
 const CARDS = {
   brief: { col: colL, side: "card-l", delayed: false, tight: false },
@@ -46,33 +55,43 @@ async function load(forState) {
     const next = await window.atlas.snapshot();
     if (state !== forState) return;
     snap = next;
+    delete ui.errors.brief;
     for (const name of PHASE_CARDS[forState]) mount(name);
     refreshAll();
   } catch (err) {
     console.error("[atlas] snapshot failed", err);
+    ui.errors.brief = { msg: friendly(err), retry: () => load(state) };
+    refreshAll();
   }
 }
 
 async function act(action) {
+  const card = ACT_CARD[action.type];
+  if (card) delete ui.errors[card];
+  ui.busy = action.type;
+  refreshAll();
   try {
     const next = await window.atlas.act(action);
     if (action.type === "reject_candidate") {
-      ui.pendingConfirm = true;
-      ui.explanation = next.proposedChange?.explanation ?? ui.explanation;
+      ui.pendingConfirm = Boolean(next.proposedChange);
+      ui.explanation = next.proposedChange?.explanation ?? null;
     }
     if (action.type === "confirm_change") {
       ui.pendingConfirm = false;
       ui.explanation = null;
       ui.rejected.clear();
+      ui.confirmed = true;
     }
     snap = next;
-    refreshAll();
-    // The live provider runs research on the next snapshot after approval.
-    if (action.type === "approve_brief" && state === "speaking") load("speaking");
     return next;
   } catch (err) {
     console.error("[atlas] act failed", err);
-    return { error: err.message };
+    const msg = friendly(err);
+    if (card) ui.errors[card] = { msg, retry: () => act(action) };
+    return { error: msg };
+  } finally {
+    ui.busy = null;
+    refreshAll();
   }
 }
 
