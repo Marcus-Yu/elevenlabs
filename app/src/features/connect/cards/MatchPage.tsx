@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getMatchDemo, runMatchStep, useQuery } from "wasp/client/operations";
+import { humanStatus } from "../../../shared/humanize";
 
 // /match: two-user double opt-in demo. User B is synthetic; nothing is sent.
 
@@ -33,7 +34,7 @@ export function MatchPage() {
     </label>
   ));
   const m = d.match;
-  const current = !d.cardA ? 1 : !d.cardB ? 2 : !m ? 3 : !m.aAccepted ? 4 : !m.bAccepted ? 5 : !(d.revealA && d.revealB) ? 6 : 7;
+  const current = !d.cardA ? 1 : !d.cardB ? 2 : !m ? 3 : !m.aAccepted ? 4 : !m.bAccepted ? 5 : !(d.revealA && d.revealB) ? 6 : d.intro ? 8 : 7;
   const step = (n: number, title: string, body: React.ReactNode) => (
     <section style={{ ...box, opacity: n > current ? 0.5 : 1, borderColor: n === current ? "#2563eb" : "#ccc" }}>
       <h2>{n}. {title} {n < current && <small>✓ done</small>}{n === current && <small> ← current step</small>}</h2>
@@ -45,12 +46,12 @@ export function MatchPage() {
   return (
     <div style={{ maxWidth: 760, margin: "0 auto", padding: 16 }}>
       <h1>Double opt-in match</h1>
-      <p>User A is you (demo, Orrery Robotics hiring manager). User B <span style={tag}>Synthetic second user</span> is a synthetic robotics engineer created for this demo. Every step goes through the gateway; nothing is sent. Press the highlighted step's button; the others unlock in order.</p>
+      <p>User A is you (demo, Orrery Robotics hiring manager). User B <span style={tag}>Synthetic second user</span> is a synthetic robotics engineer created for this demo. Every step is checked by Atlas's privacy rules; nothing is sent. Press the highlighted step's button; the others unlock in order.</p>
       {err && <p style={{ color: "crimson" }}>{err}</p>}
 
       {step(1, "Publish A's card", <>
         {d.draftA && !d.cardA && (<>
-          <p>Draft (before the gateway):</p>
+          <p>Your draft card (before privacy rules):</p>
           <ul>{Object.entries(d.draftA).map(([k, v]) => <li key={k}><b>{k}</b>: {v}</li>)}</ul>
         </>)}
         {d.cardA ? <CardView card={d.cardA} /> : btn(1, "1. Publish A's card", () => run("publishA"))}
@@ -70,9 +71,9 @@ export function MatchPage() {
 
       {step(5, "B accepts (simulated)", m?.bAccepted ? <p>B accepted <span style={tag}>Synthetic second user</span></p> : btn(5, "5. B accepts (simulated)", () => run("acceptB")))}
 
-      {step(6, "Choose reveals (card.reveal, needs approval)", <>
-        <div>A: {d.revealA ? `approval ${d.revealA.status}: ${d.revealA.fields.join(", ")}` : (<>{picker(pickA, setPickA)}{btn(6, "6a. A reveals", () => run("revealA", pickA), pickA.length > 0)}</>)}</div>
-        <div style={{ marginTop: 8 }}>B (simulated): {d.revealB ? `approval ${d.revealB.status}: ${d.revealB.fields.join(", ")}` : (<>{picker(pickB, setPickB)}{btn(6, "6b. B reveals (simulated)", () => run("revealB", pickB), !!d.revealA && pickB.length > 0)}</>)}</div>
+      {step(6, "Choose what each side reveals (needs both OKs)", <>
+        <div>A: {d.revealA ? `${humanStatus(d.revealA.status)}: shares ${d.revealA.fields.join(", ")}` : (<>{picker(pickA, setPickA)}{btn(6, "6a. A reveals", () => run("revealA", pickA), pickA.length > 0)}</>)}</div>
+        <div style={{ marginTop: 8 }}>B (simulated): {d.revealB ? `${humanStatus(d.revealB.status)}: shares ${d.revealB.fields.join(", ")}` : (<>{picker(pickB, setPickB)}{btn(6, "6b. B reveals (simulated)", () => run("revealB", pickB), !!d.revealA && pickB.length > 0)}</>)}</div>
         {current === 6 && !d.revealA && <small>Pick fields, then press 6a; 6b unlocks after A.</small>}
       </>)}
 
@@ -89,8 +90,8 @@ export function MatchPage() {
 
 function CardView({ card }: { card: CardInfo }) {
   return (<>
-    <p>Published (anonymous):</p>
+    <p>Shared anonymously:</p>
     <ul>{Object.entries(card.published).map(([k, v]) => <li key={k}><b>{k}</b>: {v}</li>)}</ul>
-    {card.stripped.length > 0 && <p style={{ color: "#b45309" }}>Stripped by rule <code>{card.ruleId}</code>: {card.stripped.join(", ")}<br /><small>{card.logReason}</small></p>}
+    {card.stripped.length > 0 && <p style={{ color: "#b45309" }}>Removed before sharing: {card.stripped.join(", ")} (private, never matched on) <small style={{ color: "#888" }}>({card.ruleId})</small></p>}
   </>);
 }
