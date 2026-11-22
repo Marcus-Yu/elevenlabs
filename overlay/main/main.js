@@ -3,6 +3,7 @@
 const path = require("node:path");
 const { app, BrowserWindow, globalShortcut, ipcMain, screen } = require("electron");
 const mock = require("./providers/mock");
+const { next: nextState, ignoresMouse } = require("./state");
 
 const HOTKEY = process.env.ATLAS_HOTKEY || "Alt+Space";
 const LEAVE_MS = 1000; // design: leaving holds 1000 ms, then hidden
@@ -51,24 +52,20 @@ function go(next) {
   clearTimeout(leaveTimer);
   state = next;
   if (!win || win.isDestroyed()) return;
-  const hidden = next === "hidden";
-  win.setIgnoreMouseEvents(hidden, { forward: true });
+  win.setIgnoreMouseEvents(ignoresMouse(next), { forward: true });
   if (next === "listening") {
     if (process.platform === "darwin") app.focus({ steal: true });
     win.focus(); // so Escape reaches the renderer
   }
+  console.log(`[atlas] state → ${next}`);
   win.webContents.send("atlas:state", next);
-  if (next === "leaving") leaveTimer = setTimeout(() => go("hidden"), LEAVE_MS);
+  if (next === "leaving") leaveTimer = setTimeout(() => send("left"), LEAVE_MS);
 }
 
-const summon = () => state === "hidden" && go("listening");
-const dismiss = () => ["listening", "thinking", "speaking"].includes(state) && go("leaving");
-const advance = () => {
-  if (state === "listening") go("thinking");
-  else if (state === "thinking") go("speaking");
-  else if (state === "speaking") go("leaving");
-};
-const toggle = () => (state === "hidden" ? summon() : dismiss());
+function send(event) {
+  const target = nextState(state, event);
+  if (target !== state) go(target);
+}
 
 function createWindow() {
   const { x, y, width, height } = screen.getPrimaryDisplay().bounds;
@@ -111,16 +108,16 @@ function createWindow() {
 if (!app.requestSingleInstanceLock()) {
   app.quit();
 } else {
-  app.on("second-instance", summon);
+  app.on("second-instance", () => send("summon"));
 
   ipcMain.handle("atlas:snapshot", () => call("snapshot"));
   ipcMain.handle("atlas:act", (_e, action) => call("act", action));
-  ipcMain.on("atlas:nav", (_e, move) => (move === "advance" ? advance() : dismiss()));
+  ipcMain.on("atlas:nav", (_e, move) => send(move === "advance" ? "advance" : "dismiss"));
 
   app.whenReady().then(() => {
     createWindow();
     if (process.platform === "darwin" && app.dock) app.dock.hide();
-    if (!globalShortcut.register(HOTKEY, toggle)) {
+    if (!globalShortcut.register(HOTKEY, () => send("toggle"))) {
       console.warn(`[atlas] could not register hotkey ${HOTKEY}; set ATLAS_HOTKEY to another accelerator`);
     } else {
       console.log(`[atlas] ready · press ${HOTKEY} to summon · data: ${provider === mockProvider ? "mock" : "live"}`);
