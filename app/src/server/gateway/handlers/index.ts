@@ -1,3 +1,4 @@
+import { createVoiceHandlers } from "./voice";
 import type { MemoryItemDelegate } from "../../../features/memory/memoryStore";
 import type { HandlerMap } from "../types";
 import { createDiscoveryHandlersFromEnv } from "./discovery";
@@ -18,6 +19,7 @@ export interface HandlerDeps {
  * - Discovery (WP2): company.search, jobs.search, contact.search, contact.reveal_email, web.read.
  *   With ADAPTER_MODE=replay (the default) they read recorded fixtures and need no keys; a request
  *   without a fixture throws FixtureMissError, which the gateway logs as handler_error. Nothing is invented.
+ * - Voice (WP9): voice.scribe_token, voice.speak (ElevenLabs live only).
  * - Memory (WP12): memory.read, memory.write, memory.delete (Postgres, mirrored to Rowboat when configured).
  * - Watcher submissions (WP10): match.submit persists sourced matches for the goal.
  * - Everything else (draft.create, outreach.send, call.place, meeting.listen,
@@ -26,6 +28,7 @@ export interface HandlerDeps {
 export function createHandlerMap(env: NodeJS.ProcessEnv, deps: HandlerDeps): HandlerMap {
   return {
     ...createStubHandlers(),
+    ...createVoiceHandlers(env.ELEVENLABS_MODE === "live" || env.ADAPTER_MODE === "live" ? env.ELEVENLABS_API_KEY?.trim() : undefined),
     ...createDiscoveryHandlersFromEnv(env),
     ...createMemoryHandlers(createMemoryStoreFromEnv(deps.memoryItems, env)),
     "match.submit": createMatchSubmission(deps.matchDatabase),

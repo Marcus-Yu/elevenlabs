@@ -78,7 +78,7 @@ export async function writeLog(
     decision,
     ruleId,
     reason,
-    inputSummary: summarizePayload(subject.payload, extra.omitText),
+    inputSummary: subject.actionType === "voice.speak" || subject.actionType === "voice.scribe_token" ? null : summarizePayload(subject.payload, extra.omitText),
     factIdsSent: extra.factIdsSent ?? [],
     adapterMode: deps.env.adapterMode,
   });
@@ -97,7 +97,7 @@ export function subjectOf(request: ActionRequest): LogSubject {
     actor: request.actor,
     origin: request.origin,
     actionType: request.actionType,
-    payload: request.payload,
+    payload: request.actionType === "voice.speak" || request.actionType === "voice.scribe_token" ? undefined : request.payload,
   };
 }
 

@@ -20,6 +20,7 @@ export const PROVIDER_BOUND: ReadonlySet<ActionType> = new Set<ActionType>([
   "contact.search",
   "contact.reveal_email",
   "web.read",
+  "voice.speak",
 ]);
 
 /** Actions that only make sense for one goal; they are denied without a goalId. */
@@ -33,6 +34,8 @@ export const GOAL_REQUIRED: ReadonlySet<ActionType> = new Set<ActionType>([
 /** Consent each action needs (§8 consent rule). draft.create needs model_processing only when it uses facts. */
 export const ACTION_CONSENT: Partial<Record<ActionType, ConsentKind>> = {
   "meeting.listen": "meeting_listening",
+  "voice.scribe_token": "model_processing",
+  "voice.speak": "model_processing",
   "call.place": "phone_calls",
   "card.publish": "matching",
   "card.reveal": "identity_reveal",
