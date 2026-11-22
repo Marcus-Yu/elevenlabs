@@ -16,6 +16,7 @@ export const ACTION_TYPES = [
   "draft.create",
   "outreach.send",
   "call.place",
+  "pitch.score",
   "voice.scribe_token",
   "voice.speak",
   "memory.read",

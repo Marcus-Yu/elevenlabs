@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import type { Persona, ScoreResponse } from '../../shared/contracts/sim';
 import type { PitchGoal, PitchResult } from '../pitch/PitchWorkspace';
 import { compareMeasuredRuns, segmentCurves, toughestPersona, type PitchSentence } from '../pitch/pitch-analysis';
 import { InterestChart } from './InterestChart';
+import { RoomMicrophone } from './RoomMicrophone';
 
 /** Provider-agnostic interface. Append accepts a single committed sentence. */
 export type RoomTransport = {
@@ -11,11 +12,19 @@ export type RoomTransport = {
   finish(input: { runId: string }): Promise<PitchResult>;
 };
 type ActiveRoom = { runId: string; personas: Persona[]; sentences: PitchSentence[]; response: ScoreResponse | null };
-export type RoomWorkspaceProps = { goals: PitchGoal[]; loadingGoals?: boolean; goalsError?: string; transport: RoomTransport };
+export type RoomWorkspaceProps = { goals: PitchGoal[]; loadingGoals?: boolean; goalsError?: string; consentGranted?: boolean; transport: RoomTransport };
 
-export function RoomWorkspace({ goals, loadingGoals = false, goalsError, transport }: RoomWorkspaceProps) {
+export function RoomWorkspace({ goals, loadingGoals = false, goalsError, consentGranted = false, transport }: RoomWorkspaceProps) {
   const [goalId, setGoalId] = useState('');
   const [room, setRoom] = useState<ActiveRoom | null>(null);
+  const roomRef = useRef<ActiveRoom | null>(null);
+  const pending = useRef<string[]>([]);
+  const processing = useRef(false);
+  const consentRef = useRef(consentGranted);
+  consentRef.current = consentGranted;
+  const [queued, setQueued] = useState(0);
+  const [microphoneActive, setMicrophoneActive] = useState(false);
+  const [queueFailed, setQueueFailed] = useState(false);
   const [first, setFirst] = useState<PitchResult | null>(null);
   const [second, setSecond] = useState<PitchResult | null>(null);
   const [draft, setDraft] = useState('');
@@ -24,6 +33,35 @@ export function RoomWorkspace({ goals, loadingGoals = false, goalsError, transpo
   const lock = useRef(false);
   const generation = useRef(0);
   useEffect(() => () => { generation.current++; }, []);
+  const onMicrophoneActive = useCallback((active: boolean) => setMicrophoneActive(active), []);
+  function updateRoom(next: ActiveRoom | null) { roomRef.current = next; setRoom(next); }
+  async function drain() {
+    if (processing.current) return;
+    processing.current = true;
+    const current = generation.current;
+    setQueueFailed(false);
+    try {
+      while (pending.current.length && generation.current === current) {
+        if (!consentRef.current) throw new Error('Model processing consent is required to score spoken sentences.');
+        const active = roomRef.current;
+        if (!active) throw new Error('The Room run is no longer active.');
+        const text = pending.current[0];
+        const result = await transport.append({ runId: active.runId, text, expectedIndex: active.sentences.length });
+        if (generation.current !== current) return;
+        if (result.sentence.index !== active.sentences.length || result.sentence.text !== text) throw new Error('Unexpected committed sentence from server.');
+        const sentences = [...active.sentences, result.sentence];
+        const response: ScoreResponse = { ...result.response, scores: [...(active.response?.scores ?? []), ...result.response.scores] };
+        segmentCurves(active.personas, sentences, response);
+        updateRoom({ ...active, sentences, response });
+        pending.current.shift(); setQueued(pending.current.length);
+      }
+    } catch (cause) {
+      if (generation.current === current) { setQueueFailed(true); setError(cause instanceof Error ? cause.message : 'Could not score the spoken sentence.'); }
+    } finally { processing.current = false; }
+  }
+  function queueSentence(text: string) {
+    pending.current.push(text); setQueued(pending.current.length); void drain();
+  }
   const withLock = async (work: (current: number) => Promise<void>) => {
     if (lock.current) return;
     lock.current = true;
@@ -41,7 +79,7 @@ export function RoomWorkspace({ goals, loadingGoals = false, goalsError, transpo
       if (!started.runId || !started.personas.length) throw new Error('The Room could not start without a panel.');
       if (!linked) { setFirst(null); setSecond(null); }
       else setSecond(null);
-      setRoom({ ...started, sentences: [], response: null });
+      updateRoom({ ...started, sentences: [], response: null });
     });
   }
   async function commit(event: FormEvent) {
@@ -55,7 +93,7 @@ export function RoomWorkspace({ goals, loadingGoals = false, goalsError, transpo
       const sentences = [...room.sentences, result.sentence];
       const response: ScoreResponse = { ...result.response, scores: [...(room.response?.scores ?? []), ...result.response.scores] };
       segmentCurves(room.personas, sentences, response);
-      setRoom({ ...room, sentences, response });
+      updateRoom({ ...room, sentences, response });
       setDraft('');
     });
   }
@@ -74,7 +112,7 @@ export function RoomWorkspace({ goals, loadingGoals = false, goalsError, transpo
           { personas: result.personas, tier: 'measured', response: result.response });
         setSecond(result);
       } else setFirst(result);
-      setRoom(null);
+      updateRoom(null);
     });
   }
   const measured = second ?? first;
@@ -82,7 +120,7 @@ export function RoomWorkspace({ goals, loadingGoals = false, goalsError, transpo
     { personas: second.personas, tier: 'measured', response: second.response }) : null;
   const toughest = measured ? toughestPersona(measured.personas, measured.sentences, measured.response) : null;
   return <section className="space-y-4">
-    <header><h1 className="text-2xl font-semibold">The Room</h1><p>Feedback comes from a simulated panel.</p><p>Enter pitch sentences below. Microphone transcription is unavailable.</p></header>
+    <header><h1 className="text-2xl font-semibold">The Room</h1><p>Feedback comes from a simulated panel.</p><p>Speak or enter pitch sentences below.</p></header>
     {goalsError && <p role="alert">{goalsError}</p>}
     {!loadingGoals && !goalsError && !goals.length && <p>Create a goal with sourced matches before starting.</p>}
     <div><label htmlFor="room-goal">Goal</label><br /><select id="room-goal" value={goalId} disabled={loadingGoals || !!goalsError || busy || !!room || !goals.length}
@@ -94,10 +132,13 @@ export function RoomWorkspace({ goals, loadingGoals = false, goalsError, transpo
       <button type="button" disabled={busy || !first} onClick={() => void start(true)}>Start linked second run</button></div>}
     {room && <>
       <p>Run active · {room.personas.length} simulated personas</p>
+      <RoomMicrophone consentGranted={consentGranted} disabled={busy || !!draft.trim() || queued > 0} onSentence={queueSentence} onActiveChange={onMicrophoneActive} />
+      {queued > 0 && <><p role="status">{queued} spoken sentence(s) waiting to be scored.</p><ol aria-label="Unscored spoken sentences">{pending.current.map((text, index) => <li key={index}>{text}</li>)}</ol></>}
+      {queueFailed && <button type="button" disabled={!consentGranted} onClick={() => void drain()}>Retry spoken sentences</button>}
       <form onSubmit={(e) => void commit(e)} className="space-y-2"><label htmlFor="room-sentence">Committed sentence</label><br />
-        <textarea id="room-sentence" value={draft} disabled={busy} onChange={(e) => setDraft(e.target.value)} rows={2} maxLength={2_000} className="w-full border p-2" />
-        <button type="submit" disabled={busy || !draft.trim()}>Score sentence</button>{' '}
-        <button type="button" disabled={busy || !room.sentences.length || !!draft.trim()} onClick={() => void stop()}>Stop and measure</button>
+        <textarea id="room-sentence" value={draft} disabled={busy || microphoneActive || queued > 0} onChange={(e) => setDraft(e.target.value)} rows={2} maxLength={2_000} className="w-full border p-2" />
+        <button type="submit" disabled={busy || microphoneActive || queued > 0 || !draft.trim()}>Score sentence</button>{' '}
+        <button type="button" disabled={busy || microphoneActive || queued > 0 || !room.sentences.length || !!draft.trim()} onClick={() => void stop()}>Stop and measure</button>
         {draft.trim() && <p>Score or clear the current sentence before stopping.</p>}
       </form>
       <h2 className="font-semibold">Transcript</h2><ol className="list-decimal pl-5">{room.sentences.map((s) => <li key={s.index}>{s.text}</li>)}</ol>

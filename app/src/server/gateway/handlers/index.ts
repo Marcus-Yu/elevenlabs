@@ -10,6 +10,7 @@ import { createOutreachHandlersFromEnv } from "./outreach.prisma";
 import { createStubHandlers } from "./stubs";
 import { createGoalProposalHandler, createThreadChatHandler } from "./threadChat";
 import { createVoiceHandlers } from "./voice";
+import { createPitchHandlersFromEnv } from "./pitch";
 
 export interface HandlerDeps {
   /** Prisma's MemoryItem delegate (prisma.memoryItem), for the WP12 memory handlers. */
@@ -40,6 +41,7 @@ export function createHandlerMap(env: NodeJS.ProcessEnv, deps: HandlerDeps): Han
     ...createStubHandlers(),
     ...createVoiceHandlers(env.ELEVENLABS_MODE === "live" || env.ADAPTER_MODE === "live" ? env.ELEVENLABS_API_KEY?.trim() : undefined),
     ...createCalibrationHandlers(env),
+    ...createPitchHandlersFromEnv(env),
     "thread.propose_goal": createGoalProposalHandler(),
     "thread.chat": createThreadChatHandler(env, deps.executeThreadTool),
     ...createDiscoveryHandlersFromEnv(env),

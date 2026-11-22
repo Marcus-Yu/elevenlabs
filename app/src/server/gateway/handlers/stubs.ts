@@ -38,6 +38,7 @@ export function createStubHandlers(): HandlerMap {
     "thread.chat": defineHandler({ payload: AnyObject, run: async () => stub({ available: false }) }),
     "calibration.profiles": defineHandler({ payload: AnyObject, run: async () => stub({ available: false }) }),
     "calibration.criteria": defineHandler({ payload: AnyObject, run: async () => stub({ available: false }) }),
+    "pitch.score": defineHandler({ payload: AnyObject, run: async () => stub({ available: false }) }),
     "company.search": defineHandler({ payload: AnyObject, run: async () => stub({ companies: STUB_COMPANIES }) }),
     "jobs.search": defineHandler({ payload: AnyObject, run: async () => stub({ jobs: STUB_JOBS }) }),
     "contact.search": defineHandler({ payload: AnyObject, run: async () => stub({ contacts: STUB_CONTACTS, provider: "fiber" as const }) }),

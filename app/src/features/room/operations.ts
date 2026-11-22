@@ -3,7 +3,7 @@ import { HttpError, prisma } from "wasp/server";
 import type { AppendRoomSentence, FinishRoomRun, StartRoomRun } from "wasp/server/operations";
 import { PersonaSchema, type Persona, type ScoreResponse } from "../../shared/contracts/sim";
 import type { PitchSentence } from "../pitch/pitch-analysis";
-import { findPitchPanel, requirePitchScoringGateway } from "../pitch/operations";
+import { findPitchPanel, scorePitchThroughGateway } from "../pitch/operations";
 import { requireScoreMatrix, type PitchResult } from "../pitch/pitch-workflow";
 
 const runIdSchema = z.string().min(1);
@@ -23,7 +23,6 @@ export const startRoomRun: StartRoomRun<z.input<typeof startSchema>, { runId: st
   async (raw, context) => {
     const userId = requireUser(context.user);
     const input = startSchema.parse(raw);
-    requirePitchScoringGateway();
     const panel = await findPitchPanel(userId, input.goalId, input.parentRunId, "ROOM");
     if (!panel) throw new HttpError(404, "An owned audience panel is required.");
     const personas = z.array(PersonaSchema).min(1).parse(panel.personas);
@@ -66,7 +65,7 @@ export const appendRoomSentence: AppendRoomSentence<z.input<typeof appendSchema>
 }> = async (raw, context) => {
   const userId = requireUser(context.user);
   const input = appendSchema.parse(raw);
-  const score = requirePitchScoringGateway();
+  const score = scorePitchThroughGateway;
   const run = await readRoomRun(userId, input.runId);
   if (input.expectedIndex !== run.sentences.length) {
     throw new HttpError(409, "The Room transcript has changed. Start a new run to continue.");
@@ -93,7 +92,7 @@ export const appendRoomSentence: AppendRoomSentence<z.input<typeof appendSchema>
 export const finishRoomRun: FinishRoomRun<{ runId: string }, PitchResult> = async (raw, context) => {
   const userId = requireUser(context.user);
   const runId = runIdSchema.parse(raw?.runId);
-  const score = requirePitchScoringGateway();
+  const score = scorePitchThroughGateway;
   const run = await readRoomRun(userId, runId);
   if (!run.sentences.length) throw new HttpError(400, "Add a sentence before finishing.");
   const response = requireScoreMatrix(await score(userId, run.goalId, {
