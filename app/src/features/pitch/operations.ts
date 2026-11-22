@@ -3,21 +3,18 @@ import type { ListPitchGoals, ScorePitchRun } from "wasp/server/operations";
 import { PitchInputSchema, runPitchWorkflow, type PitchInput, type PitchResult } from "./pitch-workflow";
 import type { PitchWorkflowPorts } from "./pitch-workflow";
 import { panelForRankedMatches } from "./ranked-panel";
+import { gateway } from "../../server/gateway";
+import { ScoreResponseSchema } from "../../shared/contracts/sim";
 
 const rankedStatus = ["VETTED", "APPROVED", "CONTACTED"] as const;
 
-let scoreThroughGateway: PitchWorkflowPorts["score"] | undefined;
-
-/** WP1 server startup installs the gateway dispatcher once its scoring action is available. */
-export function registerPitchScoringGateway(dispatch: PitchWorkflowPorts["score"]) {
-  if (scoreThroughGateway) throw new Error("Pitch scoring gateway already registered.");
-  scoreThroughGateway = dispatch;
-}
-
-export function requirePitchScoringGateway(): PitchWorkflowPorts["score"] {
-  if (!scoreThroughGateway) throw new HttpError(503, "Pitch scoring is waiting for the action gateway.");
-  return scoreThroughGateway;
-}
+/** Every score is authorized at time of use, including each live Room segment. */
+export const scorePitchThroughGateway: PitchWorkflowPorts["score"] = async (userId, goalId, payload) => {
+  const result = await gateway.execute({ actionType: "pitch.score", userId, goalId,
+    actor: { kind: "user", id: userId }, origin: "ui", tainted: false, payload });
+  if (result.decision.outcome !== "allow") throw new HttpError(403, "Pitch scoring requires an active owned goal and model processing consent.");
+  return ScoreResponseSchema.parse(result.data);
+};
 
 export const listPitchGoals: ListPitchGoals<void, { id: string; statement: string }[]> = async (_, context) => {
   if (!context.user) throw new HttpError(401, "Sign in to score a pitch.");
@@ -35,7 +32,7 @@ export const listPitchGoals: ListPitchGoals<void, { id: string; statement: strin
 export const scorePitchRun: ScorePitchRun<PitchInput, PitchResult> = async (input, context) => {
   if (!context.user) throw new HttpError(401, "Sign in to score a pitch.");
   if (!PitchInputSchema.safeParse(input).success) throw new HttpError(400, "Enter a goal and a valid pitch.");
-  const score = requirePitchScoringGateway();
+  const score = scorePitchThroughGateway;
 
   return runPitchWorkflow(context.user.id, input, {
     findPanel: (userId, goalId, parentRunId) => findPitchPanel(userId, goalId, parentRunId, "TEXT"),
