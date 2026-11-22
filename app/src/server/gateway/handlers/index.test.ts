@@ -14,7 +14,7 @@ import { createStubHandlers } from "./stubs";
 const REPLAY_ENV = { ADAPTER_MODE: "replay" } as NodeJS.ProcessEnv;
 const unusedMemory = new Proxy({}, { get: () => () => Promise.reject(new Error("memory not used in this test")) }) as MemoryItemDelegate;
 
-const deps: HandlerDeps = { memoryItems: unusedMemory, matchDatabase: {} as HandlerDeps["matchDatabase"] };
+const deps: HandlerDeps = { memoryItems: unusedMemory, matchDatabase: {} as HandlerDeps["matchDatabase"], executeThreadTool: async () => { throw new Error("No model tools expected"); } };
 
 function replayGateway() {
   const store = new MemoryGatewayStore();

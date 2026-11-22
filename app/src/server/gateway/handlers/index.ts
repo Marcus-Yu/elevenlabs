@@ -1,14 +1,18 @@
 import type { MemoryItemDelegate } from "../../../features/memory/memoryStore";
+import type { Gateway } from "../engine";
 import type { HandlerMap } from "../types";
+import { createCalibrationHandlers } from "./calibration";
 import { createDiscoveryHandlersFromEnv } from "./discovery";
 import { createMatchSubmission, type MatchSubmissionDatabase } from "./matchSubmission";
 import { createMemoryHandlers, createMemoryStoreFromEnv } from "./memory";
+import { createGoalProposalHandler, createThreadChatHandler } from "./threadChat";
 import { createStubHandlers } from "./stubs";
 
 export interface HandlerDeps {
   /** Prisma's MemoryItem delegate (prisma.memoryItem), for the WP12 memory handlers. */
   memoryItems: MemoryItemDelegate;
   matchDatabase: MatchSubmissionDatabase;
+  executeThreadTool: Gateway["execute"];
 }
 
 /**
@@ -26,6 +30,9 @@ export interface HandlerDeps {
 export function createHandlerMap(env: NodeJS.ProcessEnv, deps: HandlerDeps): HandlerMap {
   return {
     ...createStubHandlers(),
+    ...createCalibrationHandlers(env),
+    "thread.propose_goal": createGoalProposalHandler(),
+    "thread.chat": createThreadChatHandler(env, deps.executeThreadTool),
     ...createDiscoveryHandlersFromEnv(env),
     ...createMemoryHandlers(createMemoryStoreFromEnv(deps.memoryItems, env)),
     "match.submit": createMatchSubmission(deps.matchDatabase),

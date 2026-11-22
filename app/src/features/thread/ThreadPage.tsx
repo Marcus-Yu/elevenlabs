@@ -1,11 +1,42 @@
-import { PlaceholderPage } from "../../shell/PlaceholderPage";
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+import {
+  confirmCriteriaChange, createHireGoal, getHireRuns, getThreadSettings, rejectMatchWithReason,
+  runHireShortlist, startThreadCalibration, submitThreadCalibration, useQuery,
+} from 'wasp/client/operations';
+import { AssistantThread } from './AssistantThread';
+import { HiringWorkflow, type HiringTransport } from './HiringWorkflow';
+
+const hiringTransport: HiringTransport = {
+  create: createHireGoal,
+  shortlist: runHireShortlist,
+  reject: rejectMatchWithReason,
+  confirm: confirmCriteriaChange,
+  runs: getHireRuns,
+  startCalibration: startThreadCalibration,
+  submitCalibration: submitThreadCalibration,
+};
 
 export function ThreadPage() {
-  return (
-    <PlaceholderPage
-      title="Thread"
-      purpose="One conversation from request to approved action, with approval cards."
-      owner="WP4"
-    />
-  );
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { data: settings } = useQuery(getThreadSettings);
+  const [voiceDraft] = useState(() => {
+    const state = location.state as { hiringNeed?: unknown } | null;
+    return typeof state?.hiringNeed === 'string' ? state.hiringNeed.slice(0, 2000) : '';
+  });
+  const [reviewedDraft, setReviewedDraft] = useState<{ need: string }>();
+  useEffect(() => {
+    if (location.state && typeof location.state === 'object' && 'hiringNeed' in location.state) {
+      const { hiringNeed: _ignored, ...remaining } = location.state as Record<string, unknown>;
+      void navigate(`${location.pathname}${location.search}${location.hash}`, {
+        replace: true, state: Object.keys(remaining).length ? remaining : null,
+      });
+    }
+  }, [location, navigate]);
+  return <main className="space-y-8">
+    <header><h1 className="text-2xl font-semibold">Thread</h1><p>Explore a goal, review evidence, and decide what happens next.</p></header>
+    <AssistantThread onReviewHiringGoal={(need) => setReviewedDraft({ need })} />
+    <HiringWorkflow initialDraft={voiceDraft} reviewedDraft={reviewedDraft} shortlistReplay={settings?.shortlistReplay} transport={hiringTransport} />
+  </main>;
 }
