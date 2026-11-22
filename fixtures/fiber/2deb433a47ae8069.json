@@ -2,7 +2,7 @@
   "version": 1,
   "provider": "fiber",
   "hash": "2deb433a47ae8069",
-  "recordedAt": "2026-11-22T17:38:41.300Z",
+  "recordedAt": "2026-11-22T18:20:17.826Z",
   "request": {
     "method": "POST",
     "url": "https://api.fiber.ai/v1/people-search",
@@ -50,13 +50,100 @@
               {
                 "is_current": true,
                 "title": "Director of Operations & Special Projects",
-                "company_name": "International Warehouse Logistics Association"
+                "company_name": "International Warehouse Logistics Association",
+                "start_date": "2025-10-01T00:00:00.000Z",
+                "seniority": "Director"
+              },
+              {
+                "is_current": false,
+                "title": "Executive Assistant & Manager of Operations",
+                "start_date": "2024-10-01T00:00:00.000Z",
+                "seniority": "Director"
+              },
+              {
+                "is_current": false,
+                "title": "Executive Assistant",
+                "start_date": "2023-06-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Director of Legal and Volunteer Leadership Administration",
+                "start_date": "2022-06-01T00:00:00.000Z",
+                "seniority": "Director"
+              },
+              {
+                "is_current": false,
+                "title": "Director of Operations",
+                "start_date": "2009-02-01T00:00:00.000Z",
+                "seniority": "Director"
+              },
+              {
+                "is_current": false,
+                "title": "Director of Marketing Operations",
+                "start_date": "2007-01-01T00:00:00.000Z",
+                "seniority": "Director"
+              },
+              {
+                "is_current": false,
+                "title": "Manager of InfoExpress",
+                "start_date": "2002-06-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "InfoExpress Coordinator",
+                "start_date": "2001-09-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Part-time assistant convention",
+                "start_date": "1999-10-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Manager of Risk Management",
+                "start_date": "1996-06-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Assistant Manager Risk Management",
+                "start_date": "1995-06-01T00:00:00.000Z",
+                "seniority": "Associate"
+              },
+              {
+                "is_current": false,
+                "title": "Adminstrative Assistant Risk Management",
+                "start_date": "1993-06-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Staff Assistant Membership/Risk Management",
+                "start_date": "1991-04-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Part-time assistant General Operations",
+                "start_date": "1990-06-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Mailroom Coordinator",
+                "start_date": "1987-06-01T00:00:00.000Z",
+                "seniority": "Entry level"
               }
-            ]
+            ],
+            "skills": []
           }
         ],
         "estimatedCount": null,
-        "nextCursor": "gAAAAABrAyigqWkYaNPtnYWZllnp1WyKA6jcr0uqOi-Cli7qCtqufJwbb2vMRC_mUyFXgrHaNaBCXaZI5o6zAwrm2I-tkVcHkEu5kVAWNQNH3GCFejmgfVG9exC0pfB3U_0OiYQHyAr1JCLHQkfnavpJW8QW2OoF6OxwVxSfra-gVlH8W_QP3zq3B9anRdzdpfu1tvzxiEQb6ZIfwWqAZ44zFH3CydEhZDGpVb6nQFa4zbgzoxB1xSmGxMSOb-_9otoMWG3rwfJYwDFIUxeo5G7QRlzh7kXGMheGmw5waO6T9uN_yOxetPM="
+        "nextCursor": "gAAAAABrAzJhgvAwQubnDAiORlcGMdSUPDZEH4ULHr0OYvxbja9gWYHo0JQkF4TmSd-5DcC7AtGR287W1J3LPlJhMMLRdrkXXw67Csp269aTBi4_w1xCSP72UmluQvEwj4vDP0xzYhL_hauocKNKSZdd0Hu9ufgHpV3ZSEru6Ocr__HB7ZIBn_JzAXYQ52WfNJW3_gDuX5bjPFQsD1g7nrQj-_HuHXn6r1LaBcrnS137VaJkLkWXJn-xL6TPj4s1n74QmSawinXrHkyVBidF0Elv2q62IaYWfuuJdPqJExZNMzYAj42eg80="
       },
       "chargeInfo": {
         "method": "charged-now",
