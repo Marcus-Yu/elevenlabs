@@ -4,6 +4,7 @@ import type { GoalProposal } from "./need-detection";
 type GoalSelection = GoalProposal["proposedGoal"] & { autonomy: "WATCH" | "PREPARE" | "ACT" };
 
 export type MeetingProposalCardProps = {
+  approvalAvailable?: boolean;
   proposalId: string;
   proposal: GoalProposal;
   onApprove: (proposalId: string, goal: GoalSelection) => Promise<void>;
@@ -15,7 +16,7 @@ export function MeetingProposalCard(props: MeetingProposalCardProps) {
   return <PendingMeetingProposal key={props.proposalId} {...props} />;
 }
 
-function PendingMeetingProposal({ proposalId, proposal, onApprove, onDismiss }: MeetingProposalCardProps) {
+function PendingMeetingProposal({ approvalAvailable = true, proposalId, proposal, onApprove, onDismiss }: MeetingProposalCardProps) {
   const id = useId();
   const [statement, setStatement] = useState(proposal.proposedGoal.statement);
   const [autonomy, setAutonomy] = useState<"WATCH" | "PREPARE" | "ACT">("PREPARE");
@@ -48,7 +49,7 @@ function PendingMeetingProposal({ proposalId, proposal, onApprove, onDismiss }: 
       <form onSubmit={(event) => {
         event.preventDefault();
         const trimmed = statement.trim();
-        if (!trimmed) return;
+        if (!approvalAvailable || !trimmed) return;
         void act(() => onApprove(proposalId, { ...proposal.proposedGoal, statement: trimmed, autonomy }));
       }}>
         <label htmlFor={`${id}-statement`}>Goal statement</label>
@@ -65,7 +66,8 @@ function PendingMeetingProposal({ proposalId, proposal, onApprove, onDismiss }: 
         </fieldset>
         {error && <p role="alert">{error}</p>}
         {pending && <p role="status">Working…</p>}
-        <button type="submit" disabled={pending || !statement.trim()}>Approve goal</button>
+        {!approvalAvailable && <p>Goal approval is not available yet.</p>}
+        <button type="submit" disabled={!approvalAvailable || pending || !statement.trim()}>Approve goal</button>
         <button type="button" disabled={pending} onClick={() => void act(() => onDismiss(proposalId))}>Dismiss</button>
       </form>
     </section>
