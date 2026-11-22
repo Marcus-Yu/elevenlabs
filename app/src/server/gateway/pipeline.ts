@@ -61,6 +61,11 @@ export function summarizePayload(payload: unknown, omitText = false): string | n
   return text.length > SUMMARY_MAX ? `${text.slice(0, SUMMARY_MAX)}…` : text;
 }
 
+const privateActions = new Set<string>([
+  "thread.chat", "thread.propose_goal", "calibration.profiles", "calibration.criteria",
+  "voice.scribe_token", "voice.speak",
+]);
+
 export async function writeLog(
   deps: GatewayDeps,
   subject: LogSubject,
@@ -78,7 +83,7 @@ export async function writeLog(
     decision,
     ruleId,
     reason,
-    inputSummary: summarizePayload(subject.payload, extra.omitText),
+    inputSummary: privateActions.has(subject.actionType) ? null : summarizePayload(subject.payload, extra.omitText),
     factIdsSent: extra.factIdsSent ?? [],
     adapterMode: deps.env.adapterMode,
   });
@@ -97,7 +102,7 @@ export function subjectOf(request: ActionRequest): LogSubject {
     actor: request.actor,
     origin: request.origin,
     actionType: request.actionType,
-    payload: request.payload,
+    payload: privateActions.has(request.actionType) ? undefined : request.payload,
   };
 }
 
@@ -154,7 +159,7 @@ export async function decideAndRun(
   try {
     result = await handler.run(allow.payload, ctx);
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
+    const message = privateActions.has(request.actionType) ? "request failed" : error instanceof Error ? error.message : String(error);
     const logId = await writeLog(deps, logged, "ALLOW", allow.ruleId, joinReasons(allow.reason, `handler_error: ${message}`), { factIdsSent });
     throw new GatewayHandlerError(logId, request.actionType, error);
   }

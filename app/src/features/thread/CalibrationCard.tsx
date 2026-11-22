@@ -33,7 +33,7 @@ export function buildCalibrationReactions(
     const selection = selections[profile.id];
     return selection?.decision ? [{ profileId: profile.id, decision: selection.decision, reason: selection.reason.trim() }] : [];
   });
-  if (!selected.length || selected.some((entry) => !entry.reason)) return null;
+  if (!selected.length || selected.some((entry) => !entry.reason || entry.reason.length > 600)) return null;
   return selected.map((entry) => ({ id: makeId(), ...entry }));
 }
 
@@ -75,7 +75,7 @@ export function CalibrationCard({ profiles, onSubmit, disabled = false }: Calibr
         </label>)}
       </div>
       <label htmlFor={`${groupId}-reason-${index}`}>Reason{selections[profile.id]?.decision ? ' (required)' : ' (optional until selected)'}</label>
-      <textarea id={`${groupId}-reason-${index}`} className="block w-full border p-2" rows={2}
+      <textarea id={`${groupId}-reason-${index}`} className="block w-full border p-2" rows={2} maxLength={600}
         value={selections[profile.id]?.reason ?? ''} onChange={(e) => setSelection(profile.id, { reason: e.target.value })} />
     </fieldset>)}
     {error && <p role="alert">{error}</p>}

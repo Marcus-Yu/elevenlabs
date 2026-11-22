@@ -24,7 +24,7 @@ What each action calls:
 - `run_research` → `runHireShortlist`. The first `snapshot()` after the brief is approved does this once too, because the shell has no research button.
 - `reject_candidate` → `rejectMatchWithReason`. It returns an extra `proposedChange.explanation` for the confirm prompt, anonymised.
 - `confirm_change` → `confirmCriteriaChange`, which produces run 2.
-- `open_intro` → returns an extra `introUrl` (`{client}/match`) for `shell.openExternal`.
+- `open_intro` → returns an extra `introUrl` (`{client}/match`). The shell opens it in an in-app Atlas window (`main/introWindow.js`: titled "Atlas", no menu bar, reused if open, navigation locked to the client origin, new windows denied) and hides the overlay. It never opens the system browser.
 - `refresh` → re-reads.
 
 Mapping:
