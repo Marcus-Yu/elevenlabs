@@ -26,9 +26,10 @@ export const HireCriteria = z.object({
   evidence: z.array(z.object({ criterion: z.string(), reactions: z.array(z.string()) })).default([]),
 });
 export type HireCriteria = z.output<typeof HireCriteria>;
+export type HireCriteriaInput = z.input<typeof HireCriteria>;
 
 /** Structural match for adapters/fiber.ts CandidateRecord (features must not import adapters). */
-export interface Candidate {
+export type Candidate = {
   fullName: string;
   title: string;
   currentCompany?: string;
@@ -37,15 +38,15 @@ export interface Candidate {
   seniority?: string;
   skills: string[];
   sources: SourceRef[];
-}
+};
 
-export interface CandidateReason {
+export type CandidateReason = {
   text: string;
   points: number;
   source?: SourceRef;
-}
+};
 
-export interface RankedCandidate {
+export type RankedCandidate = {
   candidate: Candidate;
   score: number;
   rationale: string;
@@ -53,7 +54,7 @@ export interface RankedCandidate {
   citedSources: SourceRef[];
   meetsMustHaves: boolean;
   method: typeof CANDIDATE_RANKING_METHOD;
-}
+};
 
 /** The people-search request for these criteria (contact.search in criteria mode). */
 export function candidateQueryFor(criteria: HireCriteria) {
@@ -146,13 +147,13 @@ function scoreCandidate(c: Candidate, criteria: HireCriteria): RankedCandidate {
 
 // ---------- rejection → proposed criteria change → confirm → rerun ----------
 
-export interface CriteriaChange {
+export type CriteriaChange = {
   /** The fields that would change, with old and new values, for the confirm card. */
-  changes: { field: keyof HireCriteria; from: unknown; to: unknown }[];
+  changes: { field: keyof HireCriteria; from: HireCriteria[keyof HireCriteria] | null; to: HireCriteria[keyof HireCriteria] }[];
   explanation: string;
   /** The rejection that led to it, for the memory item and the audit log. */
   basedOn: { candidate: string; reason: string; source?: SourceRef };
-}
+};
 
 const JUNIOR = /\b(too junior|junior|not senior enough|too green|needs more experience|inexperienced)\b/i;
 const SENIOR = /\b(too senior|overqualified|too experienced|too expensive)\b/i;
