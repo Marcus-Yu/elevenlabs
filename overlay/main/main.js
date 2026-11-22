@@ -79,11 +79,13 @@ let leaveTimer = null;
 
 function go(next) {
   clearTimeout(leaveTimer);
+  const prev = state;
   state = next;
   if (!win || win.isDestroyed()) return;
   win.setIgnoreMouseEvents(ignoresMouse(next), { forward: true });
-  if (next === "listening") {
-    // Each summon starts fresh: no stale need or goal, and re-check the live server.
+  if (next === "listening" && prev === "hidden") {
+    // A new summon after an explicit dismiss starts fresh: no stale need or goal, and
+    // re-check the live server. Voice turn-taking (→ listening) must NOT reset anything.
     liveProvider?.reset?.();
     mockProvider.reset?.();
     providerReady = probeLive();

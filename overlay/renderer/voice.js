@@ -45,9 +45,10 @@ async function start() {
         if (source === "user") window.atlas.voiceState("thinking");
       },
       onDisconnect: () => {
+        // A voice session ending is not a dismiss: keep the overlay and cards; the next
+        // ball click (→ listening) or summon resumes voice.
         conv = null;
         stopBars();
-        window.atlas.nav("dismiss");
       },
       onError: (message) => console.error("[atlas] voice error", message),
     });

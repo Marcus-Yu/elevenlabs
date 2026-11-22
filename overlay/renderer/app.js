@@ -99,7 +99,7 @@ function mountForState() {
 
 // Neutral start: until the user states a need, one small input under the ball.
 const needBox = h("form", { class: "need-box", hidden: true },
-  h("input", { type: "text", placeholder: "What do you need help with?", "aria-label": "What do you need help with?" }));
+  h("input", { type: "text", placeholder: "Who do you want to find?", "aria-label": "Who do you want to find?" }));
 document.querySelector(".cluster").append(needBox);
 needBox.addEventListener("submit", (e) => {
   e.preventDefault();
