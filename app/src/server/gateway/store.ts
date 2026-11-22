@@ -35,9 +35,12 @@ export interface FactSnapshot {
   allowedPurposes: string[];
 }
 
+export type MatchStatus = "NEW" | "VETTED" | "APPROVED" | "REJECTED" | "CONTACTED";
+
 export interface MatchSnapshot {
   id: string;
   goalId: string;
+  status: MatchStatus;
 }
 
 export interface SourceRefSnapshot {
@@ -105,6 +108,8 @@ export interface GatewayStore {
   /** All profile facts of the user. */
   getUserFacts(userId: string): Promise<FactSnapshot[]>;
   getMatch(matchId: string): Promise<MatchSnapshot | null>;
+  /** The goal's match for the company with this domain. */
+  findMatchByDomain(goalId: string, domain: string): Promise<MatchSnapshot | null>;
   getDraft(draftId: string): Promise<DraftSnapshot | null>;
   /** True when the lower-cased address or its domain is in OptOut. */
   isOptedOut(email: string): Promise<boolean>;
