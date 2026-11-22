@@ -61,6 +61,10 @@ export function summarizePayload(payload: unknown, omitText = false): string | n
   return text.length > SUMMARY_MAX ? `${text.slice(0, SUMMARY_MAX)}…` : text;
 }
 
+function isPrivateThreadAction(actionType: string): boolean {
+  return actionType === "thread.chat" || actionType === "thread.propose_goal" || actionType === "calibration.profiles" || actionType === "calibration.criteria";
+}
+
 export async function writeLog(
   deps: GatewayDeps,
   subject: LogSubject,
@@ -78,7 +82,7 @@ export async function writeLog(
     decision,
     ruleId,
     reason,
-    inputSummary: summarizePayload(subject.payload, extra.omitText),
+    inputSummary: isPrivateThreadAction(subject.actionType) ? null : summarizePayload(subject.payload, extra.omitText),
     factIdsSent: extra.factIdsSent ?? [],
     adapterMode: deps.env.adapterMode,
   });
@@ -154,7 +158,7 @@ export async function decideAndRun(
   try {
     result = await handler.run(allow.payload, ctx);
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
+    const message = isPrivateThreadAction(request.actionType) ? "request failed" : error instanceof Error ? error.message : String(error);
     const logId = await writeLog(deps, logged, "ALLOW", allow.ruleId, joinReasons(allow.reason, `handler_error: ${message}`), { factIdsSent });
     throw new GatewayHandlerError(logId, request.actionType, error);
   }
