@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "provider": "fiber",
+  "hash": "72417c5d732e89b0",
+  "recordedAt": "2026-11-22T17:38:42.237Z",
+  "request": {
+    "method": "POST",
+    "url": "https://api.fiber.ai/v1/people-search",
+    "body": {
+      "apiKey": "[REDACTED]",
+      "pageSize": 3,
+      "currentCompanies": [
+        {
+          "domain": "logiwa.com"
+        }
+      ],
+      "searchParams": {
+        "jobTitleV2": {
+          "anyOf": [
+            {
+              "type": "term",
+              "term": "operations"
+            },
+            {
+              "type": "term",
+              "term": "supply chain"
+            },
+            {
+              "type": "term",
+              "term": "fulfillment"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "body": {
+      "output": {
+        "data": [
+          {
+            "name": "Berkin İraf",
+            "first_name": "Berkin",
+            "last_name": "İraf",
+            "url": "https://www.linkedin.com/in/berkin-iraf-6a5198b8",
+            "primary_slug": "berkin-iraf-6a5198b8",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Product Manager - Inbound Operations",
+                "company_name": "Logiwa"
+              }
+            ]
+          },
+          {
+            "name": "SERCAN YASAR",
+            "first_name": "SERCAN",
+            "last_name": "YASAR",
+            "url": "linkedin.com/in/sercanyasar",
+            "primary_slug": "sercanyasar",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Director of Value Operations",
+                "company_name": "Logiwa WMS"
+              }
+            ]
+          },
+          {
+            "name": "Victoria Pereira",
+            "first_name": "Victoria",
+            "last_name": "Pereira",
+            "url": "https://www.linkedin.com/in/victoria-pereira-l",
+            "primary_slug": "victoria-pereira-l",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Senior Manager of Revenue Operations",
+                "company_name": "Logiwa"
+              }
+            ]
+          }
+        ],
+        "estimatedCount": null,
+        "nextCursor": "gAAAAABrAyiho75DS8Amr0_Wq25SIf0pyuECTCeeDAon-PdjQQ1TvA54PSdM2WN3uyrA5HKtVukjdBsfhsv37As-rROwpyHxoixuXjpCNbBnMIYw5qwAmlTfPEKoia8HDFapkeXY5txeyR0ysF3li-NbNzC3ODwGIz49wESrHs3PE2RzZQ0l6OPzR2bq7tMzMFk5R_pES-PluCgkhh1HXa3MN_O_gzaLBlotmc9lUj_7d7PLlPHCB7qy10QuwosClOH_vBOhMPBE0BPJDuaN7qeLjX2VvPu0H99vYjkUWvCysw7qzCkmoTjAj1XV1uERynAkiW0vwhwiJDlaobkIKserl4La-pas67DZnmalzUCrQ2AtFKiO5_TDytko8WuBL1BLIijif7Tioa1dOy2MEoktMjWH5tnEnTwjaHvbg6v5qChiq-uZWv6BrGY5h7R4afcXVl07q19qO3nSi2VwuL8BV0qipQYw-qIIiFCOU1GXkDQ7tO2z8ACXMnSDKSMb6GkzD8zjV0inP6ReVpvx-Urf5NFs2yc47EawT0QINQqRwrVZwIdDM0y1v5jeqSwJ0DkpDy_TR__veBCeNEwii9dJbB1FbmOsHla4ZgrCAWAlMptnj-zJ7pgGNnHqfJ6MP5pa8K9OyXQytZwUzSCY-Hhv9qmMQiwjEGxluss8iZVdl2OwumqSu7m8xnVy1CGrZOzXed_OwMwieYHNSlRNyoITKeNd_s4qEyefXz5Yenid2gzaCPOMH_Iad4iYMJIYRDeqz3dx4iTAo2tv2zNhP9H6WjTIAAZjonBMkjqdJ6q9FGkHvyo7uHbglxIHeleu785MG5nvtW6B6ZujadFdB-9t24EpnC4WIt6Kl3ejbsr8ilWiE7hLqwAoframKGO_rImDw9PfZyn-QfZdFZ1kDnTXTmC_IZq-c0POWC5I7cMQi8Au4oGg2jeF6Du8S7KDpBdFv0d5IkE86gCTBKG3G9Dhm3e49_nqNl3v4wFUpIIrOWoIMwINSdad8W6QlVAl7D1v-LKkZBkGYhWoQMrklRkv6_6AzxwhRAysNox7bYfrrqjXmrhoSnTYFmQbWIStXEhp6KLa9sV35kJQDjFWAa7XY6uxCrMYX0gUbdkz9SginrZEVXElF84_hM1qEYZ_j3E8ANVXOItnDqLx6MfYUN5friYP97s1lwbaN0KcUlped4yLolIaYJz98RHT6BPY-8yIFfCSXl_4flMOQn0xchL5gfTRRGB42oURrBGr3Y_lh4L9_jNbe9nOMc0ifgvD0bAsJaUJt09tmWh8sKtWkqZDbtTP5hQKFVzACT0QIV7FSd4QgHZarJ1i1PoyMLUlpHglTzeX2nPpEzZUqDUE49R-0OVoH5PvnY4fTuLJhUlHD5I4NJdJLLN8GYNg8VhL1-v5uKbCaOSDgInqOys3g-Rmlij_oAPWbQDlPzQJjjsdbyVFhk6_a4buPokYrvxy9VyYx2uKs3VEnawpQYgYQ58H1x1M8ucIhboekpf9pCGeW4KtkUR6CfG7KWDxItY-AiiDFhKpeo8p7Mwj_4KCbAoXHJmaI4oGkbOYlqyG3nSVwgTZ6LxBKNvEOWaE8qbR-G57VuxqMRTxqCOqCXgpx4bJpNBPaVI4WDrZoB02xl5ifwhTu_aeitrHGgtkrO4T_bj9yjR2aLwzMX8DBnzwv0sBJl0CXDPsqNyfFHVDjEW5IhN8lH4UcITEfSidEbEzW8mlfk9kJyUvnZ5HbgyRawESUspn0pM5I1_eOWqZJip_ZbcjL9sBN-2BNZh-FEo-uHGgSxHM1Si0FSx6BN1ISKop1sMc2Z17P8Px27fXcj2oyL_iDOcxWobrDovSLg0bqYzuexCUF3XFD3oBtKWzq8_N9oOUTKoQadNcfVuVq1cehzxCzQFmYz2-fAp3tPwJYzFv3OoSV18nrtxUoVCFhEh6bth8RVBxYbzKAj2uaZohe4BNhi84fhC57_UPDkMu1IzOlf0eLy4iiTa_GnRN4_-nK0mLXROLBNzbkOziSGvrDjYUvSnWKZWD4LAcLE8gs0u9jOzSs8Cx10bDBzNQUIS_XvJr6SgSSqiAUPgUqEQJ2_M3usE9OoMAXA_7zbAv2jJfZ_evzvRGi3emiDrYB7u4tbeE2XaRPuG4GUXPHsEIshJcpR7NESyWOs3_05MVFK7oCv0C9h7Jr62cxfN4x_nllVag7p79DTEWRh5MTwDcCX-WtkB0qHtqxLWl9VEJAG6DEUBZD7WtG0aYp3WEpw2Tv6yr3nMJTfpFqCEplLUJtv9mwRdzdpAHMl2kXojCbzHopUCYSz6PT0gEHv144E0xcyXd5anYrF_mE61p9xIMlGufXPQOVM2_ef9V00x8HGq_4X-zMVZgrB9q_I3PKidhI77G7eKS7KURgSk2aw2RQEgDIsQhkXg91VTVhglsc6uJT_TMHRlO40za46ics5nY32I0GhMJodCASRyDUxdEHU8DtojPE8le_Ek2aaYUk64AyxNNnqmwSeGSkQ46E0ROqjbjk2WUuXC14AZeSDIHIS-nN6JoQVRHzb29vDcjAQ-VLVzC9FCfqN6cQYac1wG3k4IApbgBLxroFFjGryjicPfOTyA5rp4amTAfsXIvws2Gar8wbZpdJnun2sKaLkSs5owOCDDU4qeZDmDcVdhGUeQj8cIqLMLebPpto0B4XwgYJPwFxTBU4BJNqCYjXxEsSELlficpxAki4eSjpg6TRRxETf728rLgou3O2H2EIpwUYjOPUYoYUeT8B7UiSV7qk06GRqsz0rE8DYUwij6QtD54N_kIkcEtGNgcPPpBtT9uAHGixVX58R3oQu0xa5C5XAsgeFFqpIJu6nKS2dqyZ2piUgjSzMJOTpiEjDzMQ3e98r-nRjhJW5Fv5clbbgCVWMQ29p_Olej-Hwl93GDYsu1C6Yoa9Z86RA_ABRUNREbVSLsOElX6n0NFu_cJCzWxzZLxP29G0s4W6DiIY5iMWAa5GV7tiaYriLNWAWEc8mwQ1CosYhAAAJ8P2bPxnQfmExySDSOIp70BWKH4xAcnyBkzmKig-ZcQAdt4Y85G-Z-PYh3Bu7bS-Nr7azyNH7YBgmSCF6J_lamkgay3V3t5Is4JiwCh557f6GZmtfvyrAEcqoKvaLykzvJ5k6QFeosNUjEXJDkVyLNiLuLZN2S8XkgtXayDzDjRj-LGKn07bDHZoaPd_GCf92RE-b6eiWkIk6OxT2xJCM62z1QirbW7yOsUgFSOSD5hNwn93BI2QPVNamMuOGTl_8byS7wu2tUEM1baaJreLTyhEUD5_IqR3SrlC0cnajHEtdzjW18rwaVsDZZWuFfsbX0oHXCOBBpFowVxT-Twv8oENAIPXDwMVoV9I8Lh8mZnhN1w9-86Lxw0OQUq5G427Qv6jeeV3a8MnA5CjrKAHo-EV57KNKW_XNDL_2NlI6DtRwN8A28KLe_OPv2gopy3LYWZpmTHFHR_9Mm4y4-QSiaJRQLagh2U7Q9oip8JklsN91xjIAptLI-D7UQcO5Lsff_psrv7dIEITf-IRh0FbAnw8FDDHI-ZDv6STOyi0iczd99gUW893X90V3Z-trPmlpk47FRKUibp4L52uF5r1bN4_HUHhbiE9HqXcDEDGKIrV6RbZwu5aBylGQH_G-OZJVD-5i_wRbCkyy4giYlj49yCUiHBvZD66NVfhwfSSNI4UQEeSUm2GjmKnqhWAV8m2kT5kgu7qG2vNjdGIl2VE_dzRXGqUZp1uHYB5Ei7jCuYwYZzK6qHANn_G-OAR0cNI-vQk0JgQDZG5NZ1hJyIbCjvj0SXvmSbFhPFLxDkHv9MgCobAUh01RzsSV9aMfLHOthFB0M9_g78ZeVveS2dEJW4qQ8wG7HqbJgOl7YvAzTZZriG4m7A8_eaFGDpBKVDntHibLcpr4rxI6Z6KUbmOo3rPjB1wrvArpB_6uQp9hZqpaQ6CPV7weanTOzacQRMTbAi7U1hSzeaPL3DXyOXRha0lqBk-osqEOBL1bMh1ZsD_r6J1lyZDSniCB-BtBLIC3pTAeWfCmF5LiiChpi2MyIJ5EJnCFUjT8RXLhwkRcB1fIXn3v0wqVQ7wEzPh5nry5uzOgruFiPnwd6KJLlYMzce306zBm5UbdWL3X8LEEPO7yI-tsMHrBbB068TiZhiBWrzYxHsft0CTUALXAIyPEyd0s7RwM8uJSQ4mh-eu8JH7maJTMmVsVXQRKTPhnxi8HLd6LV41AVrsQTUR8LcBdPLtmsf3XJES6sHZBajwjcyWay89yRK14L85JAbdvQfaiEBRLeAprsYiLt5PUaNuPq3j0jx1BlirbZc6hU5sk68f2Fdq8MqhQggQcRBhdgdgrc2Rn4hWlZxU-O_bOKPdAv6VOXQdj2RxvMBayfkQyClJfd3x2qtakq70vIOcjvRUDumt45wZSmWGNHG0pj03vuxTZi36SNgyJWYhd6_is8DgX44PaNTqoClNE4sOCXmtue1EVi723LYWu3KgKx9rc5e8nO1wXnjAvT49XMqNJqVfjaH0vOrh-BQA_zNeE9zDtlWhwQmcDYqpKePjxrdOnnY6R_chnWTcyr5fnW_IvF9PddGykSYDvmK2u-n4tdZvBLlORlvAy93DM17nQoZCzy26CnXzHaDfzdQmPRsvZzjUhwOKvhW_OA_jB8gpPGfG2xH8PMDQGUHH_j6UE0EJwCj24-EO6FVVCOzQWaPvP6hplokAWPu263emmkTxbecgf3fSe3e0PQ5tn89a-RkawjelvnFShNih-81BTujTNrwFjZDkUTFSkjRmxS8zMfgpRbWaBrqB3-BE4SEHCwdd3iXdnn9wFzXNF_5ZInchrUmREz-i8Pp5mfVvS9JKrZe0DJWAmc56MOI2ejxfVfrMPId3hGyAQBBUXzEOddt41OKxWpWqIiW0-3n6Dv1EgBXZoCJyc5bHeTCZLic-m5nHGvGUU8GBMPYK-_mWNH6L2MAmTmJ5RaKVzpFIdjSLxurigMvJO3832ZmPy6ylVge4myaGWOFbRYhiMQU5PPHYZMSP7A3G71PgK409lG81o-Glc_viK_Mm5PGTomsJ52d1CQItQxawEbyd_gdBEG-ONIrHiNcWLyzZ5pjO_kMesz-U3xkPfxE9ppgnNOeOgJhbd8tKgEQ7kk8C5wCVHLGZZKxueUc9FYFRtuGu873i7Yl8Qska9XIVkPLIvlvJg_lzwFEwEtfW_ZqK7v2SKd3pcy-hRkomTR6RFVZ1CKM9erfOw71iXFWvH6Wqf8uAscbmpBe0NjKKEP9QUdm7ywzdPjAsV38JfxjfVuKs7UifbVvtZu8yTEdxSVNtvyO_a0Lov1-0M3V8MkXm8PW16862EUEoMWSYz8fSHF7oSzobie-hADvFdlsAnjs6JQUhvkBJaEtrnKl49B5Vjf2TREOYvzGZ_7WZr-ZU-XRjaMiKLWiJNFl8Xpjb57r9FZncoboeFczY83ZFiiDcvgskatMsezLwQ8r93CxR_2FeV3tN2Ge5RzBdFPJoXzjuZNBdN2YBnySJgBixdunwDkWdBbxoTtdYSwaIy6GzvwPncgwmoSvFZYA1B3NA3HkGXdUDl33uPbxQJ9UvaJttr0-6vdjQb7bJPVfQ8FDPvMAQftwAUMQEUe5DcM66DfMrAojMxMN1d2RcMUZX_3zq3-4bpwhH75ZScUgzvqrtkYsokrxmJ_KCc33vbe1DP8JNstUe794bBzyBeg4PreKRAIZ0Vk9OrmCSA0fXtBtftXAgkDwE2ZUOrQJDGq4eTvA_yjmGgqEHS8nbvU-IPqS9TaT2kKHBtoq92JGSuzj9D6jiJpFANQaY0ubTmjbql60AXZUSMoPEmYmg5N2sMgUZ_nYa-3hq3hAk_aABFoibMXpU3gEvRS8wAHIpDIap3CbVFH4YaaNWuu8ONijV0ygUL_7NiVYOn-vZ5FzHo3d5wP7-z7C9qgkddSA77asieg3zxC7yJf_TO4-sxBDO-QhFBddd3Q3BqGK61hDityq3v4kqUnSskDsZzEcvBu8zSsy3k7EDhtgRfZhuJHQ1G8lRZaRZltZU__qnDkPhqjz0V2WyjNDdUQQsitWLc-mSMb4BG8KzJdAfw0u5UeCT6B8QbNrh1HUWaBRrluI8RH8st76VSoJ09Ax0vle1nXexkW58JLLNvYX0f_R0CnK-at7jQy9nIGRZZ9YcrKhs-BBcp_ZEjK5L5oIJbwAKI0voMg5Olf8S5anqRc9agEY1paOJ5V534GMmdR1MZh_2tr198cd1cy8l0qCjBFFlFT5NLg_s7UzkNeet-UitQhrj9fJneu54JGK1FnjXLDsynbAcdpmV-bjz5ge7O3Jq0sXLZRg7IDWdV0a0sazZ62uVNsOorV489kLA9aNa-xr5lYeQl6IEzmvhN_ErkdSCYIK-aJymtZsLvt1W21Rgf61oQqIx-0YkpoCqGdLU7sXyOT5Pt2Hwy2HTKxLEIqXyhPdoaV8BBypv2Y6lTjjmk72gF-PNTNUZqijj-4Sdoy59SiNdFTiYFhB9XwHZeKVRhSmhTc6idWHF_rNJlRIcigEaKmljZ1Ez0r-rr9zrfPm8fm3IxA_NHHVBfengpD7tyjHFD8dAU8fRK1UZLlubmU6KGHdTud7R_DZBRZ5ioKnBfFppNqIXNSCfvr7sFYiegTQPrixT8Ws5WwGwUup9sgSw8VNUItLk0AuhII08qIl0EYaePCbq1Dbs9SiMMcS2L5-IYfKKRJ5Yc7w05yRUDiUuN6jgKSp-4ZswQiEQ3KZ2NTa7mVCiGYIUwo5bm5SiX81g-IP0hgTibDyO2rzaY0lwkgqnt0omOXvyBR7x33U4yXS-oq440NExnj0lxuu-PhlTjaTqgOdSqRLK5Bui1yXa-qDmF9Gbp8Ejs4pzxsSra9h2uYoWQu3dMkRQm2U87wX_qtYytd6mmVWjvC3AV9BsgSE9x1qCL2c-O2d_HmDzEw4HnrXHmY1iYPBIIpwpqirPUki8XCdcI_ZBuKwMj0-CpKreXlEsCqy14MvkOnLaKoE0zU6MSHcAxHUGTzvhv2AIn9jk8XTJn2EBfhe3sAngn3Drd-nbEZ4aUOlZA4KKh3duk7l9zoipbRhUs3Bj6_RwIuUH1xYQMaFtCMN-UT9jS8V-S7wBkwSAxJjXU5DrqADz8ArDvWBmv_-B7HGRPYDBJs7WoMyGPltLkRDB87AHExgjlBNuvaSNcPS-W6ljnf8e15hL_-HB5Z_LyZfKvb3VV9IpqRuoRw_Ff8DZMEWlnBvk475MpJl_AFYKdF_qaNBxQXd1t-wOHtbwYWXRaOWcE3Lv3aoy3_dk8y65ugdoo7px5PzlowDwzawBeWO5w-lTajSsnp4hODLyMZq4Y9sfCX05VYlk3B5bNFRzcoF4HJV6YpX_7NDB7ssrgl83GsG8mAeat02GqMzbwLf5BhQ31Haga3_iPxbnUjLCk6vtlLaBrKgZ1f69zQh-Srk5har5wXJVmGKYGiH5ob_keN1yV-nfcrlVABH-tOmcRxK8D7aT9KwRyz67SMTnPDMFfVrTm2OgcMuoYYDjmPV-SQKWL_ZXfbKZnrqjTV07TKaUYJyuTG7d5SeBwpawN7bRoA-Ud71-jP1961k9uyGy5FJVok4Mv6ndjepKTasZsKvenp6pZQlLBEzzqaoNDJc9f_tMk2Be_-7KT1t4GkHtVAZbOtY7g1_uYZK4_dUEXlq4gHgZXIsxYv9z0xyddP5wlUUYUaF6q0uNtfMXfOov_bSAfeDVkFWSaTL2FEUb1AsoA0_7MK5btnA1OC88s44HYmCV2I9trCX3iDLCdE8CGrxzpCJJf7uEIeL_lElKNrgrJpG3eURfbT_RrbRzr_sqTtxbKS0Io9dg2mh4ltxL_Hnaef2RlTvt1a_q2vg1cpsFdnFY5c8OQkJhVWUY6isdpm6aeer9y4hP1mv4Ate4d8o8R-29lTlPxrO8f2q4VuC_VJuj2WWfHKDW1Q0YhIk8SDiG_aAvkdvqzP1oxbLWKfBQU1xcYoYsGFyVdsx_jbOPd1fG6aG5tsM4Vpgx5FP_u8crztIT5AGfo6iRw8TF_LiCu-3ddo-5LkbdvnQ6VKFRK0U8YAdXMbPNWf1U5ZHtPq1jLBgt4pGoQbRsQ3ricCDNBcU3FgURFaT_JrTrHCjAuiqjydzAlS9B3hLJLn8DtrHYuOEHuhvp_2C8Cv_LIF2p8aOXiD0K7SXQgxYW1nwzznkyisinqP4OEcLX2_3-OcH1QRNt1fc1cvaiFKXkcGw_JSYCpnyLiL9T3BOWOI4L3tuHbsqnBy9p4judyv7VAk0A9o1cbAJembD7FvexZM9TAeel2Q4jfeD2S00lFmsGGU_TvFH2zyG69NcIHU-1ie9XAjtSnCNIm5PC08RZJoEoB-Z2pETVlzIeUB2j8PwDPDgjCLABXljrNh7ZnDBi0Dy0zdqT4439rDoG1-KuvGvuxzv0qPeub7mGIYVbHmRH01-WzDSB4cVAQ0r_FaYFQm7dExi1ulMcFJNsLG4Onza3Zt5_e4bbjoRvRmOTvqyGR92_ykvWQbtaQBlB4GOT-Se1elYJMthrvOMrqcVWFdiaDl2TJUD3LFKG9gMRD-RR2nMJ9QPHxe6WWzzrL-8IqhroRClQNBPvI-xsZ3uA9FzO8aRWXlzxvLVUiVPk4Tvs06WkSxZP8PEsD6pCreUw5e1G8hqbN4NIN6PhBY8J8QURArnXp3T3PcazlEGlS5MY0Nrh1eSh0b9d6hJf0UT5TGH5eESTww78uKq5r5NzBE_Po0vTpxnRe_od4ODq9Rqvjh4YzOZvqgO_v2cazhfZ9M9rdyLT6k0FnVsky6xBWvaT3izA1PyO5Zj-YM4NXKHC3dghVjDiN4PEdFrobgk_lpNU6GbxXFUN1-6_JuCUiF0AhIBQ5ClThMdCKZCBQ_plzSbR0kbMLfWYK-YLjRrt3RwHmQjQC_b7vAQKmoPQJMQMB6QO0cOyOGf8mhgrdhFwspNy3ddCbeDiXAfiMVJA382ImK8uKey-5J5CP5aG34bhUcT9BjAEtcBuBPqyKIdbjP2UwK184eZH9qXFSW-P7oEmjULj-2qCbW0BIcP64CZYc2dIY1LE1_Qj6wGKH0bxfGQbHxqNL5iSyEf9IeuSX7ZC7HqCXhXUTVfzRkFAfAp3OOhoGxiiHfhH8XdcahAxOvlyRbttcR2FzLkXHZQ-No2yVyqKPGygECk2RDwaNnkdCcQd5e5frJRe2b1BWMQeAOp2_GT99IyQm6mxll7BtWng3JXo4D_L2waFbwojK03wuqi4zMrlY1jZuTmtBVYllty7RGF6-d9Tq5Kcm5dFoC9gt_TY24wkOPgubEl4C9vcUE-ZL4nPmx0n4jasBKiKM2B_6Pk4mJeADc1Il6LDu2R_5gFgpxf3Nn1Du_M7AA4-L_7n2WIFZJ9x1VjIQnshYdEVeRHCXLGxBrvAnrNrotZrHP-DW_JvEitOa0JJXFmHQHv0brOKp9-jZeEUwNEbdkv9DBTTRRJ8fZ7FubAr9kFWad1wle9EtiJlbNzI4nZroUKDatevmGmUpptDyOKPEcdBYxem6bs1lyq8vFSoHu95-O7Ni0aSPiV2qJfu6RBgHvW8okNTC8Plo4TYd2Whqs4FCeJvqllrUa4sgaBiDeZSz6SEO5SowVl9ihbwLspclKU_4KXi8mSoFXSJqclXuRvzFIKwQpeLSI_l2BYRJHGvD79lFsXOrNbMadjOKUmusn2LSbxeecSG_Udn9ykT78WYnL7qSc_54xmfbweJmea9ep0Pb7bl6ndasifukdGJwBwF7_OBiDy6qQScFNuSrypyVet3FcQeAgOCoQDaa1w0DX8E0mYdGwxB00IVwV0XvEHWLeREnOr_VanptjwVpr8iGgMdExYD5wgFy9rzO9VNnFInP8Fd5H6fd9PNZD4ugQk1vkzNoXCaWiYAyjJSQhO23fUyVw72pXeYxFZpo9vdq3CFLn_kcnNEyoso_coh235eTxCxdO5QbrTxz23ZWUKyJAa2Gn1XOyrWdU_0QCjEaA333VigsFYhyAf7s3n9MaVmPwo-gTx04GWZuT75WBl9UxPcp-ptX5rqXi8x8nm0HvOHeFb5Mu8oQ4R30Z-fPOpUeNuVKmFRy5gZsmZQH-1k-MNLShpk7NLv3bzJCjCDyd4StFlJGm3IUxAUK-TXrClZV9PJ9o_wW7IbgExaplVpsKLKRGUlWhLoyw2Z98-NhyJsNGPCq5curN63dIqWJUbYA9TSl04Dh1LekMV9nTNmgSLb14hwcsqIsDbwoc7xEgH6KMVCArBFTmr_9dNb2myjoJhAe0qDbgcuxkMIDEdXQZMbHBOsGWEPze34pdQX-HV9WISCZItBnAko3cgneOIpQH2YW72vMalV9RvOos059HPkOjCSX-QIJZrbrBjf7sk9ay0cKwBVjYkI0bv8VZkpYHN7-irS68Vxut4D6dnJKb46go5HnChvL1whtjG2R48pToi6SYmQNO6yX9PJngwj7_OPExpioG1BX8wjH_pdP37Z04PRPQHUuxOtGBQb47Wm4LmM9abSmuxGOPvm2Mn6GaRD7kuUECubX2EbxxRyXOTp28PnHhrBDNibjnnkI9jXE7TufNLd8bVLC3pfL34Vw4QjJZhLgTKsTqgodIAsQDRBoTgfhdwlaLFXw_XmVfRz2McKMN3"
+      },
+      "chargeInfo": {
+        "method": "charged-now",
+        "creditsCharged": 0
+      },
+      "advice": [
+        "Your search returned 3 profiles. Use lite reveal to get verified emails at the lowest cost per contact on the market.",
+        "For emails + phone numbers, use standard reveal. For maximum coverage, try exhaustive reveal.",
+        "Add prospect exclusion lists to automatically skip people you've already contacted."
+      ]
+    }
+  },
+  "trimmed": "people fields reduced to name, LinkedIn URL and current roles (public repo)"
+}
