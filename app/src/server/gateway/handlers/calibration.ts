@@ -32,7 +32,9 @@ async function simulationRequest(baseUrl: string, path: string, input: unknown) 
 
 export function createCalibrationHandlers(env: NodeJS.ProcessEnv): HandlerMap {
   const baseUrl = env.SIM_URL || "http://localhost:8000";
-  const live = env.ADAPTER_MODE === "live" || env.ADAPTER_MODE === "record";
+  const mode = env.SIM_CALIBRATION_MODE;
+  if (mode && mode !== "live" && mode !== "replay") throw new Error("SIM_CALIBRATION_MODE must be live or replay.");
+  const live = mode ? mode === "live" : env.ADAPTER_MODE === "live" || env.ADAPTER_MODE === "record";
   return {
     "calibration.profiles": defineHandler({
       payload: startCalibrationInput,

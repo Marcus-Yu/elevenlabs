@@ -4,6 +4,7 @@ import type { MiddlewareConfigFn } from "wasp/server";
 import type { ChatApi } from "wasp/server/api";
 import { gateway } from "../../server/gateway";
 import type { Gateway } from "../../server/gateway/engine";
+import { chatProviderConfig } from "../../server/gateway/handlers/chatProvider";
 
 export const chatMiddleware: MiddlewareConfigFn = (config) => config;
 
@@ -28,7 +29,7 @@ export function parseChatMessages(input: unknown): ModelMessage[] | null {
 }
 
 interface ChatRuntime {
-  apiKey: string | undefined;
+  providerReady: boolean;
   execute: Gateway["execute"];
 }
 
@@ -40,7 +41,7 @@ export function makeChatApi(runtime: ChatRuntime): ChatApi {
     if (!context.user?.id) { res.status(401).json({ error: "unauthorized" }); return; }
     const messages = parseChatMessages(req.body);
     if (!messages) { res.status(400).json({ error: "invalid_messages" }); return; }
-    if (!runtime.apiKey?.trim()) {
+    if (!runtime.providerReady) {
       res.status(503).json({ error: "chat_unavailable" }); return;
     }
     try {
@@ -60,7 +61,11 @@ export function makeChatApi(runtime: ChatRuntime): ChatApi {
   };
 }
 
+export function isChatProviderReady(env: NodeJS.ProcessEnv): boolean {
+  try { chatProviderConfig(env); return true; } catch { return false; }
+}
+
 export const chatApi: ChatApi = (req, res, context) => makeChatApi({
-  apiKey: process.env.ANTHROPIC_API_KEY,
+  providerReady: isChatProviderReady(process.env),
   execute: gateway.execute,
 })(req, res, context);
