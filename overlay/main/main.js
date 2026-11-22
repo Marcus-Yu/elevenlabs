@@ -71,8 +71,8 @@ function go(next) {
   if (!win || win.isDestroyed()) return;
   win.setIgnoreMouseEvents(ignoresMouse(next), { forward: true });
   if (next === "listening") {
-    if (process.platform === "darwin") app.focus({ steal: true });
-    win.focus(); // so Escape reaches the renderer
+    if (!HEADLESS && process.platform === "darwin") app.focus({ steal: true });
+    if (!HEADLESS) win.focus(); // so Escape reaches the renderer
   }
   console.log(`[atlas] state → ${next}`);
   win.webContents.send("atlas:state", next);
@@ -117,7 +117,7 @@ function createWindow() {
   win.loadFile(path.join(__dirname, "..", "renderer", "index.html"));
   win.once("ready-to-show", () => {
     win.setBounds({ x, y, width, height });
-    win.showInactive(); // transparent and click-through until summoned
+    if (!HEADLESS) win.showInactive(); // transparent and click-through until summoned
   });
 }
 
@@ -156,7 +156,9 @@ if (!app.requestSingleInstanceLock()) {
     }
     createWindow();
     if (process.platform === "darwin" && app.dock) app.dock.hide();
-    if (!globalShortcut.register(HOTKEY, () => send("toggle"))) {
+    if (HEADLESS) {
+      console.log("[atlas] headless test run: no window shown, no hotkey");
+    } else if (!globalShortcut.register(HOTKEY, () => send("toggle"))) {
       console.warn(`[atlas] could not register hotkey ${HOTKEY}; set ATLAS_HOTKEY to another accelerator`);
     } else {
       console.log(`[atlas] ready · press ${HOTKEY} to summon · data: ${provider === mockProvider ? "mock" : "live (probing)"} · voice: ${voice ? "on" : "off"}`);
