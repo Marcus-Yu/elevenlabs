@@ -41,18 +41,23 @@ function withTimeout(promise) {
   ]);
 }
 
-// Startup probe: the only place live falls back to mock. If the server is unreachable
-// at launch, the whole session runs on the labelled mock (cards say "Synthetic · mock").
-const providerReady =
-  provider === mockProvider
-    ? Promise.resolve()
-    : withTimeout(Promise.resolve().then(() => provider.snapshot({ state: "probe" }))).then(
-        () => console.log("[atlas] live server reachable"),
-        (err) => {
-          console.warn(`[atlas] live server unreachable at startup, using mock for this session: ${err.message}`);
-          provider = mockProvider;
-        },
-      );
+// Live is preferred whenever reachable: probed at startup and again on every summon,
+// so a server that comes back is picked up (cards say "Synthetic · mock" only while it's down).
+const liveProvider = provider === mockProvider ? null : provider;
+function probeLive() {
+  if (!liveProvider) return Promise.resolve();
+  return withTimeout(Promise.resolve().then(() => liveProvider.snapshot({ state: "probe" }))).then(
+    () => {
+      if (provider !== liveProvider) console.log("[atlas] live server reachable");
+      provider = liveProvider;
+    },
+    (err) => {
+      console.warn(`[atlas] live server unreachable, using mock: ${err.message}`);
+      provider = mockProvider;
+    },
+  );
+}
+let providerReady = probeLive();
 
 // After startup, live errors are reported to the card that asked (no silent mock fallback mid-flow).
 async function call(method, arg) {
@@ -78,6 +83,10 @@ function go(next) {
   if (!win || win.isDestroyed()) return;
   win.setIgnoreMouseEvents(ignoresMouse(next), { forward: true });
   if (next === "listening") {
+    // Each summon starts fresh: no stale need or goal, and re-check the live server.
+    liveProvider?.reset?.();
+    mockProvider.reset?.();
+    providerReady = probeLive();
     if (!HEADLESS && process.platform === "darwin") app.focus({ steal: true });
     if (!HEADLESS) win.focus(); // so Escape reaches the renderer
   }
@@ -162,6 +171,14 @@ if (!app.requestSingleInstanceLock()) {
       }
     }
     createWindow();
+    // Keep covering the primary display when displays or resolution change; the renderer re-fits on resize.
+    const refit = () => {
+      if (!win || win.isDestroyed()) return;
+      win.setBounds(screen.getPrimaryDisplay().bounds);
+    };
+    screen.on("display-metrics-changed", refit);
+    screen.on("display-added", refit);
+    screen.on("display-removed", refit);
     if (process.platform === "darwin" && app.dock) app.dock.hide();
     if (HEADLESS) {
       console.log("[atlas] headless test run: no window shown, no hotkey");

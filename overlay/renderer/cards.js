@@ -38,7 +38,7 @@ export function brief(snap, ui) {
   return [
     head("Brief", snap, h("span", { class: "meta" }, `Goal · ${b.goalKind}`)),
     h("h3", { class: "title" }, TITLES.brief),
-    h("span", { class: "role" }, b.role),
+    h("span", { class: "role clamp", title: b.role }, b.role),
     h("ul", { class: "chips" }, b.criteria.map((c) => h("li", {}, c))),
     h("div", { class: "foot" },
       h("span", { class: "note" }, icon("lock"), b.privateNote),
@@ -56,8 +56,17 @@ export function research(snap, ui) {
         s.status === "done" && s.count != null ? h("span", { class: "src-count" }, `${s.count} found`) : null),
       h("div", { class: "track" },
         h("div", { class: "fill", style: s.status === "done" ? { animation: "none" } : { animationDuration: `${2.4 + i}s` } }))));
-  // Next step after approval: find candidates, until a shortlist exists.
-  const needsSearch = snap.brief.status === "approved" && snap.shortlist.candidates.length === 0;
+  // Next step after approval (hire only): find candidates, until a shortlist exists.
+  const needsSearch = snap.brief?.status === "approved" && snap.brief?.goalKind === "Hire" && (snap.shortlist?.candidates.length ?? 0) === 0;
+  if (r.note) {
+    // Honest placeholder for needs whose research isn't wired yet (rule 5: no fake results).
+    return [
+      h("div", { class: "head" }, h("span", { class: "label" }, "Research", tag(snap))),
+      h("h3", { class: "title" }, TITLES.research),
+      h("span", { class: "small clamp", title: r.note }, r.note),
+      errorLine(ui, "research"),
+    ];
+  }
   return [
     h("div", { class: "head" },
       h("span", { class: "label" }, "Research", tag(snap)),
@@ -78,7 +87,7 @@ function fullFit(fit) {
 
 /** Run 2+ means the criteria change was confirmed and the shortlist re-ran. */
 export function rerun(snap) {
-  return /^Run [2-9]/.test(snap.shortlist.runLabel || "");
+  return /^Run [2-9]/.test(snap.shortlist?.runLabel || "");
 }
 
 export function shortlist(snap, ui) {
@@ -108,7 +117,7 @@ export function shortlist(snap, ui) {
   });
   const confirm = ui.pendingConfirm
     ? h("div", { class: "confirm" },
-        ui.explanation ? h("span", { class: "explain" }, ui.explanation) : null,
+        ui.explanation ? h("span", { class: "explain clamp", title: ui.explanation }, ui.explanation) : null,
         actionBtn(ui, { type: "confirm_change" }, confirmLabel(ui.explanation)))
     : null;
   return [
@@ -134,7 +143,7 @@ export function gateway(snap, ui) {
   const events = g.events.map((e) => {
     const [look, name, stroke] = EVENT_ICON[e.kind] || EVENT_ICON.pending;
     return h("li", {}, h("span", { class: `ico ${look}` }, icon(name, 12, stroke)),
-      h("span", {}, e.text, e.ruleId && e.ruleId !== "default" ? h("span", { class: "rule" }, ` (${e.ruleId})`) : null));
+      h("span", { class: "clamp", title: e.text }, e.text, e.ruleId && e.ruleId !== "default" ? h("span", { class: "rule" }, ` (${e.ruleId})`) : null));
   });
   // Last step: review the intro once the shortlist has been refined (Run 2).
   const ready = ui.confirmed || rerun(snap);
