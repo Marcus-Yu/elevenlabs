@@ -1,0 +1,547 @@
+// Atlas data model (docs/IMPLEMENTATION_PLAN.md §6). Owned by WP0.
+// Later packages may only make additive changes and must call them out in their PR.
+// Enum values follow the casing used in §6.
+
+datasource db {
+  provider = "postgresql"
+  // Wasp requires that the url is set to the DATABASE_URL environment variable.
+  url      = env("DATABASE_URL")
+}
+
+// Wasp requires the `prisma-client-js` generator to be present.
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ---------------------------------------------------------------------------
+// Users, profile, consent
+// ---------------------------------------------------------------------------
+
+// Wasp auth stores credentials in its own tables and links them to this entity.
+model User {
+  id              String    @id @default(uuid())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  phone           String?
+  phoneVerifiedAt DateTime?
+
+  profiles      Profile[]
+  consents      Consent[]
+  goals         Goal[]
+  approvals     Approval[]
+  memoryItems   MemoryItem[]
+  needProposals NeedProposal[]
+  shareCards    ShareCard[]
+}
+
+enum ProfileSourceKind {
+  website
+  resume
+  oneliner
+}
+
+model Profile {
+  id         String            @id @default(uuid())
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+  userId     String
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceUrl  String?
+  sourceKind ProfileSourceKind
+  summary    String?
+
+  facts ProfileFact[]
+
+  @@index([userId])
+}
+
+enum FactSensitivity {
+  public
+  shareable
+  private
+}
+
+model ProfileFact {
+  id              String          @id @default(uuid())
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  profileId       String
+  profile         Profile         @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  key             String
+  value           String
+  sensitivity     FactSensitivity
+  // Purposes this fact may be used for, e.g. "draft.create". Checked by the need_to_know rule.
+  allowedPurposes String[]
+
+  @@index([profileId])
+}
+
+enum ConsentKind {
+  model_processing
+  meeting_listening
+  phone_calls
+  matching
+  identity_reveal
+}
+
+model Consent {
+  id        String      @id @default(uuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind      ConsentKind
+  scope     String?
+  grantedAt DateTime    @default(now())
+  revokedAt DateTime?
+
+  @@index([userId, kind])
+}
+
+// ---------------------------------------------------------------------------
+// Goals, companies, matches, contacts, drafts
+// ---------------------------------------------------------------------------
+
+enum GoalDirection {
+  SELL
+  BUY
+  WORK_FOR
+}
+
+enum GoalKind {
+  customers
+  investors
+  manufacturer
+  supplier
+  intern
+  employer
+}
+
+enum Autonomy {
+  WATCH
+  PREPARE
+  ACT
+}
+
+enum GoalStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+  ARCHIVED
+}
+
+model Goal {
+  id               String        @id @default(uuid())
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  userId           String
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  direction        GoalDirection
+  kind             GoalKind
+  statement        String
+  icp              Json          @default("{}")
+  autonomy         Autonomy      @default(PREPARE)
+  // { dailyCap?: number, quietHours?: ... }. The daily_cap rule defaults to 10 when unset.
+  rules            Json          @default("{}")
+  status           GoalStatus    @default(ACTIVE)
+  watcherTokenHash String?
+
+  matches     Match[]
+  approvals   Approval[]
+  panels      Panel[]
+  pitchRuns   PitchRun[]
+  memoryItems MemoryItem[]
+  watcherRuns WatcherRun[]
+  shareCards  ShareCard[]
+
+  @@index([userId])
+}
+
+model Company {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  domain      String   @unique
+  name        String
+  description String?
+  data        Json?
+
+  matches Match[]
+}
+
+enum MatchStatus {
+  NEW
+  VETTED
+  APPROVED
+  REJECTED
+  CONTACTED
+}
+
+model Match {
+  id           String      @id @default(uuid())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  goalId       String
+  goal         Goal        @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  companyId    String
+  company      Company     @relation(fields: [companyId], references: [id])
+  score        Float
+  rationale    String
+  status       MatchStatus @default(NEW)
+  rejectReason String?
+
+  sources  SourceRef[]
+  contacts Contact[]
+  drafts   Draft[]
+
+  @@unique([goalId, companyId])
+}
+
+enum SourceProvider {
+  fiber
+  ploid
+  web
+}
+
+model SourceRef {
+  id        String         @id @default(uuid())
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  matchId   String
+  match     Match          @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  claim     String
+  provider  SourceProvider
+  url       String?
+  fetchedAt DateTime
+
+  @@index([matchId])
+}
+
+model Contact {
+  id          String         @id @default(uuid())
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  matchId     String
+  match       Match          @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  fullName    String
+  title       String
+  linkedinUrl String?
+  // Null until contact.reveal_email succeeds after approval.
+  email       String?
+  provider    SourceProvider
+
+  drafts Draft[]
+
+  @@index([matchId])
+}
+
+model Draft {
+  id                  String   @id @default(uuid())
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  matchId             String
+  match               Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  contactId           String?
+  contact             Contact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  channel             String   @default("email")
+  subject             String
+  body                String
+  version             Int      @default(1)
+  // SourceRef ids that personalise this draft. Checked by the personalization rule.
+  personalizationRefs String[]
+  // ProfileFact ids the model was given to write this draft.
+  usedFactIds         String[]
+
+  outreachMessages OutreachMessage[]
+
+  @@index([matchId])
+}
+
+// ---------------------------------------------------------------------------
+// Approvals, outreach, opt-outs, action log
+// ---------------------------------------------------------------------------
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  DENIED
+  EXPIRED
+  EXECUTED
+  FAILED
+}
+
+enum DecisionChannel {
+  web
+  thread
+  voice
+}
+
+model Approval {
+  id              String           @id @default(uuid())
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  userId          String
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goalId          String?
+  goal            Goal?            @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  actionType      String
+  // The exact ActionRequest payload that executes on approval.
+  payload         Json
+  payloadHash     String
+  status          ApprovalStatus   @default(PENDING)
+  decidedVia      DecisionChannel?
+  alterApprovalId String?
+  decidedAt       DateTime?
+
+  outreachMessages OutreachMessage[]
+
+  @@index([userId, status])
+}
+
+model OutreachMessage {
+  id                String    @id @default(uuid())
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  draftId           String
+  draft             Draft     @relation(fields: [draftId], references: [id])
+  approvalId        String
+  approval          Approval  @relation(fields: [approvalId], references: [id])
+  recipient         String
+  // Set in sandbox mode: where the message was actually delivered.
+  redirectedTo      String?
+  providerMessageId String?
+  sentAt            DateTime?
+
+  @@index([draftId])
+}
+
+model OptOut {
+  id            String   @id @default(uuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  // Lower-cased email address or bare domain.
+  emailOrDomain String   @unique
+  reason        String?
+}
+
+enum GatewayDecision {
+  ALLOW
+  DENY
+  NEEDS_APPROVAL
+}
+
+enum RequestOrigin {
+  thread
+  watcher
+  voice
+  meeting
+  ui
+  system
+}
+
+enum AdapterMode {
+  live
+  record
+  replay
+}
+
+// Append-only audit log. No foreign keys on purpose: a denied request may name a
+// goal that does not exist, and log rows must outlive the records they describe.
+model ActionLog {
+  id           String          @id @default(uuid())
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  ts           DateTime        @default(now())
+  userId       String
+  goalId       String?
+  // ActionRequest.actor: { kind: "user" | "agent" | "schedule", id: string }
+  actor        Json
+  origin       RequestOrigin
+  // String rather than an enum so unknown action types can be logged as denied.
+  actionType   String
+  decision     GatewayDecision
+  ruleId       String
+  reason       String?
+  inputSummary String?
+  factIdsSent  String[]
+  traceId      String?
+  adapterMode  AdapterMode?
+
+  @@index([userId, ts])
+  @@index([goalId, ts])
+}
+
+// ---------------------------------------------------------------------------
+// Simulation: panels, pitch runs, segment scores
+// ---------------------------------------------------------------------------
+
+model Panel {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  goalId    String
+  goal      Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  // Persona[] from src/shared/contracts/sim.ts
+  personas  Json
+
+  pitchRuns PitchRun[]
+
+  @@index([goalId])
+}
+
+enum PitchMode {
+  TEXT
+  ROOM
+}
+
+model PitchRun {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  goalId      String
+  goal        Goal      @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  panelId     String?
+  panel       Panel?    @relation(fields: [panelId], references: [id], onDelete: SetNull)
+  mode        PitchMode
+  parentRunId String?
+  parentRun   PitchRun? @relation("PitchRunLineage", fields: [parentRunId], references: [id], onDelete: SetNull)
+  childRuns   PitchRun[] @relation("PitchRunLineage")
+  transcript  String?
+  summary     Json?
+  // "edsl" or "direct", as reported by the sim service.
+  engine      String?
+
+  segmentScores SegmentScore[]
+
+  @@index([goalId])
+}
+
+enum ScoreTier {
+  LIVE
+  MEASURED
+}
+
+model SegmentScore {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  runId     String
+  run       PitchRun  @relation(fields: [runId], references: [id], onDelete: Cascade)
+  index     Int
+  text      String
+  personaId String
+  // Integer 1-7.
+  interest  Int
+  objection String?
+  tier      ScoreTier
+
+  @@index([runId, index])
+}
+
+// ---------------------------------------------------------------------------
+// Memory, watchers, meetings, share cards
+// ---------------------------------------------------------------------------
+
+enum MemoryKind {
+  preference
+  objection
+  outcome
+  fact
+}
+
+model MemoryItem {
+  id          String     @id @default(uuid())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goalId      String?
+  goal        Goal?      @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  kind        MemoryKind
+  text        String
+  source      String
+  // Reference returned by the external store (Rowboat), if mirrored.
+  externalRef String?
+
+  @@index([userId, kind])
+}
+
+enum WatcherRuntime {
+  local
+  maritime
+}
+
+model WatcherRun {
+  id         String         @id @default(uuid())
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  goalId     String
+  goal       Goal           @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  runtime    WatcherRuntime
+  startedAt  DateTime       @default(now())
+  finishedAt DateTime?
+  stats      Json?
+
+  @@index([goalId, startedAt])
+}
+
+enum ProposalStatus {
+  PENDING
+  APPROVED
+  DISMISSED
+}
+
+model NeedProposal {
+  id                String         @id @default(uuid())
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  userId            String
+  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transcriptExcerpt String
+  proposedGoal      Json
+  status            ProposalStatus @default(PENDING)
+
+  @@index([userId, status])
+}
+
+enum ShareCardStatus {
+  DRAFT
+  ACTIVE
+  REVOKED
+  EXPIRED
+}
+
+model ShareCard {
+  id        String          @id @default(uuid())
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  userId    String
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goalId    String?
+  goal      Goal?           @relation(fields: [goalId], references: [id], onDelete: SetNull)
+  fields    Json
+  purpose   String
+  expiresAt DateTime
+  status    ShareCardStatus @default(DRAFT)
+
+  matchesAsA CardMatch[] @relation("CardMatchA")
+  matchesAsB CardMatch[] @relation("CardMatchB")
+
+  @@index([userId])
+}
+
+model CardMatch {
+  id         String    @id @default(uuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  cardAId    String
+  cardA      ShareCard @relation("CardMatchA", fields: [cardAId], references: [id], onDelete: Cascade)
+  cardBId    String
+  cardB      ShareCard @relation("CardMatchB", fields: [cardBId], references: [id], onDelete: Cascade)
+  rationale  String
+  aAccepted  Boolean   @default(false)
+  bAccepted  Boolean   @default(false)
+  revealedAt DateTime?
+
+  @@unique([cardAId, cardBId])
+}
