@@ -11,7 +11,10 @@ import { optOut } from "./optOut";
 import { ownership } from "./ownership";
 import { paidReveal } from "./paidReveal";
 import { personalization } from "./personalization";
+import { preferenceConfirm } from "./preferenceConfirm";
 import { privateLeak } from "./privateLeak";
+import { providerMinimum } from "./providerMinimum";
+import { selectedProspect } from "./selectedProspect";
 import { taint } from "./taint";
 import { taintedDraft } from "./taintedDraft";
 import type { Rule } from "./types";
@@ -29,14 +32,17 @@ export const RULES: readonly Rule[] = [
   taint,
   needToKnow,
   privateLeak,
+  providerMinimum,
   optOut,
   personalization,
   dailyCap,
   autonomyWatch,
+  selectedProspect,
   firstContact,
   taintedDraft,
   autonomyPrepare,
   introductions,
+  preferenceConfirm,
   paidReveal,
 ];
 
