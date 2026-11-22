@@ -1,4 +1,6 @@
+import type { PrismaClient } from "@prisma/client";
 import type { HandlerMap } from "../types";
+import { createOutreachHandlersFromEnv } from "./outreach.prisma";
 import { createStubHandlers } from "./stubs";
 
 /**
@@ -8,8 +10,10 @@ import { createStubHandlers } from "./stubs";
  *
  *   return { ...createStubHandlers(), ...createDiscoveryHandlersFromEnv(env) };
  */
-export function createHandlerMap(_env: NodeJS.ProcessEnv = process.env): HandlerMap {
+export function createHandlerMap(env: NodeJS.ProcessEnv = process.env, prisma?: PrismaClient): HandlerMap {
   return {
     ...createStubHandlers(),
+    // WP7: real outreach.send (EXECUTION_BACKEND=local|alter). Needs Prisma for goal autonomy.
+    ...(prisma ? createOutreachHandlersFromEnv(prisma, env) : {}),
   };
 }
