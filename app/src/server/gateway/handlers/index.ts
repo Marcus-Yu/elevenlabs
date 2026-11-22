@@ -11,11 +11,14 @@ import { createStubHandlers } from "./stubs";
 import { createGoalProposalHandler, createThreadChatHandler } from "./threadChat";
 import { createVoiceHandlers } from "./voice";
 import { createPitchHandlersFromEnv } from "./pitch";
+import { createThreadMatchHandlers, type ThreadGoalReader } from "./threadMatches";
+import { threadMemoryProposal } from "./threadMemory";
 
 export interface HandlerDeps {
   /** Prisma's MemoryItem delegate (prisma.memoryItem), for the WP12 memory handlers. */
   memoryItems: MemoryItemDelegate;
   matchDatabase: MatchSubmissionDatabase;
+  threadGoals: ThreadGoalReader;
   executeThreadTool: Gateway["execute"];
   /** WP7: outreach.send reads the goal autonomy level. Omitted in unit tests. */
   prisma?: PrismaClient;
@@ -43,7 +46,9 @@ export function createHandlerMap(env: NodeJS.ProcessEnv, deps: HandlerDeps): Han
     ...createCalibrationHandlers(env),
     ...createPitchHandlersFromEnv(env),
     "thread.propose_goal": createGoalProposalHandler(),
+    "thread.propose_memory": threadMemoryProposal,
     "thread.chat": createThreadChatHandler(env, deps.executeThreadTool),
+    ...createThreadMatchHandlers(deps.threadGoals),
     ...createDiscoveryHandlersFromEnv(env),
     ...createMemoryHandlers(createMemoryStoreFromEnv(deps.memoryItems, env)),
     "match.submit": createMatchSubmission(deps.matchDatabase),

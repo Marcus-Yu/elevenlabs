@@ -72,8 +72,8 @@ function tools() {
   const run = async (action) => {
     window.atlas.voiceState("thinking");
     let snap = await deps.act(action);
-    // The live provider runs research on the next snapshot after approval.
-    if (action.type === "approve_brief" && snap && !snap.error) snap = await deps.act({ type: "refresh" });
+    // Approval alone doesn't research ("refresh" only re-reads); run it so the agent can read back the shortlist.
+    if (action.type === "approve_brief" && snap && !snap.error) snap = await deps.act({ type: "run_research" });
     return toolResult(action.type, snap, action);
   };
   return {

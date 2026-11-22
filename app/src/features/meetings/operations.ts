@@ -1,3 +1,6 @@
+import { HttpError, prisma } from "wasp/server";
+import { z } from "zod";
+import { AUTONOMY, createGoalFromProposal, ProposalError, type ProposalTx } from "../goals/goalDraft";
 import type { GoalProposal } from "./need-detection";
 
 type ProposalRow = { id: string; transcriptExcerpt: string; proposedGoal: unknown };
@@ -37,4 +40,29 @@ export async function dismissMeetingProposal(args: { proposalId: string }, conte
   if (!args || typeof args.proposalId !== "string" || !args.proposalId) throw new Error("Invalid proposal");
   const result = await context.entities.NeedProposal.updateMany({ where: { id: args.proposalId, userId: owner, status: "PENDING" }, data: { status: "DISMISSED" } });
   if (result.count !== 1) throw new Error("Pending proposal not found");
+}
+
+const approvalInput = z.object({
+  proposalId: z.string().min(1).max(256),
+  autonomy: z.enum(AUTONOMY),
+  statement: z.string().trim().min(5).max(500),
+}).strict();
+
+/** An explicit owner action atomically claims the pending proposal and creates one goal. */
+export async function approveMeetingProposal(args: unknown, context: Context): Promise<{ goalId: string }> {
+  if (!context.user?.id) throw new HttpError(401, "Authentication required");
+  const input = approvalInput.safeParse(args);
+  if (!input.success) throw new HttpError(400, "Invalid proposal approval");
+  try {
+    const { goalId } = await createGoalFromProposal({ userId: context.user.id, proposalId: input.data.proposalId,
+      autonomy: input.data.autonomy, edits: { statement: input.data.statement } },
+    fn => prisma.$transaction(tx => fn(tx as unknown as ProposalTx)));
+    return { goalId };
+  } catch (error) {
+    if (error instanceof ProposalError) {
+      const status = error.code === "not_found" ? 404 : error.code === "not_pending" ? 409 : 400;
+      throw new HttpError(status, "Proposal could not be approved");
+    }
+    throw error;
+  }
 }

@@ -49,6 +49,17 @@ describe("thread gateway handlers", () => {
     expect(store.logs.map(({ inputSummary }) => inputSummary)).toEqual([null, null]);
   });
 
+  it("allows live calibration independently of discovery replay", async () => {
+    const profiles = Array.from({ length: 6 }, (_, i) => ({ id: `p${i}`, label: `Role ${i}`, yearsExperience: i + 1, skills: ["Python"], workStyle: "Collaborative", synthetic: true }));
+    const fetch = vi.fn().mockResolvedValue(Response.json({ profiles }));
+    vi.stubGlobal("fetch", fetch);
+    const { gateway } = createWorld({ handlers: createCalibrationHandlers({ ADAPTER_MODE: "replay", SIM_CALIBRATION_MODE: "live" }) });
+    const panel = await gateway.execute(request("calibration.profiles", { goalSummary: need }));
+    expect(panel.data).toMatchObject({ source: "live", profiles });
+    expect(fetch).toHaveBeenCalledWith(new URL("http://localhost:8000/calibrate/profiles"), expect.anything());
+    expect(() => createCalibrationHandlers({ SIM_CALIBRATION_MODE: "invalid" })).toThrow();
+  });
+
   it("labels the replay panel, preserves evidence IDs, and rejects unknown evidence without logging user text", async () => {
     const fetch = vi.fn()
       .mockResolvedValueOnce(Response.json({ minimumExperience: null, mustHaveSkills: [{ skill: "ROS 2", reactionIds: ["r1"] }], tradeOffs: [] }))

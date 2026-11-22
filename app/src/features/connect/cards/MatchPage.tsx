@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getMatchDemo, runMatchStep, useQuery } from "wasp/client/operations";
+import { humanStatus } from "../../../shared/humanize";
 
 // /match: two-user double opt-in demo. User B is synthetic; nothing is sent.
 
@@ -32,52 +33,56 @@ export function MatchPage() {
       <input type="checkbox" checked={sel.includes(f)} onChange={(e) => set(e.target.checked ? [...sel, f] : sel.filter((x) => x !== f))} /> {f}
     </label>
   ));
+  const m = d.match;
+  const current = !d.cardA ? 1 : !d.cardB ? 2 : !m ? 3 : !m.aAccepted ? 4 : !m.bAccepted ? 5 : !(d.revealA && d.revealB) ? 6 : d.intro ? 8 : 7;
+  const step = (n: number, title: string, body: React.ReactNode) => (
+    <section style={{ ...box, opacity: n > current ? 0.5 : 1, borderColor: n === current ? "#2563eb" : "#ccc" }}>
+      <h2>{n}. {title} {n < current && <small>✓ done</small>}{n === current && <small> ← current step</small>}</h2>
+      {body}
+    </section>
+  );
+  const btn = (n: number, label: string, onClick: () => void, extra = true) =>
+    <button disabled={n !== current || !extra} onClick={onClick}>{label}</button>;
   return (
     <div style={{ maxWidth: 760, margin: "0 auto", padding: 16 }}>
       <h1>Double opt-in match</h1>
-      <p>User A is you (demo, Orrery Robotics hiring manager). User B <span style={tag}>Synthetic second user</span> is a synthetic robotics engineer created for this demo. Every step goes through the gateway; nothing is sent.</p>
+      <p>User A is you (demo, Orrery Robotics hiring manager). User B <span style={tag}>Synthetic second user</span> is a synthetic robotics engineer created for this demo. Every step is checked by Atlas's privacy rules; nothing is sent. Press the highlighted step's button; the others unlock in order.</p>
       {err && <p style={{ color: "crimson" }}>{err}</p>}
 
-      <section style={box}>
-        <h2>1. A reviews the anonymous share card</h2>
-        {d.draftA && (<>
-          <p>Draft (before the gateway):</p>
+      {step(1, "Publish A's card", <>
+        {d.draftA && !d.cardA && (<>
+          <p>Your draft card (before privacy rules):</p>
           <ul>{Object.entries(d.draftA).map(([k, v]) => <li key={k}><b>{k}</b>: {v}</li>)}</ul>
-          <button onClick={() => run("publishA")}>Opt in to anonymous matching, approve and publish (card.publish)</button>
         </>)}
-        {d.cardA && <CardView card={d.cardA} />}
-      </section>
+        {d.cardA ? <CardView card={d.cardA} /> : btn(1, "1. Publish A's card", () => run("publishA"))}
+      </>)}
 
-      <section style={box}>
-        <h2>2. B's card <span style={tag}>Synthetic second user</span></h2>
-        {d.cardB ? <CardView card={d.cardB} /> : <button disabled={!d.cardA} onClick={() => run("publishB")}>simulate synthetic user B publishing</button>}
-      </section>
+      {step(2, "B publishes (simulated)", <>
+        <span style={tag}>Synthetic second user</span>
+        {d.cardB ? <CardView card={d.cardB} /> : <p>{btn(2, "2. B publishes (simulated)", () => run("publishB"))}</p>}
+      </>)}
 
-      <section style={box}>
-        <h2>3. Anonymous match</h2>
-        {!d.match ? <button disabled={!d.cardA || !d.cardB} onClick={() => run("match")}>Match the two anonymous cards</button> : (<>
-          <p><b>Rationale:</b> {d.match.rationale}</p>
-          <p>Identities hidden until both sides accept and approve a reveal.</p>
-          <p>A accepted: {d.match.aAccepted ? "yes" : "no"} {!d.match.aAccepted && <button onClick={() => run("acceptA")}>Accept as A</button>}</p>
-          <p>B accepted: {d.match.bAccepted ? "yes" : "no"} {!d.match.bAccepted && <button disabled={!d.match.aAccepted} onClick={() => run("acceptB")}>simulate synthetic user B</button>}</p>
-        </>)}
-      </section>
+      {step(3, "Match", m ? (<>
+        <p><b>Rationale:</b> {m.rationale}</p>
+        <p>Identities hidden until both sides accept and approve a reveal.</p>
+      </>) : btn(3, "3. Match", () => run("match")))}
 
-      {d.match?.aAccepted && d.match.bAccepted && (
-        <section style={box}>
-          <h2>4. Choose identity fields to reveal (card.reveal, needs approval)</h2>
-          <div>A: {d.revealA ? `approval ${d.revealA.status}: ${d.revealA.fields.join(", ")}` : (<>{picker(pickA, setPickA)}<button onClick={() => run("revealA", pickA)}>Request and approve reveal as A</button></>)}</div>
-          <div style={{ marginTop: 8 }}>B: {d.revealB ? `approval ${d.revealB.status}: ${d.revealB.fields.join(", ")}` : (<>{picker(pickB, setPickB)}<button onClick={() => run("revealB", pickB)}>simulate synthetic user B approving reveal</button></>)}</div>
-        </section>
-      )}
+      {step(4, "A accepts", m?.aAccepted ? <p>A accepted.</p> : btn(4, "4. A accepts", () => run("acceptA")))}
 
-      {d.intro && (
-        <section style={box}>
-          <h2>5. Introduction draft <span style={{ ...tag, background: "#e5e7eb" }}>UNSENT</span></h2>
-          <pre style={{ whiteSpace: "pre-wrap" }}>{d.intro}</pre>
-          <p>Draft only. There is no send button in this demo.</p>
-        </section>
-      )}
+      {step(5, "B accepts (simulated)", m?.bAccepted ? <p>B accepted <span style={tag}>Synthetic second user</span></p> : btn(5, "5. B accepts (simulated)", () => run("acceptB")))}
+
+      {step(6, "Choose what each side reveals (needs both OKs)", <>
+        <div>A: {d.revealA ? `${humanStatus(d.revealA.status)}: shares ${d.revealA.fields.join(", ")}` : (<>{picker(pickA, setPickA)}{btn(6, "6a. A reveals", () => run("revealA", pickA), pickA.length > 0)}</>)}</div>
+        <div style={{ marginTop: 8 }}>B (simulated): {d.revealB ? `${humanStatus(d.revealB.status)}: shares ${d.revealB.fields.join(", ")}` : (<>{picker(pickB, setPickB)}{btn(6, "6b. B reveals (simulated)", () => run("revealB", pickB), !!d.revealA && pickB.length > 0)}</>)}</div>
+        {current === 6 && !d.revealA && <small>Pick fields, then press 6a; 6b unlocks after A.</small>}
+      </>)}
+
+      {step(7, "Intro draft (unsent)", d.intro ? (<>
+        <span style={{ ...tag, background: "#e5e7eb" }}>UNSENT</span>
+        <pre style={{ whiteSpace: "pre-wrap" }}>{d.intro}</pre>
+        <p>Draft only. There is no send button in this demo.</p>
+      </>) : <p>{current === 7 ? "The intro appears once both reveals are approved." : "Appears after both reveals."} <span style={{ ...tag, background: "#e5e7eb" }}>UNSENT</span></p>)}
+
       <button onClick={() => run("reset")} style={{ marginTop: 16 }}>Reset demo</button>
     </div>
   );
@@ -85,8 +90,8 @@ export function MatchPage() {
 
 function CardView({ card }: { card: CardInfo }) {
   return (<>
-    <p>Published (anonymous):</p>
+    <p>Shared anonymously:</p>
     <ul>{Object.entries(card.published).map(([k, v]) => <li key={k}><b>{k}</b>: {v}</li>)}</ul>
-    {card.stripped.length > 0 && <p style={{ color: "#b45309" }}>Stripped by rule <code>{card.ruleId}</code>: {card.stripped.join(", ")}<br /><small>{card.logReason}</small></p>}
+    {card.stripped.length > 0 && <p style={{ color: "#b45309" }}>Removed before sharing: {card.stripped.join(", ")} (private, never matched on) <small style={{ color: "#888" }}>({card.ruleId})</small></p>}
   </>);
 }

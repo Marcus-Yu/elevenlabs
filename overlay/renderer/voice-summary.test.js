@@ -11,6 +11,8 @@ test("approve reads back the anonymous shortlist", () => {
 test("errors become a denial the agent must explain", () => {
   assert.match(toolResult("approve_brief", { error: "gateway denied" }), /^Denied: gateway denied\. Stop/);
   assert.match(toolResult("confirm_change", null), /^Denied/);
+  // main falls back to the mock snapshot on a live failure but keeps the error
+  assert.match(toolResult("confirm_change", { ...snap, mode: "mock", error: "No criteria change is waiting" }), /^Denied: No criteria change/);
 });
 
 test("reject includes the proposed change and asks for confirmation", () => {

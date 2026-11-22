@@ -28,6 +28,44 @@ or `anthropic` to match. Maritime LLM implements the OpenAI API and
 injects `OPENAI_BASE_URL` and `OPENAI_API_KEY` into a configured agent.
 Run the simulation in that agent to use its prepaid inference credits.
 
+## Run chat and calibration with a local model
+
+Atlas can use one loopback llama.cpp server for chat and calibration. The app
+uses the Anthropic-compatible chat endpoint and EDSL uses the OpenAI-compatible
+endpoint. A Qwen3-1.7B Q4_K_M GGUF served by llama.cpp passed a synthetic
+goal-proposal and calibration smoke test. Use a model with a tool-capable chat
+template. [Model weights](https://huggingface.co/ggml-org/Qwen3-1.7B-GGUF) · [llama.cpp server](https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md)
+
+Start the installed server and model on loopback.
+
+```bash
+llama-server -m /path/to/model.gguf --alias atlas-local-qwen \
+  --host 127.0.0.1 --port 58210 --jinja --no-webui \
+  --ctx-size 4096 --parallel 1 --reasoning-budget 0
+```
+
+From `sim/`, start the simulation against the local model.
+
+```bash
+uv sync --locked --extra openai
+SIM_EDSL_SERVICE=openai SIM_EDSL_MODEL=atlas-local-qwen \
+  OPENAI_BASE_URL=http://127.0.0.1:58210/v1 OPENAI_API_KEY=local-only \
+  uv run uvicorn atlas_sim.api:app --host 127.0.0.1 --port 58211
+```
+
+Set these values in the app's ignored `app/.env.server` and restart Atlas.
+Enable model-processing consent in the thread before sending a chat message.
+With this configuration, Fiber discovery still uses recorded results.
+
+```dotenv
+ADAPTER_MODE=replay
+SIM_URL=http://127.0.0.1:58211
+SIM_CALIBRATION_MODE=live
+ATLAS_CHAT_PROVIDER=local
+ATLAS_CHAT_LOCAL_BASE_URL=http://127.0.0.1:58210/v1
+ATLAS_CHAT_LOCAL_MODEL=atlas-local-qwen
+```
+
 ## Scoring contract
 
 Send the sourced panel, indexed pitch segments, and a tier of `live` or

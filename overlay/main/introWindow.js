@@ -59,7 +59,7 @@ function createIntroWindow(allowedOrigin) {
     if (introWin === win) introWin = null;
   });
   lockNavigation(win, allowedOrigin);
-  win.once("ready-to-show", () => win.show());
+  if (process.env.ATLAS_HEADLESS !== "1") win.once("ready-to-show", () => win.show());
   win.allowedOrigin = allowedOrigin;
   return win;
 }
@@ -81,10 +81,12 @@ function openIntroWindow(url) {
   } else {
     if (introWin.webContents.getURL() !== url) introWin.loadURL(url);
     if (introWin.isMinimized()) introWin.restore();
-    introWin.show();
+    if (process.env.ATLAS_HEADLESS !== "1") introWin.show();
   }
-  if (process.platform === "darwin") app.focus({ steal: true });
-  introWin.focus();
+  if (process.env.ATLAS_HEADLESS !== "1") {
+    if (process.platform === "darwin") app.focus({ steal: true });
+    introWin.focus();
+  }
   console.log(`[atlas] intro window → ${origin}${new URL(url).pathname}`);
   return true;
 }

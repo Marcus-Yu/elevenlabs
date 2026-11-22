@@ -2,6 +2,7 @@
 // Each function returns the children of one card; the card element itself is
 // created once by app.js so its entry animation never replays on updates.
 import { h, icon } from "./dom.js";
+import { TITLES, statusWord, fitText, confirmLabel } from "./copy.js";
 
 // AGENTS.md rule 5: synthetic material and the data mode are always labelled.
 function tag(snap) {
@@ -15,24 +16,39 @@ function head(label, snap, meta) {
     meta);
 }
 
+// One action button: disabled while any action is in flight; the busy one says so.
+function actionBtn(ui, action, label, { mini = false, enabled = true } = {}) {
+  const busy = ui.busy === action.type;
+  return h("button", { type: "button", class: `btn${mini ? " mini" : ""} primary`, disabled: !enabled || Boolean(ui.busy),
+    onclick: () => ui.act(action) }, busy ? "Working…" : label);
+}
+
+// Inline error for a card, with a retry of the action that failed.
+function errorLine(ui, card) {
+  const e = ui.errors[card];
+  if (!e) return null;
+  return h("div", { class: "err", role: "alert" },
+    h("span", {}, e.msg),
+    h("button", { type: "button", class: "btn mini", disabled: Boolean(ui.busy), onclick: e.retry }, "Retry"));
+}
+
 export function brief(snap, ui) {
   const b = snap.brief;
-  const status = b.status === "approved"
-    ? h("span", { class: "ok" }, icon("check", 15, 2.4), "Approved")
-    : h("span", { class: "pending" },
-        h("span", { class: "pend-dot pend" }), "Needs your OK",
-        h("button", { type: "button", class: "btn mini", onclick: () => ui.act({ type: "approve_brief" }) }, "Approve"));
+  const approved = b.status === "approved";
   return [
     head("Brief", snap, h("span", { class: "meta" }, `Goal · ${b.goalKind}`)),
-    h("h3", { class: "title" }, b.role),
+    h("h3", { class: "title" }, TITLES.brief),
+    h("span", { class: "role" }, b.role),
     h("ul", { class: "chips" }, b.criteria.map((c) => h("li", {}, c))),
     h("div", { class: "foot" },
       h("span", { class: "note" }, icon("lock"), b.privateNote),
-      status),
+      approved ? h("span", { class: "ok" }, icon("check", 15, 2.4), statusWord("approved")) : h("span", { class: "pending" }, h("span", { class: "pend-dot pend" }), statusWord("needs_ok"))),
+    approved ? null : actionBtn(ui, { type: "approve_brief" }, "Approve brief"),
+    errorLine(ui, "brief"),
   ];
 }
 
-export function research(snap) {
+export function research(snap, ui) {
   const r = snap.research;
   const sources = r.sources.map((s, i) =>
     h("div", { class: "src" },
@@ -40,12 +56,17 @@ export function research(snap) {
         s.status === "done" && s.count != null ? h("span", { class: "src-count" }, `${s.count} found`) : null),
       h("div", { class: "track" },
         h("div", { class: "fill", style: s.status === "done" ? { animation: "none" } : { animationDuration: `${2.4 + i}s` } }))));
+  // Next step after approval: find candidates, until a shortlist exists.
+  const needsSearch = snap.brief.status === "approved" && snap.shortlist.candidates.length === 0;
   return [
     h("div", { class: "head" },
       h("span", { class: "label" }, "Research", tag(snap)),
-      h("span", { class: "pill" }, r.status === "done" ? "Done" : "Scanning")),
+      h("span", { class: "pill" }, statusWord(r.status === "done" ? "done" : "scanning"))),
+    h("h3", { class: "title" }, TITLES.research),
     ...sources,
     h("span", { class: "small" }, icon("link"), "Every claim links to its source"),
+    needsSearch ? actionBtn(ui, { type: "run_research" }, "Find candidates") : null,
+    errorLine(ui, "research"),
   ];
 }
 
@@ -55,35 +76,48 @@ function fullFit(fit) {
   return got !== undefined && got === of;
 }
 
+/** Run 2+ means the criteria change was confirmed and the shortlist re-ran. */
+export function rerun(snap) {
+  return /^Run [2-9]/.test(snap.shortlist.runLabel || "");
+}
+
 export function shortlist(snap, ui) {
   const s = snap.shortlist;
+  const canReject = !ui.pendingConfirm && !ui.confirmed && !rerun(snap);
   const rows = s.candidates.map((c) => {
     const key = `${c.alias}|${c.headline}`;
     const rejected = ui.rejected.has(key);
-    const reject = () => {
-      if (rejected) return;
-      ui.rejected.add(key);
-      ui.act({ type: "reject_candidate", alias: c.alias, reason: "too junior" });
-    };
+    const reject = () =>
+      ui.act({ type: "reject_candidate", alias: c.alias, reason: "too junior" }).then((r) => {
+        if (r && !r.error) ui.rejected.add(key);
+        ui.refresh();
+      });
     return h("li", {},
-      h("button", { type: "button", class: `row${rejected ? " rejected" : ""}`, title: "Reject: too junior", onclick: reject },
+      h("div", { class: `row${rejected ? " rejected" : ""}` },
         h("span", { class: "avatar" }, c.alias),
         h("span", { class: "who" },
           h("b", {}, `Candidate ${c.alias}`),
           h("span", {}, rejected ? "Rejected · too junior" : c.headline)),
         h("span", { class: "fit" },
-          h("span", { class: `badge${fullFit(c.fit) ? "" : " partial"}` }, c.fit),
-          `${c.sourceCount} sources`)));
+          h("span", { class: `badge${fullFit(c.fit) ? "" : " partial"}` }, fitText(c.fit)),
+          `${c.sourceCount} sources`),
+        canReject && !rejected
+          ? h("button", { type: "button", class: "btn mini", disabled: Boolean(ui.busy), onclick: reject },
+              ui.busy === "reject_candidate" ? "…" : "Too junior")
+          : null));
   });
   const confirm = ui.pendingConfirm
     ? h("div", { class: "confirm" },
         ui.explanation ? h("span", { class: "explain" }, ui.explanation) : null,
-        h("button", { type: "button", class: "btn", onclick: () => ui.act({ type: "confirm_change" }) }, "Confirm change"))
+        actionBtn(ui, { type: "confirm_change" }, confirmLabel(ui.explanation)))
     : null;
   return [
-    head("Shortlist", snap, h("span", { class: "meta" }, `${s.runLabel} · names hidden`)),
-    h("ul", { class: "rows" }, rows),
+    head("Shortlist", snap, h("span", { class: "meta" }, "Names hidden")),
+    h("h3", { class: "title" }, TITLES.shortlist),
+    h("span", { class: "run" }, s.runLabel),
+    s.candidates.length ? h("ul", { class: "rows" }, rows) : h("span", { class: "small" }, "No candidates yet"),
     confirm,
+    errorLine(ui, "shortlist"),
   ];
 }
 
@@ -99,12 +133,16 @@ export function gateway(snap, ui) {
   const g = snap.gateway;
   const events = g.events.map((e) => {
     const [look, name, stroke] = EVENT_ICON[e.kind] || EVENT_ICON.pending;
-    return h("li", {}, h("span", { class: `ico ${look}` }, icon(name, 12, stroke)), e.text);
+    return h("li", {}, h("span", { class: `ico ${look}` }, icon(name, 12, stroke)),
+      h("span", {}, e.text, e.ruleId && e.ruleId !== "default" ? h("span", { class: "rule" }, ` (${e.ruleId})`) : null));
   });
+  // Last step: review the intro once the shortlist has been refined (Run 2).
+  const ready = ui.confirmed || rerun(snap);
   return [
     head([icon("shield"), "Gateway"], snap, h("span", { class: "meta" }, "Rules, not the model")),
+    h("h3", { class: "title" }, TITLES.gateway),
     h("ul", { class: "events" }, events),
-    h("button", { type: "button", class: "btn", disabled: g.introStatus === "none",
-      onclick: () => ui.act({ type: "open_intro" }) }, "Review the intro"),
+    actionBtn(ui, { type: "open_intro" }, "Review intro", { enabled: ready }),
+    errorLine(ui, "gateway"),
   ];
 }

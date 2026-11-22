@@ -5,6 +5,10 @@ import { z } from "zod";
 export const ACTION_TYPES = [
   "thread.chat",
   "thread.propose_goal",
+  "thread.list_matches",
+  "thread.explain_match",
+  "thread.list_hiring_goals",
+  "thread.propose_memory",
   "calibration.profiles",
   "calibration.criteria",
   "company.search",

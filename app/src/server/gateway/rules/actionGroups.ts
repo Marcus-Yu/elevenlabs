@@ -10,6 +10,10 @@ export const READ_ACTIONS: ReadonlySet<ActionType> = new Set<ActionType>([
   "memory.read",
   "calibration.profiles",
   "thread.propose_goal",
+  "thread.list_matches",
+  "thread.explain_match",
+  "thread.list_hiring_goals",
+  "thread.propose_memory",
 ]);
 
 /** What a tainted request may still do (§8 taint rule). */
@@ -30,6 +34,8 @@ export const PROVIDER_BOUND: ReadonlySet<ActionType> = new Set<ActionType>([
 
 /** Actions that only make sense for one goal; they are denied without a goalId. */
 export const GOAL_REQUIRED: ReadonlySet<ActionType> = new Set<ActionType>([
+  "thread.list_matches",
+  "thread.explain_match",
   "contact.reveal_email",
   "pitch.score",
   "match.submit",

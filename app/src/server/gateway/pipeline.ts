@@ -63,6 +63,7 @@ export function summarizePayload(payload: unknown, omitText = false): string | n
 
 const privateActions = new Set<string>([
   "thread.chat", "thread.propose_goal", "calibration.profiles", "calibration.criteria",
+  "thread.propose_memory",
   "voice.scribe_token", "voice.speak", "pitch.score",
 ]);
 

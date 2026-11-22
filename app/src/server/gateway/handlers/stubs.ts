@@ -35,6 +35,10 @@ function stub<T>(data: T) {
 export function createStubHandlers(): HandlerMap {
   return {
     "thread.propose_goal": defineHandler({ payload: AnyObject, run: async () => stub({ available: false }) }),
+    "thread.propose_memory": defineHandler({ payload: AnyObject, run: async () => stub({ available: false }) }),
+    "thread.list_hiring_goals": defineHandler({ payload: AnyObject, run: async () => stub({ available: false }) }),
+    "thread.list_matches": defineHandler({ payload: AnyObject, run: async () => stub({ available: false }) }),
+    "thread.explain_match": defineHandler({ payload: AnyObject, run: async () => stub({ available: false }) }),
     "thread.chat": defineHandler({ payload: AnyObject, run: async () => stub({ available: false }) }),
     "calibration.profiles": defineHandler({ payload: AnyObject, run: async () => stub({ available: false }) }),
     "calibration.criteria": defineHandler({ payload: AnyObject, run: async () => stub({ available: false }) }),
