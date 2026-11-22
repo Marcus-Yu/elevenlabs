@@ -8,10 +8,10 @@ test("hotkey summons from hidden and dismisses while visible", () => {
   assert.equal(next("leaving", "toggle"), "leaving");
 });
 
-test("ball advances listening → thinking → speaking → leaving", () => {
+test("ball advances listening → thinking → speaking → listening (never hides)", () => {
   assert.equal(next("listening", "advance"), "thinking");
   assert.equal(next("thinking", "advance"), "speaking");
-  assert.equal(next("speaking", "advance"), "leaving");
+  assert.equal(next("speaking", "advance"), "listening");
   assert.equal(next("hidden", "advance"), "hidden");
   assert.equal(next("leaving", "advance"), "leaving");
 });

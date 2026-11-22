@@ -12,7 +12,8 @@ function next(state, event) {
     case "toggle":
       return state === "hidden" ? "listening" : next(state, "dismiss");
     case "advance":
-      return { listening: "thinking", thinking: "speaking", speaking: "leaving" }[state] ?? state;
+      // Speaking → listening (resumes voice); only an explicit dismiss hides the overlay.
+      return { listening: "thinking", thinking: "speaking", speaking: "listening" }[state] ?? state;
     case "left":
       return state === "leaving" ? "hidden" : state;
     default:
