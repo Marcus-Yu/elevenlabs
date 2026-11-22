@@ -101,10 +101,44 @@ describe("watcher API", () => {
   });
 
   it("builds a brief from a searches array and ignores malformed entries", () => {
-    const brief = buildBrief({
-      ...goal,
-      icp: { searches: [{ keywords: ["a"], internalNote: "keep private" }, "garbage", { keywords: ["b"] }] },
-    }, []);
-    expect(brief.searches).toEqual([{ keywords: ["a"] }, { keywords: ["b"] }]);
+    const brief = buildBrief({ ...goal, icp: { searches: [{ keywords: ["a"], internalNote: "keep private" }, "garbage", { keywords: ["b"] }] } }, []);
+    expect(("searches" in brief ? brief.searches : [])).toEqual([{ keywords: ["a"] }, { keywords: ["b"] }]);
+  });
+});
+
+describe("hire research brief", () => {
+  const hireGoal: WatchedGoal = {
+    ...goal,
+    kind: "hire",
+    statement: "Hire a robotics engineer",
+    icp: {
+      hireCriteria: { role: "Robotics engineer", titles: ["robotics engineer", "robotics software engineer"], mustHaveSkills: ["ROS", "C++"], minYearsExperience: 2, countryCodes: ["USA"] },
+      // Anything else on the goal must not reach the box.
+      salaryCeiling: 185000,
+    },
+  };
+
+  it("carries the approved criteria only, as one search agent per title", async () => {
+    const res = await handleBrief("g1", auth, deps({ loadGoal: async () => hireGoal }));
+    expect(res.body).toEqual({
+      goalId: "g1",
+      statement: "Hire a robotics engineer",
+      research: {
+        kind: "hire",
+        role: "Robotics engineer",
+        searches: [
+          { mode: "criteria", titles: ["robotics engineer"], skills: ["ROS", "C++"], minYearsExperience: 2, countryCodes: ["USA"], pageSize: 15 },
+          { mode: "criteria", titles: ["robotics software engineer"], skills: ["ROS", "C++"], minYearsExperience: 2, countryCodes: ["USA"], pageSize: 15 },
+        ],
+      },
+    });
+    expect(JSON.stringify(res.body)).not.toContain("185000");
+  });
+
+  it("lets the watcher run contact.search in criteria mode through the gateway", async () => {
+    const d = deps({ loadGoal: async () => hireGoal });
+    const res = await handleTool("g1", auth, { tool: "contact.search", args: { mode: "criteria", titles: ["robotics engineer"] } }, d);
+    expect(res.status).toBe(200);
+    expect(d.executed[0]).toMatchObject({ actionType: "contact.search", origin: "watcher", tainted: true });
   });
 });

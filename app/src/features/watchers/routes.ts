@@ -12,7 +12,7 @@ function dependencies(entities: Entities): WatchDeps {
   return {
     loadGoal: (id) => entities.Goal.findUnique({
       where: { id },
-      select: { id: true, userId: true, status: true, statement: true, watcherTokenHash: true, icp: true },
+      select: { id: true, userId: true, status: true, kind: true, statement: true, watcherTokenHash: true, icp: true },
     }),
     async matchedDomains(goalId) {
       const matches = await entities.Match.findMany({
