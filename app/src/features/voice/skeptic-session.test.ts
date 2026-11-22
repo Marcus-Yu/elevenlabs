@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { UntrustedText } from "../../shared/contracts/discovery";
-import { appendTranscriptEntry, skepticDynamicVariables, type SkepticContext } from "./skeptic-session";
+import { appendTranscriptEntry, skepticDynamicVariables, type SkepticContext, type TranscriptEntry } from "./skeptic-session";
 
 const text = (value: string): UntrustedText => ({
   kind: "untrusted", text: value, flagged: false,
@@ -32,7 +32,7 @@ describe("skepticDynamicVariables", () => {
 describe("appendTranscriptEntry", () => {
   it("appends final turns without mutating state and deduplicates retries", () => {
     const entry = { id: "one", role: "agent" as const, content: text("Why is that?") };
-    const original = [];
+    const original: TranscriptEntry[] = [];
     const first = appendTranscriptEntry(original, entry);
     expect(original).toEqual([]);
     expect(appendTranscriptEntry(first, entry)).toEqual([entry]);
