@@ -49,8 +49,12 @@ test("approve → shortlist → reject → confirm → run 2, with no names in t
   const srv = fakeServer();
   const p = createProvider({ ATLAS_SERVER_URL: "http://atlas.test:3003" }, { fetch: srv.fetch });
 
-  const s0 = await p.snapshot();
+  const neutral = await p.snapshot();
+  assert.equal(neutral.brief, null, "neutral until a need is set");
+  assert.equal(neutral.shortlist, null);
+  const s0 = await p.act({ type: "set_need", text: "I need to hire an engineer", kind: "hire" });
   assert.equal(s0.brief.status, "needs_ok");
+  assert.equal(s0.brief.goalKind, "Hire");
   assert.equal(s0.mode, "replay");
   assert.equal(s0.synthetic, true);
 
@@ -130,4 +134,17 @@ test("/match: stripped field names, opt-in progress and intro status, stub handl
   const g = _map.mapGateway([{ actionType: "contact.search", decision: "ALLOW", ruleId: "default" }], [], m3);
   assert.equal(g.introStatus, "approved");
   assert.equal(g.events[0].ruleId, "card_fields");
+});
+
+test("a non-hire need is approved honestly, with no research results", async () => {
+  const srv = fakeServer();
+  const p = createProvider({ ATLAS_SERVER_URL: "http://atlas.test:3003" }, { fetch: srv.fetch });
+  const s0 = await p.act({ type: "set_need", text: "Find a contract manufacturer", kind: "manufacturer" });
+  assert.equal(s0.brief.goalKind, "Find a manufacturer");
+  const s1 = await p.act({ type: "approve_brief" });
+  assert.equal(s1.brief.status, "approved");
+  assert.match(s1.research.note, /isn't wired in this demo yet/);
+  assert.deepEqual(s1.research.sources, []);
+  assert.equal(s1.shortlist, null);
+  assert.equal(srv.calls.filter((c) => c.path === "/operations/create-hire-goal").length, 0);
 });

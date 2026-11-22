@@ -22,6 +22,7 @@ const DEMO_HIRE_CRITERIA = {
 };
 
 const { eventText, strippedText, runLabelText } = require("./humanize");
+const { briefFromNeed } = require("../../shared/contract");
 
 const ALIASES = ["A", "B", "C"];
 const SOURCE_LABELS = { fiber: "People search (Fiber)", ploid: "People search (Ploid)", web: "Public web pages", synthetic: "Synthetic profiles" };
@@ -200,7 +201,21 @@ function createProvider(env = process.env, deps = {}) {
   const password = env.ATLAS_PASSWORD || "atlas-demo-1";
 
   let token = null;
-  const s = { goalId: null, criteria: DEMO_HIRE_CRITERIA, ranked: [], runs: [], proposedChange: null };
+  const s = { goalId: null, criteria: DEMO_HIRE_CRITERIA, ranked: [], runs: [], proposedChange: null, need: null, otherApproved: false };
+  const isHire = () => s.need && briefFromNeed(s.need).kind === "hire";
+  /** Fresh session: no need, no goal (called on every new summon and on a stale goal). */
+  function reset() {
+    Object.assign(s, { goalId: null, criteria: DEMO_HIRE_CRITERIA, ranked: [], runs: [], proposedChange: null, need: null, otherApproved: false });
+  }
+  /** A stale-goal reset returns the neutral snapshot instead of an error. */
+  async function guarded(fn) {
+    try {
+      return await fn();
+    } catch (err) {
+      if (err?.reset) return read();
+      throw err;
+    }
+  }
 
   async function post(path, body, auth) {
     let res;
@@ -236,11 +251,22 @@ function createProvider(env = process.env, deps = {}) {
       token = null;
       return op(name, args, true);
     }
+    if (!res.ok && res.status === 404 && /goal not found/i.test(res.data?.message ?? "")) {
+      // Stale goal (e.g. the database was reset): forget it and go back to neutral, silently.
+      reset();
+      const err = new AtlasProviderError("stale goal; reset");
+      err.reset = true;
+      throw err;
+    }
     if (!res.ok) throw new AtlasProviderError(`${name} failed (HTTP ${res.status}): ${res.data?.message ?? "no message"}`);
     return res.data?.json;
   }
 
   async function approveBrief() {
+    if (s.need && !isHire()) {
+      s.otherApproved = true; // no research is wired for this kind yet (rule 5: no fake results)
+      return;
+    }
     if (s.goalId) return;
     const { goalId } = await op("createHireGoal", { criteria: s.criteria });
     s.goalId = goalId;
@@ -271,6 +297,18 @@ function createProvider(env = process.env, deps = {}) {
       if (last?.criteria) s.criteria = last.criteria;
     }
     const rows = activity?.rows ?? [];
+    const meta = { mode: modeOf(rows), synthetic: username === "demo" || modeOf(rows) !== "live", updatedAt: new Date().toISOString() };
+    // Neutral until a need is set; only the hire need runs the hiring path.
+    if (!s.need) return { ...meta, brief: null, research: null, shortlist: null, gateway: null };
+    if (!isHire()) {
+      const brief = { ...briefFromNeed(s.need), status: s.otherApproved ? "approved" : "needs_ok" };
+      const research = s.otherApproved ? { status: "done", sources: [], note: `Research for "${brief.goalKind.toLowerCase()}" isn't wired in this demo yet` } : null;
+      return { ...meta, brief, research, shortlist: null, gateway: null };
+    }
+    if (!s.goalId) {
+      const need = briefFromNeed(s.need);
+      return { ...meta, brief: { ...mapBrief(s.criteria, null), role: need.role, goalKind: need.goalKind }, research: null, shortlist: null, gateway: null };
+    }
     return {
       brief: mapBrief(s.criteria, s.goalId),
       research: mapResearch(s.ranked, s.runs),
@@ -296,6 +334,10 @@ function createProvider(env = process.env, deps = {}) {
 
   async function act(action) {
     switch (action?.type) {
+      case "set_need":
+        s.need = { text: action.text, kind: action.kind, role: action.role, criteria: action.criteria };
+        s.otherApproved = false;
+        return read();
       case "approve_brief":
         await approveBrief();
         return read();
@@ -329,7 +371,7 @@ function createProvider(env = process.env, deps = {}) {
     }
   }
 
-  return { snapshot, act };
+  return { snapshot: (opts) => guarded(() => snapshot(opts)), act: (action) => guarded(() => act(action)), reset };
 }
 
 /** Wasp's dev client runs one port below the server by default (3000/3001). Override with ATLAS_CLIENT_URL. */

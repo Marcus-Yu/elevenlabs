@@ -4,7 +4,8 @@ const { createProvider } = require("./mock");
 
 test("mock walks statuses forward and stays labelled synthetic", async () => {
   const p = createProvider({});
-  const first = await p.snapshot();
+  assert.equal((await p.snapshot()).brief, null, "neutral until a need is set");
+  const first = await p.act({ type: "set_need", text: "I need to hire an engineer" });
   assert.equal(first.mode, "mock");
   assert.equal(first.synthetic, true);
   assert.equal(first.brief.status, "needs_ok");

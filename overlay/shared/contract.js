@@ -59,7 +59,13 @@
  * @property {string} updatedAt
  *
  * @typedef {{type:"approve_brief"} | {type:"run_research"} | {type:"reject_candidate", alias:string, reason:string}
- *   | {type:"confirm_change"} | {type:"open_intro"} | {type:"refresh"}} OverlayAction
+ *   | {type:"confirm_change"} | {type:"open_intro"} | {type:"refresh"}
+ *   | {type:"set_need", text:string, kind?:NeedKind, role?:string, criteria?:string[]}} OverlayAction
+ *
+ * @typedef {"hire"|"customers"|"investors"|"manufacturer"|"partner"|"other"} NeedKind
+ *
+ * Atlas is neutral until the user states a need: snapshot.brief is null until set_need, and
+ * research / shortlist / gateway are null until the brief is approved. Hiring is one need among many.
  *
  * A provider lives in the Electron main process:
  *   createProvider(env) → { snapshot(): Promise<Snapshot>, act(action: OverlayAction): Promise<Snapshot> }
@@ -106,4 +112,25 @@ const SAMPLE_SNAPSHOT = {
   },
 };
 
-module.exports = { SAMPLE_SNAPSHOT };
+const NEED_LABELS = { hire: "Hire", customers: "Find customers", investors: "Find investors", manufacturer: "Find a manufacturer", partner: "Find a partner", other: "Meet someone" };
+
+/** "I need to hire an engineer" → "hire"; anything else → "other". */
+function inferKind(text) {
+  return /\b(hire|hiring|recruit|engineer)/i.test(text || "") ? "hire" : "other";
+}
+
+/** Builds the "Your need" brief from the user's words (status needs_ok). */
+function briefFromNeed(need, hireCriteriaChips = []) {
+  const kind = need.kind || inferKind(need.text);
+  const criteria = need.criteria?.length ? need.criteria : kind === "hire" ? hireCriteriaChips : [];
+  return {
+    goalKind: NEED_LABELS[kind] || NEED_LABELS.other,
+    role: need.role || need.text || "Your need",
+    criteria,
+    privateNote: "Contact details stay private until both sides opt in",
+    status: "needs_ok",
+    kind,
+  };
+}
+
+module.exports = { SAMPLE_SNAPSHOT, NEED_LABELS, inferKind, briefFromNeed };

@@ -1,6 +1,6 @@
 // Plain-language copy for the overlay cards (same wording as the web app).
 
-export const TITLES = { brief: "Your hire", research: "Research", shortlist: "Candidates", gateway: "Privacy and approvals" };
+export const TITLES = { brief: "Your need", research: "Research", shortlist: "Candidates", gateway: "Privacy and approvals" };
 
 const STATUS = { needs_ok: "Needs your OK", approved: "Approved", scanning: "Searching…", done: "Done", PENDING: "Waiting", EXECUTED: "Done" };
 export const statusWord = (s) => STATUS[s] ?? s;
