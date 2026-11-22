@@ -13,6 +13,15 @@ export const READ_ACTIONS: ReadonlySet<ActionType> = new Set<ActionType>([
 /** What a tainted request may still do (§8 taint rule). */
 export const TAINT_ALLOWED: ReadonlySet<ActionType> = new Set<ActionType>([...READ_ACTIONS, "match.submit", "draft.create"]);
 
+/** Actions whose payload leaves for a provider (§8 provider_minimum). Watcher requests are checked too. */
+export const PROVIDER_BOUND: ReadonlySet<ActionType> = new Set<ActionType>([
+  "company.search",
+  "jobs.search",
+  "contact.search",
+  "contact.reveal_email",
+  "web.read",
+]);
+
 /** Actions that only make sense for one goal; they are denied without a goalId. */
 export const GOAL_REQUIRED: ReadonlySet<ActionType> = new Set<ActionType>([
   "contact.reveal_email",
