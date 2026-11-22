@@ -28,6 +28,30 @@ def test_generates_valid_profiles_with_generic_labels(monkeypatch):
     assert len({p["label"] for p in result}) == 6
 
 
+@pytest.mark.parametrize("wrapped", [lambda p: {"profiles": p}, lambda p: {f"role_{i}": item for i, item in enumerate(p, 1)}])
+def test_accepts_valid_wrapped_profiles(wrapped, monkeypatch):
+    assert len(run(json.dumps(wrapped(profiles())), monkeypatch)) == 6
+
+
+def test_rejects_noncontiguous_role_keys(monkeypatch):
+    with pytest.raises(ValueError):
+        run(json.dumps({f"role_{i + 2}": p for i, p in enumerate(profiles())}), monkeypatch)
+
+
+def test_accepts_empty_reasoning_terminator(monkeypatch):
+    assert len(run(f"</think>\n{json.dumps(profiles())}", monkeypatch)) == 6
+
+
+def test_accepts_a_single_json_fence(monkeypatch):
+    assert len(run(f"```json\n{json.dumps(profiles())}\n```", monkeypatch)) == 6
+
+
+@pytest.mark.parametrize("output", [f"Before ```json\n{json.dumps(profiles())}\n```", f"```json\n{json.dumps(profiles())}\n``` after"])
+def test_rejects_fenced_output_with_extra_text(output, monkeypatch):
+    with pytest.raises(ValueError):
+        run(output, monkeypatch)
+
+
 @pytest.mark.parametrize("output", ["not JSON", json.dumps(profiles()[:5]),
     json.dumps([profiles()[0]] * 6),
     json.dumps([{**p, "years_experience": "4"} for p in profiles()]),
