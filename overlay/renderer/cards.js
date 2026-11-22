@@ -39,7 +39,7 @@ export function research(snap) {
       h("span", { class: "src-row" }, s.label,
         s.status === "done" && s.count != null ? h("span", { class: "src-count" }, `${s.count} found`) : null),
       h("div", { class: "track" },
-        h("div", { class: "fill", style: { animationDuration: `${2.4 + i}s` } }))));
+        h("div", { class: "fill", style: s.status === "done" ? { animation: "none" } : { animationDuration: `${2.4 + i}s` } }))));
   return [
     h("div", { class: "head" },
       h("span", { class: "label" }, "Research", tag(snap)),
@@ -49,13 +49,20 @@ export function research(snap) {
   ];
 }
 
+// "4/4" → true, "2/3" → false.
+function fullFit(fit) {
+  const [got, of] = String(fit).split("/");
+  return got !== undefined && got === of;
+}
+
 export function shortlist(snap, ui) {
   const s = snap.shortlist;
   const rows = s.candidates.map((c) => {
-    const rejected = ui.rejected.has(c.alias);
+    const key = `${c.alias}|${c.headline}`;
+    const rejected = ui.rejected.has(key);
     const reject = () => {
       if (rejected) return;
-      ui.rejected.add(c.alias);
+      ui.rejected.add(key);
       ui.act({ type: "reject_candidate", alias: c.alias, reason: "too junior" });
     };
     return h("li", {},
@@ -65,11 +72,13 @@ export function shortlist(snap, ui) {
           h("b", {}, `Candidate ${c.alias}`),
           h("span", {}, rejected ? "Rejected · too junior" : c.headline)),
         h("span", { class: "fit" },
-          h("span", { class: `badge${c.fit.startsWith("3/") ? "" : " partial"}` }, c.fit),
+          h("span", { class: `badge${fullFit(c.fit) ? "" : " partial"}` }, c.fit),
           `${c.sourceCount} sources`)));
   });
-  const confirm = ui.rejected.size > 0
-    ? h("button", { type: "button", class: "btn", onclick: () => { ui.rejected.clear(); ui.act({ type: "confirm_change" }); } }, "Confirm change")
+  const confirm = ui.pendingConfirm
+    ? h("div", { class: "confirm" },
+        ui.explanation ? h("span", { class: "explain" }, ui.explanation) : null,
+        h("button", { type: "button", class: "btn", onclick: () => ui.act({ type: "confirm_change" }) }, "Confirm change"))
     : null;
   return [
     head("Shortlist", snap, h("span", { class: "meta" }, `${s.runLabel} · names hidden`)),
@@ -92,11 +101,10 @@ export function gateway(snap, ui) {
     const [look, name, stroke] = EVENT_ICON[e.kind] || EVENT_ICON.pending;
     return h("li", {}, h("span", { class: `ico ${look}` }, icon(name, 12, stroke)), e.text);
   });
-  const approved = g.introStatus === "approved";
   return [
     head([icon("shield"), "Gateway"], snap, h("span", { class: "meta" }, "Rules, not the model")),
     h("ul", { class: "events" }, events),
-    h("button", { type: "button", class: "btn", disabled: approved || g.introStatus === "none",
-      onclick: () => ui.act({ type: "open_intro" }) }, approved ? "Intro approved" : "Review the intro"),
+    h("button", { type: "button", class: "btn", disabled: g.introStatus === "none",
+      onclick: () => ui.act({ type: "open_intro" }) }, "Review the intro"),
   ];
 }
