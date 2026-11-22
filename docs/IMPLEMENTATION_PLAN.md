@@ -1,10 +1,49 @@
 # Atlas — Implementation Plan
 
-Status: proposed, 2026-11-22. Nothing is built yet; the repo holds only a README.
+Status: in build, 2026-11-22. **See the scope change below; it overrides §1, §10 and §12.**
 
 Atlas is a persistent agent that finds the people you need (customers, investors, manufacturers, employers), tests and rehearses your pitch against a simulated audience built from those real companies, drafts outreach, and keeps watching until the goal is met. Every action passes through a rule-based gateway that the model cannot override.
 
 This document is written to be handed to coding agents. Each work package in §9 is a self-contained brief with owned paths, inputs, and acceptance checks.
+
+---
+
+## Scope change (2026-11-22, 18:10 UTC): two-user double opt-in is the core demo
+
+The human coordinator moved the centrepiece to the agent-to-agent match, following the team notes (`Dante-Bravi/Eleven-labs-Obsidian` commit `2d1b5a1`, *Sponsor Integration Architecture*). This section overrides §1, §10 and §12 where they differ. §13.2 anticipated this change: WP13 moves up, and The Room becomes Tier 2.
+
+### Demo scenario (both users synthetic and labelled as such)
+- **User A** is the seeded Orrery Robotics hiring manager. They need a robotics engineer and have private facts, including a salary ceiling.
+- **User B** is a seeded engineer looking for a robotics role (`WORK_FOR`), with a complementary card.
+
+| Time | Beat | Sponsors | Built by |
+|---|---|---|---|
+| 0:00–0:20 | A types or says "I need a robotics engineer" in the thread | assistant-ui, ElevenLabs | WP4, WP9 |
+| 0:20–0:50 | **Calibration:** A reacts to 6–8 clearly synthetic candidate profiles, and Atlas proposes criteria from those reactions. A approves the criteria. | Expected Parrot | WP3, WP5 |
+| 0:50–1:30 | **Delegated research:** the approved brief (criteria only) runs as research agents on a Maritime box and returns a sourced shortlist. A rejects one candidate as too junior and confirms the proposed criteria change. The rerun ranks better, and TraceRoot shows both runs with the evaluation delta. | Rowboat, Maritime, Ploid, Fiber, TraceRoot | WP10, WP12, WP2, WP5, WP7 |
+| 1:30–2:20 | **Double opt-in:** A approves an anonymous share card (the gateway strips the salary ceiling, and the log shows it). The matcher pairs it with B's card. Each side's agent asks its user privately, both accept, and each chooses which details to reveal. Atlas then drafts an introduction. | Wasp, Alter (rules) | WP13, WP1 |
+| 2:20–2:50 | A approves the introduction. Alter delivers it to the sandbox redirect inbox. The activity log and TraceRoot show the send and one real denied attempt. | Alter, TraceRoot | WP7, WP6 |
+
+Codevisor is the build tool: each work package is one Codevisor agent.
+
+### Rules for hiring goals
+- New `GoalKind` value `hire` (additive schema change).
+- `contact.search` and people search may build a **sourced research shortlist** of public profiles.
+- New rule **`opt_in_only` (deny):** `contact.reveal_email` and `outreach.send` on a `hire` goal, or to a person found by research. People are contacted only through a double-opt-in `card.reveal` introduction.
+- Calibration profiles from Expected Parrot are synthetic and are never shown as real people.
+
+### Tiers after the change
+- **Tier 1 (must work live):** WP0, WP1, WP13, WP3 calibration, WP5 for hiring, WP2 people and company search, WP10 delegated research, WP7 (Alter introduction send and TraceRoot rerun comparison), WP4 thread, WP6 approvals and activity log, WP9 voice input and spoken match briefing.
+- **Tier 2 (only if time allows):** The Room and the pitch test (WP8), skeptic and phone calls (rest of WP9), meeting need detection (WP11), daily watcher schedule, "while you were away" briefing.
+- **Sponsor minimums stay:** Rowboat coordinates the delegated research agents (WP12). Timebox it to 45 minutes. If Rowboat can't orchestrate them in time, keep the Postgres + Rowboat memory mirror from #11 as a clearly labelled fallback.
+
+### Dispatch after the change (one active package per owner)
+| Owner | Now | Next |
+|---|---|---|
+| person-1 | WP1, plus `hire`, `opt_in_only` and share-card field stripping | WP7 for the introduction send and the TraceRoot rerun comparison |
+| person-2 | WP5 for hiring: criteria → shortlist → confirmed rerun | WP10 delegated research, then the WP12 Rowboat timebox |
+| person-3 | WP3 calibration endpoints | WP9 voice input and spoken match briefing |
+| person-4 | WP13 double opt-in, including seeding user B | WP4 thread cards, then WP6 approvals and activity log, then WP15 |
 
 ---
 
@@ -37,6 +76,8 @@ Where they differ, this plan does the following:
 ---
 
 ## 1. Scope
+
+> Superseded where it differs by the [scope change](#scope-change-2026-11-22-1810-utc-two-user-double-opt-in-is-the-core-demo).
 
 ### Tier 1 — must work live in the demo
 - Sixty-second onboarding: paste a website, resume or one-liner; first matches inside a minute.
@@ -497,6 +538,8 @@ Write end-to-end tests, in replay mode, for: a web page with an embedded instruc
 
 ## 10. Dispatch order
 
+> Superseded where it differs by the [scope change](#scope-change-2026-11-22-1810-utc-two-user-double-opt-in-is-the-core-demo).
+
 | Wave | Packages (parallel) | Notes |
 |---|---|---|
 | 0 | WP0 | Single agent. Review before continuing. |
@@ -530,6 +573,8 @@ A human must create these before the wave that needs them.
 ---
 
 ## 12. Demo mapping and supported claims
+
+> Superseded where it differs by the [scope change](#scope-change-2026-11-22-1810-utc-two-user-double-opt-in-is-the-core-demo).
 
 | Time | Beat | Built by |
 |---|---|---|
