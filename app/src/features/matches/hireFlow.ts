@@ -150,6 +150,10 @@ export async function rejectMatchWithReason(userId: string, matchId: string, rea
   return { proposedChange };
 }
 
+// Postgres jsonb reorders object keys, so compare the fields, not the raw JSON text.
+const changeKey = (changes: unknown) =>
+  JSON.stringify((Array.isArray(changes) ? changes : []).map((c: { field?: unknown; from?: unknown; to?: unknown }) => [c?.field, c?.from ?? null, c?.to ?? null]));
+
 /**
  * preference_confirm: applies the change the server proposed (not whatever the client sends), then
  * re-ranks the pool. The previous run is judged by the new criteria too, for the TraceRoot comparison.
@@ -159,7 +163,7 @@ export async function confirmCriteriaChange(userId: string, goalId: string, prop
   const pending = state.pendingChange;
   if (!pending) throw new HireFlowError(409, "no criteria change is waiting for confirmation");
   const sent = (proposedChange ?? {}) as { changes?: unknown };
-  if (JSON.stringify(sent.changes) !== JSON.stringify(pending.changes)) throw new HireFlowError(409, "the confirmed change does not match the proposed change");
+  if (changeKey(sent.changes) !== changeKey(pending.changes)) throw new HireFlowError(409, "the confirmed change does not match the proposed change");
 
   const confirmed = applyCriteriaChange(state.hireCriteria, pending);
   const ranked = rankWithIds(goalId, state, confirmed);
