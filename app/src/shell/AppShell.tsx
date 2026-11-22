@@ -8,39 +8,39 @@ export function AppShell() {
   const { data: user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-neutral-50 text-neutral-900">
-      <header className="border-b border-neutral-200 bg-white">
+    <div className="min-h-screen text-neutral-900">
+      <header className="atlas-header">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-3">
-          <span className="text-lg font-semibold">Atlas</span>
+          <span className="flex items-center gap-2.5">
+            <span className="atlas-orb" aria-hidden="true" />
+            <span className="atlas-wordmark">Atlas</span>
+          </span>
           {user ? (
-            <button className="text-sm text-neutral-600 hover:text-neutral-900" onClick={logout}>
+            <button className="atlas-nav-link" onClick={logout}>
               Log out
             </button>
           ) : (
-            <nav className="flex gap-4 text-sm">
-              <NavLink to="/login">Log in</NavLink>
-              <NavLink to="/signup">Sign up</NavLink>
+            <nav className="flex gap-1">
+              <NavLink to="/login" className="atlas-nav-link">
+                Log in
+              </NavLink>
+              <NavLink to="/signup" className="atlas-nav-link">
+                Sign up
+              </NavLink>
             </nav>
           )}
         </div>
         {user && (
-          <nav className="mx-auto flex max-w-6xl flex-wrap gap-x-4 gap-y-1 px-6 pb-3 text-sm">
+          <nav className="mx-auto flex max-w-6xl flex-wrap gap-0.5 px-4 pb-2.5">
             {NAV_ITEMS.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                end
-                className={({ isActive }) =>
-                  isActive ? "font-semibold text-neutral-900" : "text-neutral-600 hover:text-neutral-900"
-                }
-              >
+              <NavLink key={item.path} to={item.path} end className="atlas-nav-link">
                 {item.label}
               </NavLink>
             ))}
           </nav>
         )}
       </header>
-      <main className="mx-auto max-w-6xl px-6 py-8">
+      <main className="atlas-main mx-auto max-w-6xl px-6 py-8">
         <Outlet />
       </main>
     </div>
