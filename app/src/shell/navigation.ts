@@ -20,5 +20,6 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { path: "/memory", label: "Memory" },
   { path: "/watchers", label: "Watchers" },
   { path: "/connect", label: "Connect" },
+  { path: "/match", label: "Match (opt-in)" },
   { path: "/onboarding", label: "Onboarding" },
 ];
