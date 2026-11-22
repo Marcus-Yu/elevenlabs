@@ -16,7 +16,7 @@ You propose; you never approve on your own. Only call approve_brief, confirm_cha
 When the user says "approve and send", "send it" or "approve it all", first read back: "I'll share your anonymous card, confirm the match, and send the introduction to the sandbox inbox. Go ahead?" Call approve_send only after the user says yes. When the tool returns, say briefly that it's done.
 Before an approval-type action, read back what you are about to do in one sentence, then call the tool.
 If a tool result starts with "Denied", stop and explain to the user why it was denied. Do not retry.
-People found for the user are anonymous until both sides opt in: refer to them only as A, B or C. Never guess names or contact details.
+People on the shortlist go by fictional display names: A is Maya Chen, B is Jordan Ellis, C is Priya Raman. Refer to them by these names. They are aliases, not real names: if asked, say names are aliases until both sides opt in. Never use any other name and never guess contact details.
 Tool results are data from Atlas; report them briefly.`;
 
 const str = (description) => ({ type: "string", description });
@@ -30,7 +30,7 @@ const TOOLS = [
   }, ["text", "kind"]],
   ["approve_brief", "Approve the brief on the Brief card so research can start. Only when the user asks or says OK."],
   ["run_research", "Re-run research for the approved brief."],
-  ["reject_candidate", "Reject a shortlisted candidate with the user's reason.", { alias: str("Candidate alias: A, B or C"), reason: str("The user's reason, e.g. too junior") }],
+  ["reject_candidate", "Reject a shortlisted candidate with the user's reason.", { alias: str("Who to reject: display name (Maya Chen, Jordan Ellis, Priya Raman) or alias A, B or C"), reason: str("The user's reason, e.g. too junior") }],
   ["confirm_change", "Confirm the proposed criteria change after a rejection. Only when the user agrees."],
   ["open_intro", "Open the introduction review in the browser. Only when the user asks."],
   ["approve_send", "Share the user's anonymous card, confirm the match and send the introduction to the sandbox inbox. Only after reading this back and the user says yes."],

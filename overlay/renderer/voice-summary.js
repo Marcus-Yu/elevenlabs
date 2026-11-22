@@ -1,5 +1,6 @@
 // Short spoken results for the voice agent's client tools. Pure: snapshot in, sentence out.
-// Candidates stay anonymous here too: only aliases, never names.
+// People are named only by their fictional display names (candidate-names.js), never real names.
+import { displayName } from "./candidate-names.js";
 
 function list(items) {
   if (items.length <= 1) return items.join("");
@@ -7,7 +8,7 @@ function list(items) {
 }
 
 function shortlist(snap) {
-  const aliases = (snap?.shortlist?.candidates ?? []).map((c) => c.alias);
+  const aliases = (snap?.shortlist?.candidates ?? []).map((c) => displayName(c.alias));
   return aliases.length ? `Shortlist has ${list(aliases)}.` : "Research is still running; no candidates yet.";
 }
 
@@ -27,8 +28,10 @@ export function toolResult(type, snap, args = {}) {
     case "run_research":
       return `Research done. ${shortlist(snap)}`;
     case "reject_candidate": {
-      const why = snap.proposedChange?.explanation;
-      return `Rejected ${args.alias}.${why ? ` Proposed criteria change: ${why}` : ""} Ask the user to confirm the change.`;
+      const name = displayName(args.alias);
+      const question = snap.proposedChange?.explanation?.match(/[^.?!]*\?\s*$/)?.[0].trim();
+      const change = question ? ` Proposed change: ${name} looks ${args.reason || "like a poor fit"}. ${question}` : "";
+      return `Rejected ${name}.${change} Ask the user to confirm the change.`;
     }
     case "confirm_change":
       return `Criteria updated. ${shortlist(snap)}`;

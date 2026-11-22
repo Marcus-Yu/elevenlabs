@@ -3,6 +3,7 @@
 // Main owns the state; voice only reports what the conversation is doing and
 // routes client tool calls through the same act() the cards use.
 import { toolResult } from "./voice-summary.js";
+import { aliasFor } from "./candidate-names.js";
 
 const BAR_GAIN = [0.7, 1, 0.85, 0.95, 0.75]; // per-bar spread so the bars don't move in lockstep
 
@@ -87,8 +88,9 @@ function tools() {
     set_need: (args = {}) => run(needAction(args)),
     approve_brief: () => run({ type: "approve_brief" }),
     run_research: () => run({ type: "run_research" }),
+    // The agent may say a display name ("Jordan Ellis") or an alias; operations take the alias.
     reject_candidate: ({ alias, reason } = {}) =>
-      run({ type: "reject_candidate", alias: String(alias ?? "").trim().toUpperCase(), reason: String(reason ?? "") }),
+      run({ type: "reject_candidate", alias: aliasFor(alias) || String(alias ?? "").trim().toUpperCase(), reason: String(reason ?? "") }),
     confirm_change: () => run({ type: "confirm_change" }),
     open_intro: () => run({ type: "open_intro" }),
     approve_send: () => run({ type: "approve_send" }),
