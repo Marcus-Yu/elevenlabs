@@ -1,5 +1,5 @@
 import type { ActionRequest, ActionType } from "../../../shared/contracts";
-import { createGateway } from "../engine";
+import { createGateway, type Gateway } from "../engine";
 import { createStubHandlers } from "../handlers/stubs";
 import { createRegistry } from "../registry";
 import type { GatewayEnv } from "../rules/types";
@@ -22,7 +22,7 @@ export function createWorld(options: { autonomy?: Autonomy; env?: Partial<Gatewa
   let now = NOW;
   const store = new MemoryGatewayStore(() => now);
   store.goals.set(GOAL, { id: GOAL, userId: USER, status: "ACTIVE", kind: "customers", autonomy: options.autonomy ?? "PREPARE", rules: {} });
-  store.matches.set(MATCH, { id: MATCH, goalId: GOAL });
+  store.matches.set(MATCH, { id: MATCH, goalId: GOAL, status: "APPROVED", domain: "customer.example" });
   store.sourceRefs.set(REF, { id: REF, matchId: MATCH, provider: "fiber" });
   store.drafts.set(DRAFT, { id: DRAFT, matchId: MATCH, goalId: GOAL, version: 1, personalizationRefs: [REF] });
   store.consents.set(USER, ["model_processing"]);
@@ -33,14 +33,33 @@ export function createWorld(options: { autonomy?: Autonomy; env?: Partial<Gatewa
   ]);
   const env: GatewayEnv = { outreachMode: "sandbox", redirectTo: REDIRECT, adapterMode: "replay", ...options.env };
   const registry = createRegistry({ ...createStubHandlers(), ...options.handlers });
-  const gateway = createGateway({ store, registry, env, now: () => now });
-  return {
+  const inner = createGateway({ store, registry, env, now: () => now });
+  // Counts gateway calls so tests can assert one ActionLog row per call.
+  const counter = { calls: 0 };
+  const gateway: Gateway = {
+    execute: (req) => (counter.calls++, inner.execute(req)),
+    decideApproval: (input) => (counter.calls++, inner.decideApproval(input)),
+  };
+  const world = {
     store,
     gateway,
+    get calls() {
+      return counter.calls;
+    },
     advance(ms: number) {
       now = new Date(now.getTime() + ms);
     },
   };
+  lastWorld = world;
+  return world;
+}
+
+let lastWorld: ReturnType<typeof createWorld> | null = null;
+
+/** The most recently created world, for table tests whose scenarios build their own. */
+export function latestWorld(): ReturnType<typeof createWorld> {
+  if (!lastWorld) throw new Error("no world created yet");
+  return lastWorld;
 }
 
 export function request(actionType: ActionType, payload: unknown, overrides: Partial<ActionRequest> = {}): ActionRequest {
