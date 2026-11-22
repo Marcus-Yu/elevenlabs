@@ -15,6 +15,8 @@ export interface HandlerContext {
   approvalId?: string;
   /** Set by the sandbox rule for outreach.send: the payload recipient was rewritten. */
   recipientRewrite?: { from: string; to: string };
+  /** Set for card.publish: fields the gateway stripped as not allowed for matching. The payload no longer has them. */
+  strippedFields?: { field: string; factKey: string | null; why: string }[];
 }
 
 export interface HandlerResult<T = unknown> {
