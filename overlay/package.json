@@ -1,0 +1,13 @@
+{
+  "name": "atlas-overlay",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Atlas desktop overlay: invisible until summoned, then the ball and four cards.",
+  "main": "main/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^45.4.1"
+  }
+}

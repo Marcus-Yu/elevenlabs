@@ -1,0 +1,132 @@
+// Atlas overlay main process: one transparent, always-on-top window over the
+// primary display, a global hotkey, the 5-state machine and the data provider.
+const path = require("node:path");
+const { app, BrowserWindow, globalShortcut, ipcMain, screen } = require("electron");
+const mock = require("./providers/mock");
+
+const HOTKEY = process.env.ATLAS_HOTKEY || "Alt+Space";
+const LEAVE_MS = 1000; // design: leaving holds 1000 ms, then hidden
+const PROVIDER_TIMEOUT_MS = 4000;
+
+// ---------- data provider ----------
+const mockProvider = mock.createProvider(process.env);
+
+function loadProvider() {
+  if (process.env.ATLAS_DATA === "mock") return mockProvider;
+  try {
+    const atlas = require("./providers/atlas");
+    return atlas.createProvider(process.env);
+  } catch (err) {
+    console.warn(`[atlas] live provider unavailable, using mock: ${err.message}`);
+    return mockProvider;
+  }
+}
+const provider = loadProvider();
+
+function withTimeout(promise) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error("provider timed out")), PROVIDER_TIMEOUT_MS)),
+  ]);
+}
+
+// Live provider errors fall back to the labelled mock so the demo never shows a blank card.
+async function call(method, arg) {
+  if (provider !== mockProvider) {
+    try {
+      return await withTimeout(Promise.resolve().then(() => provider[method](arg)));
+    } catch (err) {
+      console.warn(`[atlas] live ${method} failed, using mock: ${err.message}`);
+    }
+  }
+  return mockProvider[method](arg);
+}
+
+// ---------- window + state ----------
+let win = null;
+let state = "hidden";
+let leaveTimer = null;
+
+function go(next) {
+  clearTimeout(leaveTimer);
+  state = next;
+  if (!win || win.isDestroyed()) return;
+  const hidden = next === "hidden";
+  win.setIgnoreMouseEvents(hidden, { forward: true });
+  if (next === "listening") {
+    if (process.platform === "darwin") app.focus({ steal: true });
+    win.focus(); // so Escape reaches the renderer
+  }
+  win.webContents.send("atlas:state", next);
+  if (next === "leaving") leaveTimer = setTimeout(() => go("hidden"), LEAVE_MS);
+}
+
+const summon = () => state === "hidden" && go("listening");
+const dismiss = () => ["listening", "thinking", "speaking"].includes(state) && go("leaving");
+const advance = () => {
+  if (state === "listening") go("thinking");
+  else if (state === "thinking") go("speaking");
+  else if (state === "speaking") go("leaving");
+};
+const toggle = () => (state === "hidden" ? summon() : dismiss());
+
+function createWindow() {
+  const { x, y, width, height } = screen.getPrimaryDisplay().bounds;
+  win = new BrowserWindow({
+    x, y, width, height,
+    transparent: true,
+    frame: false,
+    resizable: false,
+    movable: false,
+    minimizable: false,
+    maximizable: false,
+    fullscreenable: false,
+    hasShadow: false,
+    skipTaskbar: true,
+    focusable: true,
+    show: false,
+    backgroundColor: "#00000000",
+    roundedCorners: false,
+    enableLargerThanScreen: true,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true,
+      backgroundThrottling: false,
+    },
+  });
+  win.setAlwaysOnTop(true, "screen-saver");
+  win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+  win.setIgnoreMouseEvents(true, { forward: true });
+  win.setMenu(null);
+  win.loadFile(path.join(__dirname, "..", "renderer", "index.html"));
+  win.once("ready-to-show", () => {
+    win.setBounds({ x, y, width, height });
+    win.showInactive(); // transparent and click-through until summoned
+  });
+}
+
+// ---------- app lifecycle ----------
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+} else {
+  app.on("second-instance", summon);
+
+  ipcMain.handle("atlas:snapshot", () => call("snapshot"));
+  ipcMain.handle("atlas:act", (_e, action) => call("act", action));
+  ipcMain.on("atlas:nav", (_e, move) => (move === "advance" ? advance() : dismiss()));
+
+  app.whenReady().then(() => {
+    createWindow();
+    if (process.platform === "darwin" && app.dock) app.dock.hide();
+    if (!globalShortcut.register(HOTKEY, toggle)) {
+      console.warn(`[atlas] could not register hotkey ${HOTKEY}; set ATLAS_HOTKEY to another accelerator`);
+    } else {
+      console.log(`[atlas] ready · press ${HOTKEY} to summon · data: ${provider === mockProvider ? "mock" : "live"}`);
+    }
+  });
+
+  app.on("will-quit", () => globalShortcut.unregisterAll());
+  app.on("window-all-closed", () => app.quit());
+}
