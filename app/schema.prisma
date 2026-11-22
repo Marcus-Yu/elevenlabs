@@ -115,6 +115,8 @@ enum GoalKind {
   supplier
   intern
   employer
+  // Added in WP1 (scope change 2026-11-22): hiring goals; people are contacted only via card.reveal.
+  hire
 }
 
 enum Autonomy {
