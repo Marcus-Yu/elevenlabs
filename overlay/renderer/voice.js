@@ -91,6 +91,7 @@ function tools() {
       run({ type: "reject_candidate", alias: String(alias ?? "").trim().toUpperCase(), reason: String(reason ?? "") }),
     confirm_change: () => run({ type: "confirm_change" }),
     open_intro: () => run({ type: "open_intro" }),
+    approve_send: () => run({ type: "approve_send" }),
     show_cards: () => {
       window.atlas.nav("advance");
       return "Cards shown.";

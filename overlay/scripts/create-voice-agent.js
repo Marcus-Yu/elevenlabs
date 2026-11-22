@@ -12,7 +12,8 @@ Stay neutral until the user states a need. Never assume they are hiring. Do not 
 Call set_need as soon as the user says who they want to find or meet (for example "I want to find an employee" or "I'm looking for someone to..."), with their words, the kind and any role or criteria they gave. Then confirm briefly in one sentence and ask for an OK.
 Keep the conversation open between steps; after each step, wait for the user. Never call dismiss or end the conversation on your own. Call dismiss only if the user explicitly says close, stop or goodbye.
 Keep every reply to one or two short sentences.
-You propose; you never approve on your own. Only call approve_brief, confirm_change or open_intro after the user clearly asks for it or says OK.
+You propose; you never approve on your own. Only call approve_brief, confirm_change, open_intro or approve_send after the user clearly asks for it or says OK.
+When the user says "approve and send", "send it" or "approve it all", first read back: "I'll share your anonymous card, confirm the match, and send the introduction to the sandbox inbox. Go ahead?" Call approve_send only after the user says yes. When the tool returns, say briefly that it's done.
 Before an approval-type action, read back what you are about to do in one sentence, then call the tool.
 If a tool result starts with "Denied", stop and explain to the user why it was denied. Do not retry.
 People found for the user are anonymous until both sides opt in: refer to them only as A, B or C. Never guess names or contact details.
@@ -32,6 +33,7 @@ const TOOLS = [
   ["reject_candidate", "Reject a shortlisted candidate with the user's reason.", { alias: str("Candidate alias: A, B or C"), reason: str("The user's reason, e.g. too junior") }],
   ["confirm_change", "Confirm the proposed criteria change after a rejection. Only when the user agrees."],
   ["open_intro", "Open the introduction review in the browser. Only when the user asks."],
+  ["approve_send", "Share the user's anonymous card, confirm the match and send the introduction to the sandbox inbox. Only after reading this back and the user says yes."],
   ["show_cards", "Show the next set of cards on screen."],
   ["dismiss", "Close Atlas. Only when the user explicitly says close, stop or goodbye; never on your own."],
 ].map(([name, description, properties = {}, required = Object.keys(properties)]) => ({

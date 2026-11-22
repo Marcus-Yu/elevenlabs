@@ -25,3 +25,8 @@ test("empty shortlist and intro states", () => {
   assert.match(toolResult("open_intro", { introUrl: "http://localhost:3000/match" }), /Opened/);
   assert.match(toolResult("open_intro", {}), /No introduction/);
 });
+
+test("approve_send reports done, or Denied on failure", () => {
+  assert.match(toolResult("approve_send", snap), /^Done\. .*sandbox inbox/);
+  assert.match(toolResult("approve_send", { ...snap, error: "Unknown overlay action" }), /^Denied/);
+});

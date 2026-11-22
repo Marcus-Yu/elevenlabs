@@ -32,6 +32,8 @@ export function toolResult(type, snap, args = {}) {
     }
     case "confirm_change":
       return `Criteria updated. ${shortlist(snap)}`;
+    case "approve_send":
+      return "Done. Your anonymous card is shared, the match is confirmed and the introduction went to the sandbox inbox.";
     case "open_intro":
       return snap.introUrl ? "Opened the introduction review in the browser. Both sides must opt in." : "No introduction is ready yet.";
     default:
