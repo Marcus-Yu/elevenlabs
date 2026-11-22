@@ -8,6 +8,15 @@ Use one Codevisor worktree and branch per package. Open a PR when the acceptance
 
 Send and receive worker messages on the [pinned GitHub board](https://github.com/Marcus-Yu/elevenlabs/issues/1) using `person-2` as your address. [Agent handoff format](../docs/COORDINATION.md#agent-to-agent-handoffs)
 
+## Current priority (scope change, 2026-11-22 18:10 UTC)
+
+The core demo is now the two-user double-opt-in match. [Scope change](../docs/IMPLEMENTATION_PLAN.md#scope-change-2026-11-22-1810-utc-two-user-double-opt-in-is-the-core-demo)
+
+1. **Now, WP5 for hiring:** a `hire` goal built from the criteria user A approves after calibration (WP3). Rank a sourced shortlist from people and company search. A rejection with a reason produces a proposed criteria change, the user confirms it (`preference_confirm`), and the rerun ranks better. Hiring goals skip Target and Draft, because contact happens only through the WP13 introduction.
+2. **Next, WP10:** the Maritime box runs the approved brief (criteria only, `provider_minimum`) as a one-shot delegated research job and returns the sourced shortlist. The result must still appear after the app is refreshed.
+3. **Then, WP12, timeboxed to 45 minutes:** Rowboat coordinates the research agents on that box. If it can't in time, keep #11's memory mirror as a labelled fallback, and report which one you chose.
+4. **WP2:** make sure people search covers the hiring criteria. Ploid stays the primary people search once a key arrives; until then, Fiber is the labelled fallback.
+
 ## Handoffs
 
 - Give Person 1 the Fiber, Ploid and web handler registrations and replay fixtures. Check the source references and email reveal boundary in replay.
