@@ -10,7 +10,10 @@ const colR = document.getElementById("col-r");
 let state = "hidden";
 let snap = null;
 const mounted = {}; // card name → <article>, created once per summon
-const ui = { rejected: new Set(), act };
+// Shortlist UI state that outlives a single snapshot: rows the user rejected
+// (keyed by alias + headline, since live aliases shift after a reject) and the
+// pending criteria change waiting for "Confirm change".
+const ui = { rejected: new Set(), pendingConfirm: false, explanation: null, act };
 
 const CARDS = {
   brief: { col: colL, side: "card-l", delayed: false, tight: false },
@@ -51,8 +54,20 @@ async function load(forState) {
 
 async function act(action) {
   try {
-    snap = await window.atlas.act(action);
+    const next = await window.atlas.act(action);
+    if (action.type === "reject_candidate") {
+      ui.pendingConfirm = true;
+      ui.explanation = next.proposedChange?.explanation ?? ui.explanation;
+    }
+    if (action.type === "confirm_change") {
+      ui.pendingConfirm = false;
+      ui.explanation = null;
+      ui.rejected.clear();
+    }
+    snap = next;
     refreshAll();
+    // The live provider runs research on the next snapshot after approval.
+    if (action.type === "approve_brief" && state === "speaking") load("speaking");
   } catch (err) {
     console.error("[atlas] act failed", err);
   }
@@ -63,7 +78,6 @@ function clearCards() {
     mounted[name].remove();
     delete mounted[name];
   }
-  ui.rejected.clear();
 }
 
 function setState(next) {

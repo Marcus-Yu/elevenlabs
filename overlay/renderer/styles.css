@@ -140,3 +140,10 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent
 .foot{flex-wrap:wrap}
 .note{flex:1 1 170px;min-width:0}
 .note svg,.ok svg,.small svg{flex:none}
+.confirm{display:flex;flex-direction:column;gap:8px}
+.explain{font-size:13.5px;line-height:1.4;color:#22365A}
+/* The 230px halo is wider than the 180px wrapper; a negative margin keeps the
+   grid track at 180px so the ball sits on the cluster centre, over the voice bars. */
+.halo{margin:-25px}
+.head{flex-wrap:wrap;row-gap:6px}
+.meta{margin-left:auto}

@@ -1,13 +1,13 @@
 // Atlas overlay main process: one transparent, always-on-top window over the
 // primary display, a global hotkey, the 5-state machine and the data provider.
 const path = require("node:path");
-const { app, BrowserWindow, globalShortcut, ipcMain, screen } = require("electron");
+const { app, BrowserWindow, globalShortcut, ipcMain, screen, shell } = require("electron");
 const mock = require("./providers/mock");
 const { next: nextState, ignoresMouse } = require("./state");
 
 const HOTKEY = process.env.ATLAS_HOTKEY || "Alt+Space";
 const LEAVE_MS = 1000; // design: leaving holds 1000 ms, then hidden
-const PROVIDER_TIMEOUT_MS = 4000;
+const PROVIDER_TIMEOUT_MS = Number(process.env.ATLAS_TIMEOUT_MS) || 20000; // live research can take a while
 
 // ---------- data provider ----------
 const mockProvider = mock.createProvider(process.env);
@@ -104,6 +104,20 @@ function createWindow() {
   });
 }
 
+// Opens the intro review in the default browser and gets out of its way.
+function openIntro(url) {
+  let parsed;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return console.warn("[atlas] ignoring invalid introUrl");
+  }
+  if (!["http:", "https:"].includes(parsed.protocol)) return console.warn("[atlas] ignoring non-http introUrl");
+  console.log(`[atlas] opening intro ${parsed.origin}${parsed.pathname}`);
+  shell.openExternal(parsed.href);
+  send("dismiss");
+}
+
 // ---------- app lifecycle ----------
 if (!app.requestSingleInstanceLock()) {
   app.quit();
@@ -111,7 +125,11 @@ if (!app.requestSingleInstanceLock()) {
   app.on("second-instance", () => send("summon"));
 
   ipcMain.handle("atlas:snapshot", () => call("snapshot"));
-  ipcMain.handle("atlas:act", (_e, action) => call("act", action));
+  ipcMain.handle("atlas:act", async (_e, action) => {
+    const snap = await call("act", action);
+    if (action?.type === "open_intro" && snap?.introUrl) openIntro(snap.introUrl);
+    return snap;
+  });
   ipcMain.on("atlas:nav", (_e, move) => send(move === "advance" ? "advance" : "dismiss"));
 
   app.whenReady().then(() => {
