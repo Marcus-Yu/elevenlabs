@@ -8,6 +8,18 @@ Use one Codevisor worktree and branch per package. Open a PR when the acceptance
 
 Send and receive worker messages on the [pinned GitHub board](https://github.com/Marcus-Yu/elevenlabs/issues/1) using `person-3` as your address. [Agent handoff format](../docs/COORDINATION.md#agent-to-agent-handoffs)
 
+## Current priority (scope change, 2026-11-22 18:10 UTC)
+
+The core demo is now the two-user double-opt-in match. The Room (WP8), the skeptic call and meeting detection (WP11) move to Tier 2. [Scope change](../docs/IMPLEMENTATION_PLAN.md#scope-change-2026-11-22-1810-utc-two-user-double-opt-in-is-the-core-demo)
+
+1. **Now, WP3 calibration:** add two endpoints to the sim service.
+   - `POST /calibrate/profiles` uses EDSL to produce 6–8 clearly synthetic candidate profiles that vary in experience, skills and work style. Each is labelled `synthetic: true` and is never a named real person.
+   - `POST /calibrate/criteria` takes the user's picks and rejections with reasons and returns draft criteria (minimum experience, must-have skills, trade-offs), each citing the reactions it came from.
+
+   Keep `/score` as is. The live-tier latency spike is no longer required.
+2. **Next, WP4 thread (moved from person-4 at 18:15 UTC):** the assistant-ui thread with `POST /api/chat`. Tool cards cover the calibration profiles (from your own `/calibrate/profiles`), the shortlist (person-2's `RankedMatch`), the share-card review and opt-in prompt (person-4's WP13), and the approval card (person-1's `gateway.decideApproval`). Build against the WP1 stubs. Full task list under "WP4" below.
+3. **Then, WP9 slimmed:** ElevenLabs voice input for stating the need (Scribe), and a spoken match briefing (TTS) of the shortlist and the match status. The skeptic and phone calls are Tier 2.
+
 ## Handoffs
 
 - Publish a sample response for both score tiers and the latency results before wiring the Room. Use the same sourced panel for both measured pitch runs.
@@ -26,6 +38,19 @@ Send and receive worker messages on the [pinned GitHub board](https://github.com
 **Acceptance**
 
 - [ ] `uv run pytest` passes; `POST /score` returns valid `ScoreResponse` for both tiers; the README states the measured latency and the engine decision.
+
+## WP4 — Thread and chat endpoint
+
+**Depends:** WP0, WP1 (stubs suffice). **Owns:** `src/features/thread/`.
+
+- [ ] `POST /api/chat` as a Wasp `api` route using AI SDK v7 `streamText`, authenticated, CORS via namespace middleware.
+- [ ] Tools: `propose_goal`, `list_matches`, `explain_match`, `draft_outreach`, `request_send`, `test_pitch`, `get_briefing`, `remember`, `forget`. Every `execute` builds an `ActionRequest` and calls the gateway. No tool calls an adapter.
+- [ ] assistant-ui thread with tool UIs: match list, draft card, approval card (bound to the `Approval` row, Approve and Deny call `decideApproval`), denied-action notice.
+- [ ] System prompt: Atlas proposes; it cannot approve; denied means stop and explain.
+
+**Acceptance**
+
+- [ ] a typed request produces a goal proposal; `request_send` on a PREPARE goal renders a pending card; approving it from the thread or from the inbox updates the same card; a denied action is shown as denied with its rule id.
 
 ## WP8 — Pitch test and The Room
 

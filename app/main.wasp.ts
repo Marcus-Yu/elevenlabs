@@ -1,6 +1,7 @@
 import { app, page, route } from "@wasp.sh/spec";
-import { MainPage } from "./src/MainPage" with { type: "ref" };
 import { LoginPage, SignupPage } from "./src/auth/AuthPages" with { type: "ref" };
+import { seedDemoUser } from "./src/server/seed/demoSeed" with { type: "ref" };
+import { AppShell } from "./src/shell/AppShell" with { type: "ref" };
 
 // One spec per feature (docs/IMPLEMENTATION_PLAN.md §4). Owners add their
 // routes, operations, apis and jobs to their own <feature>.wasp.ts file.
@@ -32,8 +33,13 @@ export default app({
     onAuthFailedRedirectTo: "/login",
     onAuthSucceededRedirectTo: "/",
   },
+  client: {
+    rootComponent: AppShell,
+  },
+  db: {
+    seeds: [seedDemoUser],
+  },
   spec: [
-    route("RootRoute", "/", page(MainPage)),
     route("LoginRoute", "/login", page(LoginPage)),
     route("SignupRoute", "/signup", page(SignupPage)),
     onboardingSpec,

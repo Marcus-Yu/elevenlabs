@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "provider": "fiber",
+  "hash": "b9dc28a72598c265",
+  "recordedAt": "2026-11-22T17:38:43.107Z",
+  "request": {
+    "method": "POST",
+    "url": "https://api.fiber.ai/v1/people-search",
+    "body": {
+      "apiKey": "[REDACTED]",
+      "pageSize": 3,
+      "currentCompanies": [
+        {
+          "domain": "locusrobotics.com"
+        }
+      ],
+      "searchParams": {
+        "jobTitleV2": {
+          "anyOf": [
+            {
+              "type": "term",
+              "term": "operations"
+            },
+            {
+              "type": "term",
+              "term": "supply chain"
+            },
+            {
+              "type": "term",
+              "term": "fulfillment"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "body": {
+      "output": {
+        "data": [
+          {
+            "name": "Sai Naga Raja Lakshmi Rasajna Voleti",
+            "first_name": "Sai Naga Raja Lakshmi Rasajna",
+            "last_name": "Voleti",
+            "url": "https://linkedin.com/in/rasajnavoleti",
+            "primary_slug": "rasajnavoleti",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Supply Chain Analyst",
+                "company_name": "Locus Robotics"
+              }
+            ]
+          },
+          {
+            "name": "Geoff Barlow",
+            "first_name": "Geoff",
+            "last_name": "Barlow",
+            "url": "https://linkedin.com/in/geoff-barlow-6a831252",
+            "primary_slug": "geoff-barlow-6a831252",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Senior Director of Supply Chain",
+                "company_name": "Locus Robotics"
+              }
+            ]
+          },
+          {
+            "name": "An Nguyen",
+            "first_name": "An",
+            "last_name": "Nguyen",
+            "url": "https://linkedin.com/in/annguyen-supply-chain",
+            "primary_slug": "annguyen-supply-chain",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Supply Chain Intern",
+                "company_name": "Locus Robotics"
+              },
+              {
+                "is_current": true,
+                "title": "Teaching Assistant, Graduate Fellow",
+                "company_name": "Suffolk University - Sawyer Business School"
+              }
+            ]
+          }
+        ],
+        "estimatedCount": null,
+        "nextCursor": "gAAAAABrAyiifiYfUITJxkAYnn7GlD77CNhLs4jSSgRFxmMjBJ4bEnWAw2Mk3cyGzMcxIxeDwtKaKK75FIzexnUiY_AN67gg4MEFG40JQ-38Estuw71NzWcsNdu9KVQRKMiCE-Snn_lbAJf4Mvo4pUgDijtGUxV-vTwTCYGYfrChkhRxbKIhUeZv4G437LYmE3BAc7l296oNCfSoIBOpPzPkxh6YrByW_aCIZx7HtfFBS4M_QMvNL14RGEqYt03lUJIeqCPNoqupU2hHLDthkJ0axn0jYr5pkaJFfYpByOezCjW1VXzBlskQqhJ2VLoBCM4SeeviXvygF1MWPftaJF5HkzjrKa5bS-c8rc7rGR_5eouGMOSBX5WuqZ65h3GjVldOcIGEWdO_phqZvanaAWTNAs9C5j7okG9gs-2kcoqMu7EXXxuWwhb2iZwbBG7HpgSu0eRJYmYRL0MiqnKG8uIT3qJhESlDhBz15cxN1JQdjlj3gres7zzRFYoMXAIFcECruK9DHrvvWAXNTrSehR-hHb7Oe6uU0dJuq6Tca2hQnHIgptgd9toGfFBIWLUzxUSP4LCw92ppR30x4DDpOLdu2r-6dHwtMLAdJmCSiC8ch8-yspXDAGNfDCg88PO0lk_4oxgBqdTiZcdjf1-O3mhT3_b5UI72SSO0fHY5SLgaVZPw06KVVY_cRwrSUnpnrTKJ7x5mq0yxk95acMRY-MWMyxcp1vM49SYDL_uaLqxqnj9c9_aivhC8H_OPCebSB4P8ecv1sgDQXpctlEtIBRHAKSNk0D6gZLJMrrnpmuF76ll6prhUPzXDLtLy1lPE4reb2no5wIO6mcUGjaQAFY6hh9PRAc4ftZCXDEFCnycV_syNLuKj9s_LYfCuwr6oi2mMYL5c0aXSoxxKHc_xI1SyAgAieUV21lHksp25FXLaWYd8HF_jLQ26yE8JLum0GFeKxA3_C5Irvy4u7MdCPWv7ssrhbtNp8TD_aPFSIvqheCRwqTcAajgABBVY92u9IFg2-Amr9XcwHyR2s98ygPEwBTHBF088jG7F__ZynQSpf3uBmPdPViUjWYL9x9nNIZZP50ZgD5sp1ipAJR6btlwMj3cWxkTxTm09UDx9GZhceDPYtUlIYyF0o11-tQgqwv3z6u7TcF2KWcIRfhwZYBHZBg5u85RuchKuc5SftEsilrlxUF2F9EKn5vg0lWG-f7dxIO_ZxRQgkYSTWVpXIM90-DC1bFV9-qXQVffI2D8q9LBSSosY2dbTwPJ7-lvLntcd0Z_5s0s3wKlOerbQDmNe8By-PGjMpMPadC5d0TBK0t-ujuM2JqFCeKzgJYN-DRDgzM221bWG5wHvc4xOlInMQKxn0Un28WHZT7v0vgQuyyaoz6wTesbPjCLRqasU60AMN_7LoeYG5mMtP3POMmViVgZDmh-EAAQ9-2APQ-u_0bkDXF7501iv2yyyXzb5AlPWGWXB6TgiK5mjTRJwnbIAItQipAmVthFRPkS3MKwpZCIAYYx08W0FKOgNgixNKFBqmwrkPiVFr3K3ke5jwRes4S8srd3wJkqdg-KPonCt9CTHPw0oz32xu3VL6YECdqi__4EIn6lKPbdGW8R6zzDQiK1bRhdUdRCjg9FhKBqJ4k-XKJJ487RQxkjNzrMCjqWGa7FTIuogPgRtPptF5ca8XdrIoNWRmvgpDSj8Yf-J9SeTR2rE2RAYWekJqzc-W-7GI_4OQqr6R4LU2Bo_quYTZRcMEGxwpiX5AxpeivAU_7CekapaDNT4PxG4UdbEc-uGgmeIndf4F72kKx4dp--La6yKAWh3I8Eiju8EGtDOY57mk93xa1FQqUWChDNnTN_v9cobGpJwBRcr-yIfw7v3AdVtxSgwhKoaW888oHliKrgj24nzz9vIlOEb1c1RnrUeNbIOv1ZDShAREu_I1nNm8P35N9RWv31OP5Y3ovSpAXC3P8JrBbktS7Suv8vYqK3CvdXSf8r6JsXZ-cxK0VD6JG9trhGhazSPypLps3tQSvTNbpE7vQR6GUmSFsluzhaoRVFhSKE1CjH8Q-ITNtrrrQdehR3PaX4XC_mKCYftJQWpwW8Qd-kl0YV_dxyE6R3uq3DvFKtUgFuqGYmnFSOf-0DuEJ9YXNrhmZVW8DtsolZLmv1Vcgz8KgR_OGXA29OLli_KN35FY-qfA1LZh6-kuu9lpYEJD81HOBGxvn_LVEhu2c4HxhiY5gl3Z_h-lkP6bvrKPPGXCsiyBP267pXDUdNzLh-660B6Y2-pwhEmKmzPjbpH3cHD9BMsHflYGDIDo8sYpcPIhPzPMMAhfckki_cXXX67cSHTC1gZGrmviD71h_kHYGqza1D_1ZJiXJ-OE0s22tLJ9wLYwq78TEjwfiatUJ_LHR-FlVLZF4ocnnVR8bqOIiCyq2hQWmT8uPHZNOk8Q6989NerGf8wrjKy9ytkasQj9YGpMM0-cn-wSG8lVuCN2LvcnW1Oe3o8pXfusSmw5Ss7lIB0sGoVnKqHoami_6l36FVaT2oRZXSGgO32psPP2UwglRggT3V_hMYl2qBcPNtcBYEg1sVKd_EQMCd1RFyxrq8mP41nDhCzpAxTteXviqwu5nYLi0wwvMbLwoT7xOr3NRM3yqdbiQurEU3xtvOA9YB60RhbD13S3S63DNxAjSEdk0TUNkYRPEn-JwFx9GjxVLXBs8pQCmzGU8iQcmYadQQU60HoWnXkUO1JdwOh8wyCYZ1V0v83P4f6rAghkQjJiPu-gYZmziKBAjdy00riwn6uJ9m3vp867FmWHka1iLIiyL4DO-6WK4n9rl84xzXb_8SiuoGZrfGlR1QAmrREds-DSeiYJMjs2NBhZ8ZHkqLcN4YphyiFirQ4lFNh3lRr95YwSjoewg0s59FNo0KpF116ABlxkdAFRsdD2otR0U03JR_EnI3gW7I-LebKb2stfA9vfg-1bVj6_eNaUzD8DDYuDjZd5WXV3eb_FulDuTxNvAFrIJv9xr2_ac38vSKuUyb5QGmzrPtuDYtUocnOQNxNwWMe83VxdRJ_hpUJYyvRf9bSZLvEX0u2Y9Hbvrxc8hUi1aD19WmAXHyRVGhTl4v-HsHXwjk7e_aUCCe45sDCuz0dSjYfEqk4Oqa2uKVFBB50Gd5lmXsvfmIG7rINmCcgx_fu4AV-NQiOiHFJoHGO1f7jZufcatHnzvaLspmiKzIYtUKI6bXKZh2EhW96zGtvkPkXgtt4qogkElyHbAczBj07H5jclGvFen26TpZE079E3eXjwntZkPSyUo6iOeM2Lb3LYKVhHzoxkzMM-6mqkeLklAYYhHiwmKSZ1fZhSflOc9bQdc66A17pWe_wcZqusYPiyXwiSl9F3V_0NLMEq3TOa62wQPaRLK4pQDg1CcAtayzXqDB7N-eSaRG9YK4x5tRTLnGsU4MAc3ccd1sPgSkK43lVaznrvTLSWVN4Sog6ALPB11iMakT2VsrOWhTsg_K6AQzNQgX5_45xQIhnR2eQWFOzN6RpeKEaIlo0InaIrdMNKmlNEBdPMUf9gFDnsKJXG9F6mLWVbSMtIQwJqf5BAqSpHmx8z99a3yARiOvfwFvcPUIlcQvY6LQOUl84Tt4XMgKRdpYVT1C2Aj8MhcgMNu-s2n9ieB9AQpulZs-vLposNuf-dqqGzo04nVdtcUAV_t0RcCXhCmRIB21yyZrIo193wTOPef1lMUoH2bu1Jk6H-oNBuBzOwDq67ve0gtGUASYhQE-SmrMYJFi8de7TDEP8rjQY7JdF6El-hDHE0Xa9VNwBJlKCPOPR56KqfkUXlYdQYDI_F2Fkm1Kctu6rtXmznBSpfQlBmREpZejBjYv4uw7pQ1r42rruZSKc-t4RYZZpNaea2hNGIXiSljjPdVcgRm7O_4W1Oog0ndAA_MyRIenjnkETgCGecJIMEfNCKEFve7M2mQOgJoJFrPwoESaIt9rXkB8O7z8Ctdjecl1E7VdyyhVIg_qVqUKdeLMePJdavIxVCIdMSrHaz8T5Y1x9t4N1MDPCL5BWb2eTpSCeVyPpIesTql73VFCbu9tIIA5QHQOhFNaj4jO86H77s-Iy_i6aOls7ygDNAKvd9XidTo3GeGn50aNvlce5IqJ7Ba8gFDcH1f2qm1gLv76iflSscvXark855Oqb-gMDWjv3DlAMDlxOnUVvHokjArKWaJlK_9mwmiaK2ooq6hm0xgxCM-peWDHyP4JnSRClbXU4spYgtgOmyaA92EKix6uR0B1mFqId84NOxDzlFXmu1yd8pkqiRpkd7GF0jtUeQ90aqHaL0m1kZqVmOA7CFraeYZPCFkfEX8hky_SvCa49wIXcrmagjKwX8C0wMf44b2Owup--430EUfSiLoq1qMMcainv4rIaqTiqyr8lxS-G7qPj6aUaUyQt-OjX00AeROBiiK9XS0DjR9JxM5Jfkzlyz-CemAZP5ILsfmwFaR-97H4VqsSvBDyXK0dpP62NXl5w9u3gT1_Za54v0LlOxcU2G9UMIfjRSZT-ts096uEzcAQXHpQjMBVi1aOkQvvjGcCvLxpez85HL8SBf1QQypc-mU0tSs_yKyNgB9PbYuAdZkHU7d2Zrdx9RVBOAltflJC_MyFGTxu7idZPMlrBTkGnmjXnDV2kn4L0Keid2QhXFqxIejYZzbK5mVmWryg_rCP_FvsUaM-_aUXT5akBugtixPClFSbJmXua4CoG8zTPvBebiOlnVileBjgPLmWl4xqwmv_3ICg0SJl9aLOGh6eGgDjnmrZJhLwVw8eNba6ReAUcKRNK-jpI7xNiV6gpwX2aG7-JIWtZgKe8PnbXQTEs9XFBR2723VUIdyBOGj9ibart985QaWkmlJMbeD8wopJi0N4H0El5pDdZVFYfbLdfWp3OnoIqZBBHt5mXwO8rZwYaWP21wK5MTDJ5ZV7I_tmMBMjhbZTBYhnT7hzEB2J_t2Uvs_EErtr13kZhFfELtwGJFeQ_MF4hLa6c_N0ZfvqvAGYd8NK8VAnHm4jK05hDh134XwDhq02yj6QGyIinzCTloRr0khREEz1omhlfb_RsMaNsvv4rwMZ8c-H7oLdcv5MWIBJT_euCn9UXjb8YR2A03a_Us-b2AQW7jmhYfy93lhpbSLoRdVENjnoiQR2LWElXw6_Zwl8v7WieioC1lMXp0oya30TYfUZauNdC6lMVuc5roldsRRYFg9GOx9wqv9-TOlPfLL4Y_6_JJj0714l0Amvo6YYZlceziVB4rilfkZILV0ChVv7VwK2VUiDHWTyE-5eJTSKLGUXVdE_Dt1nPyXqn1fL0ESMal5rerO4hVQT4TjkwmYtpVOqVn2HC3Em6mXFg_sT4VfZ3UF21AbC5c7iIymujPjyaOP7tWtxtYc29F1LPIOUhn_ZRXrNhlppDHaPeLLGVa64yjx3MvdpVTsbGNICUNBWquVav3Fum2Lt6NGddAsemgAhl0FB-qyOtGxsvex7p8Na1OmRFO7-QEPYhoqzk9HIoNHkitIQuy36qAJjmXBR321770g1p7JdsVbvy7QeJlntsL0t79npfSqJsq_YcoMMrzj-uRl2zEr8NTt34LyecwajnbVSl2ZQwQ2N8SI5pk-wYrBBbm9jfDHIOuZeURA7u2X6HwmLJsLKEePwluaPjt37ojcB38nxdrVcujv1rXnNHYj4lpY82HNuzJmT5PYnvj_KDIZg2ReBEkLv652xTjvlWNWqs2OgNZLNgdEgvgMKWqvxr8e0V0oXpIsbNa99-rykJdoXMVJo-xLHDHpbDHBcUyHUAARtuKz2lONqf67kJmj0D4YGAuYPCyDsFtNPeWLMNZ0dwizmoJSwLlboJljpH34jQJ_BH9J3H_lVSOw90cr2CfP4Y5RsUBhzu5zB2pJrlXEhCWFkGIV7MswxQoiD4wmiY5qB3-BLMJDC15Qw6uMsv1VjglXcKLuneGjx--kWiCkwSGmSHg_aVrR83zZJj27U0TuroIKnT_-lKWj6ZySBOfy9ua8ndhXN7LuTAxN0a0OPBRooAjHjIpLU-cjBhe28O1eRzUtlvNUInN51j9UxhsUvfRW9k1QgS0sedZSdrQ9iDl1syxN-tZ_MC5SFQL7rX9FCXZ-xfKYHgyEB81f2AFfG-bBBZUF095yLOse3UcxNZNJCxA18I9gyj9LQm07eOSGQ0o1D3SGdxtT91hFCtvXVnhtaXS_o1_vlxlRN4eydcLr13X9c1RoNAi7KEU1mGmDrO_W56k-U2etxVKBg_AzhwVBBQvH_ZL9MoGUgxmW6nww43TrsbRgb5Y9rPq8GC5_Cih0DE4yqV9spQXIokJ3wnPopjaU7VIu4TWOK9bgiyFBtY7t9BVfhmJQBlZY1VSOm7BCfvC26vnfLyhibQmsSi3X3kWzvV8iX-WCYZ-etthGa3myhS1I6Tq5LcUfrOiH9G4p1KlceONXWCUtrjlA2mXVaKU5bdmTmnH6NtLxX74RPRTBFHZjvO47a2M6p4bBj1knVd7CLV6p9t8peL_swtUcvBOxk5QLayeL9VfHt4kBOSY4bkL93g8nlSR0qTuNAbrmFYIloqroC2sxSU71Rq6hVLGCyAZ7kDzOOeHC8yd6_9yPNmnuIKInqVu4N0xghhVQ1fsCy0hhuwEFOEIoZtco6abMWHFZcpuVZgeYdMjXt-xUFtoF_h2qV89FlRgHIfipKrBuV6BXutdsDSNgzQbaLsZe-I5d2xZ-PW8Brc40MJqDuck-wfwD6EUjTEQ4hbbLMaGglEkkvcgLa1oWlbULvPZLqMjLTZbL-PNm6Oc-8NaA63kAWLL_beQW_KFHIcakHCLOlAAQtXUCg7J6nbCVIy3aoU5qVJOJcU7dMHbI0LIA6nisB0o7PbmHoyWp7UyAmWW0qy-ep_JPWkHw0UAXng3uP7609VnPnW86VJer3v1VqMMzHYoo5TipGt6FNbu7gBvPCDZrIVVqPfQJ9vwsVjCBm_xcDBuo2AAPehN1eA4exIgeuBkaRoRXnVbmbJ1CTKOvluVJUS7R0H6I2wDsVGajgs4sfdSpyfvyLTdaZgtcpkBY3Q2b5dbERnBYmPpsfqYaDJ2oyMuaIVywa0phSaIPXidoWLtpCrPv7THTqaScxPaDf-oY6fTdtX_TbFvIlS2sI0jeVC3Evu6hjt4VykjloPMTSykzVOiIood2KmrfM_xgjYqEkZpgb6rNhbzQNdKVgR2R16kaVB8rPnr4rJrAT52n7iMSA5CXgBAUx8IB8mmR_fq2leH_e6CkDpZtOPtZfrbTnQNycCuqoIIMUOxRIAcNUlNyfyNA8OmFy1lZV6v8i4cOtHUBskZc-FRNvZdVIa5y8GYH7gEq3S3IdCdWOw1toLX7ZYqNiUoMPdBz11N1_Ih46L5kF9Uzf-GHDV8ljJJ5yrCQK2w2XUMH3Zb0pJfsXDIOxjwSXBM5BVlnkWJaHTYH04Ocn4E50jlgxe1SHZDy4BU1n9iIncV6vuCJAJZaotjrBUZEHyZRCtcKeyz6T7LlSRat50QV9ynGMK_d81RGHvF8enb1ycvQZ6r9iC6hoMOw195jdZgCqN-MtgAJOmRJR6ydDaSrdcY_mACL_K03FbaGETo1R7DulPbQiLV122KZZqLlZ9Lk-Oksp8ArNkaME1Ar8x8UQnxGRWRwbO12YihGEw5Cx4IW23qrgKuAVtx9FOZ5BLZSeqilSpV_QAMOEvSQWJ4ULRoxpFft1uU1yfUmGVZJqnaeIWT31Hydd47B6tEWJiwCwYFr9hnIG_nZrBKS8Y-8af_BZLDTgDFKXzoZP_rpYj0e2vWL5UlUxUAyilw1neemMhbxT2XroMre2lMUuX5Tckri6N4Xv6rKkambtUtDRQbEcYNvFoNw8QlGQ4XSaLJguQCaaYEngYdgGA-UImuES7qTJ4EoshiJky_q4yr32cYeq3F_kMNvtBQtYfsxj9HDvNYWtDAUWPJA0G0m6X-iusFvcyId7vawFbPLXh2GFxg0M-jUesJgiN8og8x9YReo9fyHjr5CR4VKSH-jCay-pZSBVfuXcmPHVjz49R2bFJjhZ6DcfX-0Ky3edcu0_eXgZepSVB_wY35tTFJB0FJbISKFgC6IQrKT6Wyt6c2dsobTDP47Jf0W0THunaFu93RAWs7hkCOQvv3rs0EeoKTM0hGzzywG2WWuhHftZzB-h_ENqAAABEsl1Z_JqYvCduhHCmrDObLXg-EGVVJmhXO2eSS0K9Kqt-zXoMDpv-43eY_Lg53d6gEEmusQHgh-fY3gB4A4L--uOklGwQ-hOaww872NIqt-lQqmXpAzfPO6H-7APg78f3VH80vStMQ2cZtL61MjBnlhcMgeWk8t-fuOgqvWZ-5hcdfw2CeR62FVDv7BJjVjAyx1Lt-YHZh_oNvU4F-Jif3VBdbF36LxfYTk0bhdN8fOSDRjeDNaJX-qcfB1s2E458_OU_pItBoh8up5BMGDM9HB5MHiITsHu_vaKHFIj7e2uuqxo3iB0lUkzWoU8fTD87p4DHC1zou4-LHuXXiNWMQ7j85wgJJAwoxUiI7lXjuudfIV9Ui0ON3uNZAl2MkfWo6NgZ51D1b3cuAiM5YemNXQ4UnXOICD5J_COsAtCUqBYu1DuLGu7O6ex1gAGfwuMSf7_IkneTzsoDrOMJJCZjI0X7S-0fGSniUE0o8RQV6M-pX0UAxtOYKfropFKbxh9F0LwopN45wENzwPCNIMGzi3a6yfM_w3yEqDDFUG3ttZM22HtChDJUMOUTC8lf4tAfIIVQ8Xw1B99wJ6ged1zs-4rZpPeb66tcMpGyuRjhbERFhuwjfTBzH2LQcn2CsZB5rEYVgKaL6y8M6tY4h7qW-1HZCPs1q_aqdfI7qYNVRaTNNs-0AQ7f0D4kwCqJG46uYz7rQG6wTyUBZADbla3e1MapULCzH9yHEoCwEC5p0vgagbibhSG8bD-ttYGMBd3DRArFRC91kCTv_Y1jiSPWqYdvJe7_Xhw_5k6DXvGSySDBibiunfBRn2Y9pmuDrii3b758azPPYoqSNK3akmR2cTgxZ-OwmCXLfMJQ0q6Chl3aNwH-8VbrvZhY8bnPzYFDhUOem2wsWj9rMVDE8cUvWNzGwq19tKZ1dopQhmWKersSPLh5ntxH6cWCm6jKJZmeiJERhZPubkmc0GhFGgGehdn8oEq5vWops81q_2_SM49pSuI0cEpMBr_nYOzd8lhXaSOBy1E2MnA5dB00dJCzCdCPYFBvx8lxcf3iQD58ZhzAS3rdghjC7RkvskPoWHhkySKYkU0Y2p82xpx27GDMvZW7ABgK5-023hdewgHoDVDRja6Xmfxh05x_Nk1iPABAO00uwwMt3Rn2PXDI6HG6zFAT_xXqjAktm3982amxyuTw3yJPAWD8nZ2d4Y8Z_ErEjX24cfVdWSe7C9vFxdSyS_BM-JPLuGPISvTr5QR1LlECZiQvqRvkDE6Zs7GXngeLBMvjq0S7I2cUIworb_SmymeCR8OxHpvUhQ2i72ucwYFfeTIZP5xvTxA8VpSVXeOXoTxdRDT4Lf-mdZPiltGor7qpSm6UPG1i1gjSSaccpfOFuIU5bEtCRCOuSYEqtoXJ1w_FpdZsude49my-hmuR0JhdW9p2ugqYg_YYqOGfJahtUv9OR8lnvjS6vjzkluLBDfiNCJYtV9JIAEJ1cEX374-PZdTkDOFJXG7cjJ2lWJ8TqVQ2ggv9mYTXYVjySWQPQQGs_bZ_uiJxcQkYhWzc7H09_V0zjt5rK_eO557AWoXv0iLjBbb_ZDKRRg6cDrV_Nz7peUVf8mQAiMiksqfy-ljnhYT-O7hxSst3fnkifUeax-Z6yYEUP6Fdb2VX8FMaRqLvgPIk5K2ssqhyM7rJ25uvL68ifqfVUDg2MZ4s7sP79-Z_dY0krXtIfWJNLm1C1sH0iSXd2ssgwsURWOH_vV_zG9CpBvqYbLmTKAmWAejWCR1sqJP67ClMGNM57K33zlx-jpv28u3jC2qwnKxzw2XkQ1GOR5u69pGi0pJltXViEbLuh0p5-z58cIwmUbEG7M6uuSAEjFVhtMVEUdZ2TcGu0lG30ItK0DmSSpMl6gBbrnOpVIVnAnmPuVmziOeO94GMD9Xsi5OenH9Yv47gGlS4DvP-hzGBK3Cj0J8_BLS0fcPMhdtyH2UZNGR1lGVrgb0wjCjNS62JaRJrCWAoeqTNJNHwZP3ylBGBQ3wj5W1XIB8MSEXfHuVPdLdwg9hi5cH01smJle_Klx918PnV5GJiiyGUNKDpLf1RF8gJ9mQtSqMPgJtfcu0SyH5HEtCAYo2RyqqMrc9DaDy_jlpdA0adf6XAskeL9Rb4MTB6cwRTKKpB-DxihWjOUdNaRsIwo618dvxpuhXgltGwpfcS8Q7zFHWW0ZU1jEQnSbd-ZrZOIgQMo3n7kqWPx2_Q2SoZ3BmvaWY3RBx7oZLgIWC3b7PB5ltxwx6l7O5SZvlFc6nXDL-UgNeiG6XB3b92sVGRn0BaGVLOaTjFazMX-onEA-cTCJCjbzAHi6KI0NwJ64PWi6T87UEl4wZMdfGvlJFte8QsvDqs80vVcPKx_xcQzofftaeRLbQm8x_Jt05G4sLCrZ_dfiTvfmnO98ZuUqgVAPgjuyFSLyPBVuRnFEhIqYn5wy81ykZy2AmzGQdg4HU0zaEHcu1GykGa_1nqMotGNYRk"
+      },
+      "chargeInfo": {
+        "method": "charged-now",
+        "creditsCharged": 0
+      },
+      "advice": [
+        "Your search returned 3 profiles. Use lite reveal to get verified emails at the lowest cost per contact on the market.",
+        "For emails + phone numbers, use standard reveal. For maximum coverage, try exhaustive reveal.",
+        "Add prospect exclusion lists to automatically skip people you've already contacted."
+      ]
+    }
+  },
+  "trimmed": "people fields reduced to name, LinkedIn URL and current roles (public repo)"
+}

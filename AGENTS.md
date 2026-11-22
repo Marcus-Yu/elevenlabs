@@ -31,9 +31,10 @@ brew services start postgresql@17 && createdb atlas_dev   # once per machine
 cp .env.server.example .env.server                        # once per worktree; set DATABASE_URL
 wasp install                                              # once per fresh worktree
 wasp db migrate-dev                                       # apply migrations (add --name <change> after a schema edit)
+wasp db seed seedDemoUser                                 # demo user "demo" / atlas-demo-1 + synthetic robotics profile, no matches
 wasp start                                                # client http://localhost:3000, server :3001
 npm test                                                  # Vitest unit tests (src/**/*.test.ts)
 wasp compile                                              # validate the spec; don't run tsc directly
 ```
 
-Each feature declares its routes, operations, apis and jobs in `app/src/features/<name>/<name>.wasp.ts`, which `main.wasp.ts` already imports.
+Each feature declares its routes, operations, apis and jobs in `app/src/features/<name>/<name>.wasp.ts`, which `main.wasp.ts` already imports. Navigation links live in `app/src/shell/navigation.ts`.

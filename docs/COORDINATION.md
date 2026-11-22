@@ -6,8 +6,8 @@
 |---|---|---|
 | Person 1 | [Platform and approvals](../person-1/README.md) | WP0 |
 | Person 2 | [Discovery and goals](../person-2/README.md) | WP2 after WP0 merges |
-| Person 3 | [Simulation and voice](../person-3/README.md) | WP3 after WP0 merges |
-| Person 4 | [Thread and demo](../person-4/README.md) | WP4 after WP0 merges and WP1 stubs are available |
+| Person 3 | [Simulation and voice](../person-3/README.md) | WP3 calibration, then WP4 thread (moved from Person 4) |
+| Person 4 | [Thread and demo](../person-4/README.md) | WP13 double opt-in, then WP6 |
 
 ## Start the coordinator
 

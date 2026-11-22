@@ -1,0 +1,4104 @@
+{
+  "version": 1,
+  "provider": "fiber",
+  "hash": "2c30f7f1a611694d",
+  "recordedAt": "2026-11-22T17:38:40.466Z",
+  "request": {
+    "method": "POST",
+    "url": "https://api.fiber.ai/v1/company-search",
+    "body": {
+      "apiKey": "[REDACTED]",
+      "pageSize": 10,
+      "searchParams": {
+        "keywords": {
+          "containsAny": [
+            "contract manufacturing",
+            "injection molding",
+            "CNC machining"
+          ]
+        },
+        "industriesV2": {
+          "anyOf": [
+            "Manufacturing"
+          ]
+        },
+        "headquartersCountryCode": {
+          "anyOf": [
+            "USA"
+          ]
+        },
+        "employeeCountV2": {
+          "lowerBoundExclusive": 10,
+          "upperBoundInclusive": 500
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "body": {
+      "output": {
+        "data": [
+          {
+            "linkedin_id": "133792",
+            "accelerator_statuses": [],
+            "accelerators": null,
+            "blog_urls": [],
+            "custom_data": null,
+            "domains": [
+              "harbec.com"
+            ],
+            "emails": [
+              "info@harbec.com"
+            ],
+            "phone_numbers": [
+              "15852651306",
+              "5852650010"
+            ],
+            "employee_count_consensus": {
+              "gte": 64,
+              "lte": 64
+            },
+            "facebook_urls": [
+              "https://facebook.com/harbecinc",
+              "https://www.facebook.com/harbecinc/",
+              "www.facebook.com/harbecinc"
+            ],
+            "fortune_rankings": null,
+            "founded_on_consensus": "1977-01-01T00:00:00.000Z",
+            "github_usernames": [],
+            "instagram_handles": [],
+            "latest_funding_consensus": null,
+            "linkedin_slugs": [
+              "harbec",
+              "133792"
+            ],
+            "linkedin_primary_slug": "harbec",
+            "li_org_id": "133792",
+            "li_category": "C",
+            "li_job_posts_stats": null,
+            "li_description": "HARBEC is a manufacturer based in Ontario, New York, specializing in the production of tightly toleranced prototypes, tooling, machined components, and quality injection-molded parts. The company focuses on sustainable operations with a social conscience, providing superior customer service and timely delivery of custom engineered solutions. HARBEC serves sectors including aerospace, defense & security, and medical, offering services such as injection molding, additive manufacturing, and CNC machining. They are committed to fostering an atmosphere of encouragement and respect for the health and prosperity of their customers, employees, and the global community.",
+            "li_follower_count": 14385,
+            "li_headline": "This page is no longer active. Please follow ADDMAN for all the latest updates.",
+            "li_industries": [
+              {
+                "id": "synth-Consumer Goods",
+                "name": "Consumer Goods"
+              }
+            ],
+            "li_locations": null,
+            "li_specialties": [
+              "Plastics & Rubber Products",
+              "Industrial Machinery & Equipment"
+            ],
+            "location_consensus": {
+              "street_address": null,
+              "neighborhood": null,
+              "city": null,
+              "state_name": "New York",
+              "state_code": "NY",
+              "county": "Ontario County",
+              "postal_code": null,
+              "country_code": "USA",
+              "country_name": "United States",
+              "coordinates": {
+                "lat": 40.7127492,
+                "lon": -74.0059945
+              },
+              "timezone": null,
+              "full_address": "New York, United States",
+              "formatted_address": "New York, United States"
+            },
+            "locations_stats": {
+              "USA": 1,
+              "X-AMERICAS": 1,
+              "X-ANGLOSPHERE": 1,
+              "X-G20": 1,
+              "X-NORTH_AMERICA": 1,
+              "X-OECD": 1
+            },
+            "market_cap_usd": null,
+            "naics_codes": [
+              "326199",
+              "333517"
+            ],
+            "names": [
+              "Harbec",
+              "HARBEC",
+              "Harbec Plastics Inc"
+            ],
+            "preferred_name": "HARBEC",
+            "preferred_name_word_count": 1,
+            "revenue_estimate": {
+              "sources": [],
+              "fiscal_year": 2025,
+              "value_usd": {
+                "gte": 20000000,
+                "lte": 49999999
+              }
+            },
+            "standard_industries": [
+              "Consumer Goods",
+              "Logistics",
+              "Manufacturing"
+            ],
+            "status_consensus": "acquired",
+            "stock_info_consensus": null,
+            "tags": [],
+            "total_funding_consensus": null,
+            "twitter_handles": [
+              "harbecinc"
+            ],
+            "websites": [
+              "harbec.com"
+            ],
+            "wellfound_slugs": [],
+            "youtube_urls": [
+              "https://youtube.com/user/harbecinc"
+            ],
+            "role_count_matches": null,
+            "num_matching_locations": null,
+            "linkedin_ids": [
+              "133792"
+            ],
+            "last_sort_key": "gAAAAABrAyigMcrVVcAfD0iqAMiXH5KT-nPzbvkNsR5k5tjP9AuDbcRlpMVikE-7GWpXP7KvTlJ6dNz--vZVyZmja6gz-svRSIWeeu7rT4G43lxj0oeQz9o=",
+            "relevance_score": 133.66835,
+            "technology_spend_usd": 14588,
+            "historical_headcount": {
+              "latest_snapshot_date": "2025-08-01",
+              "snapshots": [
+                {
+                  "date": "2021-06-01",
+                  "employees": 399
+                },
+                {
+                  "date": "2021-07-01",
+                  "employees": 404
+                },
+                {
+                  "date": "2021-08-01",
+                  "employees": 393
+                },
+                {
+                  "date": "2021-09-01",
+                  "employees": 410
+                },
+                {
+                  "date": "2021-10-01",
+                  "employees": 410
+                },
+                {
+                  "date": "2021-11-01",
+                  "employees": 404
+                },
+                {
+                  "date": "2021-12-01",
+                  "employees": 399
+                },
+                {
+                  "date": "2022-01-01",
+                  "employees": 387
+                },
+                {
+                  "date": "2022-02-01",
+                  "employees": 393
+                },
+                {
+                  "date": "2022-03-01",
+                  "employees": 399
+                },
+                {
+                  "date": "2022-05-01",
+                  "employees": 399
+                },
+                {
+                  "date": "2022-06-01",
+                  "employees": 393
+                },
+                {
+                  "date": "2022-07-01",
+                  "employees": 393
+                },
+                {
+                  "date": "2022-08-01",
+                  "employees": 387
+                },
+                {
+                  "date": "2022-09-01",
+                  "employees": 375
+                },
+                {
+                  "date": "2022-10-01",
+                  "employees": 352
+                },
+                {
+                  "date": "2022-11-01",
+                  "employees": 363
+                },
+                {
+                  "date": "2023-01-01",
+                  "employees": 358
+                },
+                {
+                  "date": "2023-02-01",
+                  "employees": 352
+                },
+                {
+                  "date": "2023-03-01",
+                  "employees": 340
+                },
+                {
+                  "date": "2023-04-01",
+                  "employees": 328
+                },
+                {
+                  "date": "2023-05-01",
+                  "employees": 311
+                },
+                {
+                  "date": "2023-06-01",
+                  "employees": 305
+                },
+                {
+                  "date": "2023-07-01",
+                  "employees": 293
+                },
+                {
+                  "date": "2023-08-01",
+                  "employees": 287
+                },
+                {
+                  "date": "2023-09-01",
+                  "employees": 281
+                },
+                {
+                  "date": "2023-11-01",
+                  "employees": 264
+                },
+                {
+                  "date": "2024-01-01",
+                  "employees": 258
+                },
+                {
+                  "date": "2024-02-01",
+                  "employees": 240
+                },
+                {
+                  "date": "2024-03-01",
+                  "employees": 240
+                },
+                {
+                  "date": "2024-04-01",
+                  "employees": 229
+                },
+                {
+                  "date": "2024-05-01",
+                  "employees": 217
+                },
+                {
+                  "date": "2024-07-01",
+                  "employees": 223
+                },
+                {
+                  "date": "2024-11-01",
+                  "employees": 223
+                },
+                {
+                  "date": "2025-01-01",
+                  "employees": 217
+                },
+                {
+                  "date": "2025-02-01",
+                  "employees": 205
+                },
+                {
+                  "date": "2025-08-01",
+                  "employees": 211
+                }
+              ],
+              "growth": {
+                "1m": {
+                  "percent": 0,
+                  "quantity": 0
+                },
+                "2m": {
+                  "percent": 0,
+                  "quantity": 0
+                },
+                "3m": {
+                  "percent": 0.02927,
+                  "quantity": 6
+                },
+                "6m": {
+                  "percent": 0.02927,
+                  "quantity": 6
+                },
+                "12m": {
+                  "percent": -0.05381,
+                  "quantity": -12
+                },
+                "18m": {
+                  "percent": -0.12083,
+                  "quantity": -29
+                },
+                "24m": {
+                  "percent": -0.26481,
+                  "quantity": -76
+                },
+                "36m": {
+                  "percent": -0.45478,
+                  "quantity": -176
+                }
+              }
+            },
+            "cik_numbers": [],
+            "cage_codes": [],
+            "duns_numbers": [
+              "185772423"
+            ],
+            "num_li_locations": 1,
+            "location_name": "Ontario, New York",
+            "crunchbase_slug": "harbec",
+            "primary_role": "company",
+            "roles": [
+              "company"
+            ],
+            "short_description": "Harbec is a continually growing and profitable leader in the manufacturing of prototypes, highly-toleranced tooling, machined components.",
+            "long_description": "Harbec mission is to provide tightly toleranced prototypes, tooling, machined components and quality injection molded parts in a sustainable manner with a social conscience. They provide superior customer service, satisfaction and timely delivery of custom engineered solutions. They proudly foster an atmosphere of encouragement and respect for the health and prosperity of their customers, employees, and the global community.",
+            "is_subsidiary": false,
+            "parent": null,
+            "num_funding_rounds": null,
+            "funding_rounds": null,
+            "num_exits": null,
+            "investors": null,
+            "acquisitions": null,
+            "best_funding_round": null,
+            "funding_stage": "acquired",
+            "alt_industries": [
+              "consumer goods"
+            ],
+            "alt_keywords": [
+              "sustainable manufacturing",
+              "injection molding",
+              "proptoyping",
+              "models",
+              "precision mold manufacturing",
+              "cleanroom molding",
+              "additive manufacturing",
+              "cnc machining",
+              "plastics",
+              "consumer goods",
+              "scientific molding",
+              "overmolding",
+              "cavitational molding",
+              "transfer molding",
+              "polymer optical lenses",
+              "thermoplastics",
+              "high-volume production",
+              "prototyping",
+              "quality control",
+              "material selection",
+              "engineering thermoplastics",
+              "biomedical applications",
+              "aerospace manufacturing",
+              "carbon neutral manufacturing",
+              "water neutral manufacturing",
+              "rapid prototyping",
+              "dimensional analysis",
+              "tooling",
+              "part design optimization",
+              "materials flexibility",
+              "geometric freedom",
+              "automated manufacturing",
+              "spc control",
+              "end of arm automation",
+              "vision systems",
+              "precision tolerances",
+              "dmls",
+              "selective laser sintering",
+              "fused filament fabrication",
+              "stereolithography",
+              "mass customization",
+              "resin-based manufacturing",
+              "mechanical properties",
+              "thin layer manufacturing",
+              "complex geometries",
+              "tooling inserts",
+              "standard tessellation language",
+              "cost-effective production",
+              "waste reduction",
+              "material properties",
+              "custom injection molding",
+              "engineering solutions",
+              "electromagnetic components",
+              "energy management solutions",
+              "contract manufacturing",
+              "advanced manufacturing technologies",
+              "3d printing",
+              "aerospace components",
+              "medical devices",
+              "defense industry",
+              "eco-friendly practices",
+              "precision machining",
+              "custom engineered solutions",
+              "iso certifications",
+              "carbon neutrality",
+              "cleanroom capabilities",
+              "low-volume production",
+              "value-added services",
+              "assembly services",
+              "logistics services",
+              "design & engineering support",
+              "tooling & mold design",
+              "quality assurance",
+              "industrial products",
+              "automotive parts",
+              "electronics",
+              "telecommunications",
+              "energy sector",
+              "customer satisfaction",
+              "superior service",
+              "social responsibility",
+              "environmental impact",
+              "innovative materials",
+              "precision components",
+              "high-quality manufacturing",
+              "machinery",
+              "mechanical or industrial engineering",
+              "chemicals",
+              "consumers",
+              "hospital & health care",
+              "computer hardware",
+              "hardware"
+            ],
+            "alt_description": "HARBEC specializes in injection molding, precision machining, and additive manufacturing, delivering high-performance, sustainable solutions for industries that demand reliability. From prototype to production, we provide tight-tolerance manufacturing, advanced materials expertise, and energy-efficient processes that move innovation forward.",
+            "employee_trends": null,
+            "logo_url": "https://img.imagecdn.dev/company-logo/at_bhtox7wbqcnvokf1bp0i.jpeg",
+            "similar_companies": [
+              {
+                "name": "H&H Molds Inc.",
+                "industries": [
+                  "plastics"
+                ],
+                "employee_count": 16,
+                "revenue": 7000000,
+                "logo_url": "https://img.imagecdn.dev/company-logo/ct_67d17771946a6800012b8c2c.jpeg"
+              },
+              {
+                "name": "HRC Tool & Die Mfg, HRC Plastics Ltd.",
+                "industries": [
+                  "machinery"
+                ],
+                "employee_count": 11,
+                "revenue": 35000000,
+                "logo_url": "https://img.imagecdn.dev/company-logo/ct_67e2aed8a4626b000111f1cf.jpeg"
+              },
+              {
+                "name": "Crescent Industries Inc",
+                "industries": [
+                  "plastics",
+                  "packaging & containers"
+                ],
+                "employee_count": 67,
+                "revenue": 12000000,
+                "logo_url": "https://img.imagecdn.dev/company-logo/ct_67bd89eeb9b8ab00010aebb7.jpeg"
+              },
+              {
+                "name": "KALIP DESTEK Plastic mold ltd",
+                "industries": [
+                  "plastics"
+                ],
+                "employee_count": 9,
+                "revenue": null,
+                "logo_url": "https://img.imagecdn.dev/company-logo/ct_67bbee7cb35b120001eaccea.jpeg"
+              }
+            ],
+            "full_funding_rounds": null,
+            "funding_round_stats": null,
+            "investment_stats": null,
+            "is_investor": false,
+            "investor_type": null,
+            "investor_categories": null,
+            "technologies_used": [
+              {
+                "name": "zendesk"
+              }
+            ],
+            "platforms": {
+              "ecommerce": null,
+              "cms": [
+                "WordPress",
+                "WordPress 6.8"
+              ],
+              "crm": [
+                "Hubspot"
+              ],
+              "marketing": [
+                "Hubspot",
+                "Hubspot Forms",
+                "Pardot"
+              ],
+              "payment": null
+            }
+          },
+          {
+            "linkedin_id": "-3607866",
+            "accelerator_statuses": [],
+            "accelerators": null,
+            "blog_urls": [],
+            "custom_data": null,
+            "domains": [
+              "print3d4u.com"
+            ],
+            "emails": [
+              "info@addmangroup.com",
+              "info@print3d4u.com"
+            ],
+            "phone_numbers": [
+              "8882661837"
+            ],
+            "employee_count_consensus": {
+              "gte": 421,
+              "lte": 421
+            },
+            "facebook_urls": [
+              "https://facebook.com/addman3d",
+              "https://www.facebook.com/3rd-dimension-industrial-3d-printing-271888399602963/",
+              "www.facebook.com/3rd-dimension-industrial-3d-printing-271888399602963/"
+            ],
+            "fortune_rankings": null,
+            "founded_on_consensus": "2020-01-01T00:00:00.000Z",
+            "github_usernames": [],
+            "instagram_handles": [
+              "addman3d"
+            ],
+            "latest_funding_consensus": null,
+            "linkedin_slugs": [
+              "addman3d",
+              "3rd-dimension-industrial-3d-printing",
+              "addman-engineering-group"
+            ],
+            "linkedin_primary_slug": "addman3d",
+            "li_org_id": "3876975",
+            "li_category": "C",
+            "li_job_posts_stats": {
+              "total_count": 219,
+              "seniority_stats": {
+                "Associate": {
+                  "count": 1,
+                  "fraction": 0.0045662100456621
+                },
+                "Director": {
+                  "count": 1,
+                  "fraction": 0.0045662100456621
+                },
+                "Entry level": {
+                  "count": 32,
+                  "fraction": 0.1461187214611872
+                },
+                "Mid-Senior level": {
+                  "count": 53,
+                  "fraction": 0.2420091324200913
+                },
+                "Not Applicable": {
+                  "count": 132,
+                  "fraction": 0.6027397260273972
+                }
+              },
+              "employment_type_stats": {
+                "Contract": {
+                  "count": 1,
+                  "fraction": 0.0045662100456621
+                },
+                "Full-time": {
+                  "count": 206,
+                  "fraction": 0.9406392694063926
+                },
+                "Internship": {
+                  "count": 4,
+                  "fraction": 0.0182648401826484
+                },
+                "Part-time": {
+                  "count": 5,
+                  "fraction": 0.0228310502283105
+                },
+                "Volunteer": {
+                  "count": 3,
+                  "fraction": 0.0136986301369863
+                }
+              },
+              "country_location_stats": {
+                "CHE": {
+                  "count": 1,
+                  "fraction": 0.0045662100456621
+                },
+                "GBR": {
+                  "count": 1,
+                  "fraction": 0.0045662100456621
+                },
+                "USA": {
+                  "count": 217,
+                  "fraction": 0.9908675799086758
+                }
+              },
+              "puree_job_functions_stats": {
+                "Accounting": {
+                  "count": 4,
+                  "fraction": 0.0182648401826484
+                },
+                "Administrative": {
+                  "count": 2,
+                  "fraction": 0.0091324200913242
+                },
+                "Analyst": {
+                  "count": 1,
+                  "fraction": 0.0045662100456621
+                },
+                "Business Development": {
+                  "count": 3,
+                  "fraction": 0.0136986301369863
+                },
+                "Engineering": {
+                  "count": 35,
+                  "fraction": 0.1598173515981735
+                },
+                "Finance": {
+                  "count": 5,
+                  "fraction": 0.0228310502283105
+                },
+                "Human Resources": {
+                  "count": 2,
+                  "fraction": 0.0091324200913242
+                },
+                "Information Technology": {
+                  "count": 47,
+                  "fraction": 0.2146118721461187
+                },
+                "Management": {
+                  "count": 69,
+                  "fraction": 0.3150684931506849
+                },
+                "Manufacturing": {
+                  "count": 70,
+                  "fraction": 0.319634703196347
+                },
+                "Marketing": {
+                  "count": 3,
+                  "fraction": 0.0136986301369863
+                },
+                "Production": {
+                  "count": 1,
+                  "fraction": 0.0045662100456621
+                },
+                "Project Management": {
+                  "count": 6,
+                  "fraction": 0.0273972602739726
+                },
+                "Public Relations": {
+                  "count": 2,
+                  "fraction": 0.0091324200913242
+                },
+                "Purchasing": {
+                  "count": 2,
+                  "fraction": 0.0091324200913242
+                },
+                "Quality Assurance": {
+                  "count": 24,
+                  "fraction": 0.1095890410958904
+                },
+                "Research": {
+                  "count": 1,
+                  "fraction": 0.0045662100456621
+                },
+                "Sales": {
+                  "count": 5,
+                  "fraction": 0.0228310502283105
+                },
+                "Supply Chain": {
+                  "count": 2,
+                  "fraction": 0.0091324200913242
+                },
+                "Writing / Editing": {
+                  "count": 2,
+                  "fraction": 0.0091324200913242
+                }
+              },
+              "standard_industries_stats": {
+                "Aerospace & Military": {
+                  "count": 4,
+                  "fraction": 0.0182648401826484
+                },
+                "Manufacturing": {
+                  "count": 216,
+                  "fraction": 0.9863013698630136
+                },
+                "Science & Engineering": {
+                  "count": 1,
+                  "fraction": 0.0045662100456621
+                }
+              },
+              "job_location_type_stats": {
+                "Hybrid": {
+                  "count": 10,
+                  "fraction": 0.045662100456621
+                },
+                "On-site": {
+                  "count": 66,
+                  "fraction": 0.3013698630136986
+                },
+                "Remote": {
+                  "count": 5,
+                  "fraction": 0.0228310502283105
+                }
+              }
+            },
+            "li_description": "ADDMAN is an Indianapolis-based company specializing in metal additive manufacturing services. They offer a comprehensive suite of solutions, including concept to prototype design and rapid production, utilizing both metal and thermoplastic materials. ADDMAN also provides consulting and engineering services to clients across the aerospace, consumer branded goods, automotive, and industrial sectors. Their expertise lies in advanced 3D printing techniques for industrial applications.",
+            "li_follower_count": 8106,
+            "li_headline": "Additive Manufacturing | Precision Machining | Injection Molding | Design & Development",
+            "li_industries": [
+              {
+                "id": "synth-Industrial Machinery Manufacturing",
+                "name": "Industrial Machinery Manufacturing"
+              }
+            ],
+            "li_locations": null,
+            "li_specialties": [
+              "Metal Fabrication & Products"
+            ],
+            "location_consensus": {
+              "street_address": "Fort Myers",
+              "neighborhood": null,
+              "city": "Fort Myers",
+              "state_name": "Florida",
+              "state_code": "FL",
+              "county": "Lee County",
+              "postal_code": null,
+              "country_code": "USA",
+              "country_name": "United States",
+              "coordinates": {
+                "lat": 26.641868,
+                "lon": -81.871675
+              },
+              "timezone": "America/New_York",
+              "full_address": "Fort Myers, Florida, United States",
+              "formatted_address": "Fort Myers, Florida, United States"
+            },
+            "locations_stats": {
+              "USA": 1,
+              "X-AMERICAS": 1,
+              "X-ANGLOSPHERE": 1,
+              "X-G20": 1,
+              "X-NORTH_AMERICA": 1,
+              "X-OECD": 1
+            },
+            "market_cap_usd": null,
+            "naics_codes": [
+              "333248",
+              "332710"
+            ],
+            "names": [
+              "3rd Dimension Industrial 3D Printing",
+              "ADDMAN",
+              "Addman Group"
+            ],
+            "preferred_name": "ADDMAN",
+            "preferred_name_word_count": 1,
+            "revenue_estimate": {
+              "sources": [],
+              "fiscal_year": 2025,
+              "value_usd": {
+                "gte": 500000000,
+                "lte": 999999999
+              }
+            },
+            "standard_industries": [
+              "Aerospace & Military",
+              "Manufacturing",
+              "Mining"
+            ],
+            "status_consensus": "acquired",
+            "stock_info_consensus": null,
+            "tags": [],
+            "total_funding_consensus": null,
+            "twitter_handles": [
+              "3rddim3dprint",
+              "addmangroup"
+            ],
+            "websites": [
+              "print3d4u.com"
+            ],
+            "wellfound_slugs": [],
+            "youtube_urls": [],
+            "role_count_matches": null,
+            "num_matching_locations": null,
+            "linkedin_ids": [
+              "3876975",
+              "-3607866"
+            ],
+            "last_sort_key": "gAAAAABrAyigVNOB6JXTwOs9xVZXmfkvslWCOyuwcoKJq7vTtcVEinN2pUmznGhsE__E5CWRHl8vIPVMJ29VwOn1TI6_Llwcncy2Q4XzIstxDHlTrwEBv84=",
+            "relevance_score": 131.93288,
+            "technology_spend_usd": 21673,
+            "historical_headcount": {
+              "latest_snapshot_date": "2026-01-01",
+              "snapshots": [
+                {
+                  "date": "2022-12-01",
+                  "employees": 119
+                },
+                {
+                  "date": "2023-01-01",
+                  "employees": 121
+                },
+                {
+                  "date": "2023-02-01",
+                  "employees": 125
+                },
+                {
+                  "date": "2023-03-01",
+                  "employees": 127
+                },
+                {
+                  "date": "2023-04-01",
+                  "employees": 133
+                },
+                {
+                  "date": "2023-05-01",
+                  "employees": 123
+                },
+                {
+                  "date": "2023-06-01",
+                  "employees": 125
+                },
+                {
+                  "date": "2023-07-01",
+                  "employees": 129
+                },
+                {
+                  "date": "2023-08-01",
+                  "employees": 131
+                },
+                {
+                  "date": "2023-09-01",
+                  "employees": 131
+                },
+                {
+                  "date": "2023-10-01",
+                  "employees": 129
+                },
+                {
+                  "date": "2023-11-01",
+                  "employees": 129
+                },
+                {
+                  "date": "2023-12-01",
+                  "employees": 121
+                },
+                {
+                  "date": "2024-01-01",
+                  "employees": 125
+                },
+                {
+                  "date": "2024-02-01",
+                  "employees": 121
+                },
+                {
+                  "date": "2024-03-01",
+                  "employees": 121
+                },
+                {
+                  "date": "2024-04-01",
+                  "employees": 131
+                },
+                {
+                  "date": "2024-05-01",
+                  "employees": 143
+                },
+                {
+                  "date": "2024-06-01",
+                  "employees": 150
+                },
+                {
+                  "date": "2024-07-01",
+                  "employees": 156
+                },
+                {
+                  "date": "2024-08-01",
+                  "employees": 150
+                },
+                {
+                  "date": "2024-09-01",
+                  "employees": 152
+                },
+                {
+                  "date": "2024-10-01",
+                  "employees": 150
+                },
+                {
+                  "date": "2024-11-01",
+                  "employees": 154
+                },
+                {
+                  "date": "2024-12-01",
+                  "employees": 150
+                },
+                {
+                  "date": "2025-01-01",
+                  "employees": 154
+                },
+                {
+                  "date": "2025-02-01",
+                  "employees": 158
+                },
+                {
+                  "date": "2025-03-01",
+                  "employees": 166
+                },
+                {
+                  "date": "2025-04-01",
+                  "employees": 164
+                },
+                {
+                  "date": "2025-05-01",
+                  "employees": 168
+                },
+                {
+                  "date": "2025-06-01",
+                  "employees": 170
+                },
+                {
+                  "date": "2025-07-01",
+                  "employees": 172
+                },
+                {
+                  "date": "2025-08-01",
+                  "employees": 166
+                },
+                {
+                  "date": "2025-09-01",
+                  "employees": 164
+                },
+                {
+                  "date": "2025-10-01",
+                  "employees": 164
+                },
+                {
+                  "date": "2025-11-01",
+                  "employees": 168
+                },
+                {
+                  "date": "2026-01-01",
+                  "employees": 168
+                }
+              ],
+              "growth": {
+                "1m": {
+                  "percent": 0,
+                  "quantity": 0
+                },
+                "2m": {
+                  "percent": 0,
+                  "quantity": 0
+                },
+                "3m": {
+                  "percent": 0.02439,
+                  "quantity": 4
+                },
+                "6m": {
+                  "percent": -0.02326,
+                  "quantity": -4
+                },
+                "12m": {
+                  "percent": 0.09091,
+                  "quantity": 14
+                },
+                "18m": {
+                  "percent": 0.07692,
+                  "quantity": 12
+                },
+                "24m": {
+                  "percent": 0.344,
+                  "quantity": 43
+                },
+                "36m": {
+                  "percent": 0.38843,
+                  "quantity": 47
+                }
+              }
+            },
+            "cik_numbers": [],
+            "cage_codes": [],
+            "duns_numbers": [],
+            "num_li_locations": 8,
+            "location_name": "Fort Myers",
+            "crunchbase_slug": "3rd-dimension-industrial-3d-printing",
+            "primary_role": "company",
+            "roles": [
+              "company"
+            ],
+            "short_description": "3rd Dimension Industrial 3D Printing specializes in the additive manufacturing of metals.",
+            "long_description": "3rd Dimension Industrial 3D Printing specializes in the additive manufacturing of metals.",
+            "is_subsidiary": true,
+            "parent": "Generation Growth Capital",
+            "num_funding_rounds": null,
+            "funding_rounds": null,
+            "num_exits": null,
+            "investors": null,
+            "acquisitions": null,
+            "best_funding_round": null,
+            "funding_stage": "acquired",
+            "alt_industries": [
+              "machinery"
+            ],
+            "alt_keywords": [
+              "additive manufacturing",
+              "direct metal printing",
+              "aerospace components",
+              "3d printing",
+              "machining",
+              "dmls",
+              "cnc machining",
+              "metal additive material development",
+              "polymer printing",
+              "machinery",
+              "industrial machinery manufacturing",
+              "mechanical or industrial engineering"
+            ],
+            "alt_description": "Your manufacturing needs are our priority, covering prototyping to end-of-life. We present a diverse array of manufacturing capabilities, from metal and polymer 3D printing to CNC machining and injection molding. Our commitment is to tailor full lifecycle solutions that align with your evolving product roadmaps—every step, any part, any volume.",
+            "employee_trends": null,
+            "logo_url": "https://img.imagecdn.dev/company-logo/at_capirgvqkguimj2inqgp.jpeg",
+            "similar_companies": null,
+            "full_funding_rounds": null,
+            "funding_round_stats": null,
+            "investment_stats": null,
+            "is_investor": false,
+            "investor_type": null,
+            "investor_categories": null,
+            "technologies_used": [
+              {
+                "name": "zendesk"
+              },
+              {
+                "name": "slack"
+              }
+            ],
+            "platforms": {
+              "ecommerce": null,
+              "cms": [
+                "WordPress",
+                "WordPress 6.8"
+              ],
+              "crm": [
+                "Hubspot"
+              ],
+              "marketing": [
+                "Hubspot",
+                "Hubspot Forms",
+                "Pardot"
+              ],
+              "payment": null
+            }
+          },
+          {
+            "linkedin_id": "-2005144",
+            "accelerator_statuses": [],
+            "accelerators": null,
+            "blog_urls": [],
+            "custom_data": null,
+            "domains": [
+              "allianceppc.com"
+            ],
+            "emails": [
+              "contacts@allianceppc.com"
+            ],
+            "phone_numbers": [
+              "15854265310"
+            ],
+            "employee_count_consensus": {
+              "gte": 156,
+              "lte": 156
+            },
+            "facebook_urls": [
+              "https://www.facebook.com/allianceppc/"
+            ],
+            "fortune_rankings": null,
+            "founded_on_consensus": "1954-01-01T00:00:00.000Z",
+            "github_usernames": [],
+            "instagram_handles": [],
+            "latest_funding_consensus": null,
+            "linkedin_slugs": [
+              "alliance-precision-plastics",
+              "allianceppc"
+            ],
+            "linkedin_primary_slug": "allianceppc",
+            "li_org_id": "2002149",
+            "li_category": "C",
+            "li_job_posts_stats": {
+              "total_count": 1,
+              "seniority_stats": {
+                "Mid-Senior level": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              },
+              "employment_type_stats": {
+                "Full-time": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              },
+              "country_location_stats": {
+                "USA": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              },
+              "puree_job_functions_stats": {
+                "Quality Assurance": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              },
+              "standard_industries_stats": {
+                "Manufacturing": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              },
+              "job_location_type_stats": {
+                "On-site": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              }
+            },
+            "li_description": "Leading design and builder of injection molding tools, injection molding of plastics parts, and simple to complex assemblies including value added processes such as hot stamping, pad printing, gluing, ultrasonic welding, vibration welding, CNC machining, electro-mechanical assembly and test, etc.\r\n\r\nISO9001:2008 and ISO13485 certified.",
+            "li_follower_count": 2342,
+            "li_headline": "When precision, quality and service count, expect Alliance to deliver.",
+            "li_industries": [
+              {
+                "id": "117",
+                "name": "Plastics Manufacturing",
+                "primary": true
+              }
+            ],
+            "li_locations": null,
+            "li_specialties": [
+              "Injection Molding",
+              "Electromechanical Assembly",
+              "Contract Assembly",
+              "Plastic Part Production",
+              "Injection Mold Design and Build",
+              "Value Added Processes"
+            ],
+            "location_consensus": {
+              "street_address": null,
+              "neighborhood": null,
+              "city": "Rochester",
+              "state_name": "New York",
+              "state_code": "NY",
+              "county": "Monroe County",
+              "postal_code": null,
+              "country_code": "USA",
+              "country_name": "United States",
+              "coordinates": {
+                "lat": 43.15570831,
+                "lon": -77.61254883
+              },
+              "timezone": "America/New_York",
+              "full_address": "Rochester, NY",
+              "formatted_address": "Rochester, NY"
+            },
+            "locations_stats": {
+              "USA": 2,
+              "X-AMERICAS": 2,
+              "X-ANGLOSPHERE": 2,
+              "X-G20": 2,
+              "X-NORTH_AMERICA": 2,
+              "X-OECD": 2
+            },
+            "market_cap_usd": null,
+            "naics_codes": [
+              "326199",
+              "333511"
+            ],
+            "names": [
+              "Alliance Precision Plastics"
+            ],
+            "preferred_name": "Alliance Precision Plastics",
+            "preferred_name_word_count": 3,
+            "revenue_estimate": {
+              "sources": [],
+              "fiscal_year": 2025,
+              "value_usd": {
+                "gte": 50000000,
+                "lte": 99999999
+              }
+            },
+            "standard_industries": [
+              "Design",
+              "Manufacturing"
+            ],
+            "status_consensus": "active",
+            "stock_info_consensus": null,
+            "tags": [],
+            "total_funding_consensus": null,
+            "twitter_handles": [
+              "allianceppc"
+            ],
+            "websites": [
+              "allianceppc.com"
+            ],
+            "wellfound_slugs": [],
+            "youtube_urls": [],
+            "role_count_matches": null,
+            "num_matching_locations": null,
+            "linkedin_ids": [
+              "2002149",
+              "-2005144"
+            ],
+            "last_sort_key": "gAAAAABrAyigg6wK-j7xLpaauYWzJw65RlwUhTV3JQgKErQ7K3y4uY-CNlVKp8nKO2v3PjoYef-0m1wxKxKNyzQY6Htm7W8UfAtdhazZ4DIZP6nhuINBqtY=",
+            "relevance_score": 129.28181,
+            "technology_spend_usd": null,
+            "historical_headcount": null,
+            "cik_numbers": [],
+            "cage_codes": [],
+            "duns_numbers": [],
+            "num_li_locations": 2,
+            "location_name": "Rochester, NY",
+            "crunchbase_slug": "alliance-precision-plastics",
+            "primary_role": "company",
+            "roles": [
+              "company"
+            ],
+            "short_description": "Alliance Precision Plastics offers one-stop solution for design, engineering, injection, tooling, molding and assembly of plastics.",
+            "long_description": null,
+            "is_subsidiary": false,
+            "parent": null,
+            "num_funding_rounds": null,
+            "funding_rounds": null,
+            "num_exits": null,
+            "investors": null,
+            "acquisitions": null,
+            "best_funding_round": null,
+            "funding_stage": "no_funding_yet",
+            "alt_industries": [
+              "plastics"
+            ],
+            "alt_keywords": [
+              "injection mold design & build",
+              "injection molding",
+              "plastic part production",
+              "value added processes",
+              "electromechanical assembly",
+              "contract assembly",
+              "plastics",
+              "plastics manufacturing",
+              "custom injection molding",
+              "mold design",
+              "tooling",
+              "assembly",
+              "quality assurance",
+              "medical parts manufacturing",
+              "plastic component design",
+              "thermoplastic materials",
+              "high-impact plastics",
+              "lean manufacturing",
+              "iso 9001 certified",
+              "iso 13485 certified",
+              "clean room molding",
+              "large parts molding",
+              "2-shot molding",
+              "insert molding",
+              "overmolding",
+              "rapid prototyping",
+              "cad/cam tooling",
+              "automated vision inspection",
+              "fmea",
+              "doe",
+              "iq/oq/pq",
+              "material selection",
+              "defect-free manufacturing",
+              "product integrity",
+              "engineering design",
+              "mold flow analysis",
+              "low volume production",
+              "high volume production",
+              "precision machining",
+              "custom automation",
+              "heat staking",
+              "sonic welding",
+              "electronic packaging",
+              "component integration",
+              "multi-cavity molds",
+              "cost-effective manufacturing",
+              "hot runner systems",
+              "production efficiency",
+              "process optimization",
+              "sustainable production",
+              "product testing",
+              "automated assembly systems",
+              "quality control systems",
+              "cross-functional teams",
+              "manufacturing capabilities",
+              "chemicals"
+            ],
+            "alt_description": "Leading design and builder of injection molding tools, injection molding of plastics parts, and simple to complex assemblies including value added processes such as hot stamping, pad printing, gluing, ultrasonic welding, vibration welding, CNC machining, electro-mechanical assembly and test, etc.ISO9001:2008 and ISO13485 certified.",
+            "employee_trends": null,
+            "logo_url": "https://img.imagecdn.dev/company-logo/at_gapfg258q9grzi9ey3p0.jpeg",
+            "similar_companies": [
+              {
+                "name": "ABI Mould & Engineer Co., Ltd 深圳市嘉森模具实业有限公司",
+                "industries": [
+                  "plastics"
+                ],
+                "employee_count": 20,
+                "revenue": null,
+                "logo_url": "https://img.imagecdn.dev/company-logo/ct_674aeb4bb8b1de00013a27f4.jpeg"
+              },
+              {
+                "name": "Wise Plastics Technologies",
+                "industries": [
+                  "plastics"
+                ],
+                "employee_count": 120,
+                "revenue": 15000000,
+                "logo_url": "https://img.imagecdn.dev/company-logo/ct_67acf8dd1cf2a80001eb1523.jpeg"
+              }
+            ],
+            "full_funding_rounds": null,
+            "funding_round_stats": null,
+            "investment_stats": null,
+            "is_investor": false,
+            "investor_type": null,
+            "investor_categories": null,
+            "technologies_used": null,
+            "platforms": null
+          },
+          {
+            "linkedin_id": "292497",
+            "accelerator_statuses": [],
+            "accelerators": null,
+            "blog_urls": [],
+            "custom_data": null,
+            "domains": [
+              "prismier.com"
+            ],
+            "emails": [
+              "casales@prismier.com",
+              "cnsales@prismier.com",
+              "customerservice@prismier.com",
+              "info@prismier.com",
+              "orders@prismier.com",
+              "sales@prismier.com",
+              "txsales@prismier.com",
+              "websales@prismier.com"
+            ],
+            "phone_numbers": [
+              "16302144099",
+              "16305924515",
+              "6305924515"
+            ],
+            "employee_count_consensus": {
+              "gte": 32,
+              "lte": 32
+            },
+            "facebook_urls": [
+              "https://facebook.com/prismier",
+              "https://www.facebook.com/prismier"
+            ],
+            "fortune_rankings": null,
+            "founded_on_consensus": "2004-01-01T00:00:00.000Z",
+            "github_usernames": [],
+            "instagram_handles": [],
+            "latest_funding_consensus": null,
+            "linkedin_slugs": [
+              "prismier"
+            ],
+            "linkedin_primary_slug": "prismier",
+            "li_org_id": "292497",
+            "li_category": "C",
+            "li_job_posts_stats": {
+              "total_count": 1,
+              "seniority_stats": {
+                "Director": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              },
+              "employment_type_stats": {
+                "Full-time": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              },
+              "country_location_stats": {
+                "USA": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              },
+              "puree_job_functions_stats": {
+                "Quality Assurance": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              },
+              "standard_industries_stats": {
+                "Manufacturing": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              },
+              "job_location_type_stats": {
+                "On-site": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              }
+            },
+            "li_description": "Prismier is a digitally driven manufacturer offering sheet metal fabrication, CNC machining and turning, plastic injection molding, die casting, 3D printing, metal stamping & micro metal stamping, and assembly. We provide full product life cycle support from rapid prototyping through production. Prismier also offers complete finishing, assembly, packaging, and logistics services. Prismier specializes in rapid custom mechanical products and we pride ourselves in building partnerships with our customers. \n\nRealizing speed to market is essential, Prismier works around the clock to get parts in your hands in just a few days. Prismier’s corporate headquarters and NPI/Short Run center are centrally located in Bolingbrook, Illinois. Prismier has various locations that span across the US, China, & Mexico in order to optimize the manufacturing of products based on your company’s localization strategy.",
+            "li_follower_count": 3079,
+            "li_headline": "Innovate with confidence—Manufacturing Simplified®",
+            "li_industries": [
+              {
+                "id": "25",
+                "name": "Manufacturing",
+                "primary": true
+              }
+            ],
+            "li_locations": null,
+            "li_specialties": [
+              "Rapid Prototyping",
+              "CNC Milling",
+              "Prototyping",
+              "Assembly",
+              "CNC Turning",
+              "Tooling",
+              "Plastic Injection Molding",
+              "CNC Machining",
+              "Quality Control",
+              "Sheet Metal Fabrication",
+              "Design & Engineering",
+              "Brackets",
+              "Chassis",
+              "Metal Stamping",
+              "Enclosures",
+              "Rapid Tooling",
+              "Prototype Machining",
+              "Housings",
+              "Prototype Tooling",
+              "Die Casting",
+              "Progressive Dies",
+              "CNC Plastic Machining",
+              "Small Metal Stamping",
+              "EMI/RFI Shielding",
+              "Prototype Sheet Metal",
+              "Rapid Injection Molding",
+              "Battery Contacts"
+            ],
+            "location_consensus": {
+              "street_address": null,
+              "neighborhood": null,
+              "city": "Bolingbrook",
+              "state_name": "Illinois",
+              "state_code": "IL",
+              "county": "Will County",
+              "postal_code": null,
+              "country_code": "USA",
+              "country_name": "United States",
+              "coordinates": {
+                "lat": 41.69826508,
+                "lon": -88.07791138
+              },
+              "timezone": "America/Chicago",
+              "full_address": "Bolingbrook, IL",
+              "formatted_address": "Bolingbrook, IL"
+            },
+            "locations_stats": {
+              "CHN": 1,
+              "USA": 1,
+              "X-AMERICAS": 1,
+              "X-ANGLOSPHERE": 1,
+              "X-APAC": 1,
+              "X-ASIA": 1,
+              "X-BRICS": 1,
+              "X-EAST_ASIA": 1,
+              "X-G20": 2,
+              "X-NORTH_AMERICA": 1,
+              "X-OECD": 1
+            },
+            "market_cap_usd": null,
+            "naics_codes": [
+              "332710",
+              "332322"
+            ],
+            "names": [
+              "Prismier"
+            ],
+            "preferred_name": "Prismier",
+            "preferred_name_word_count": 1,
+            "revenue_estimate": {
+              "sources": [],
+              "fiscal_year": 2025,
+              "value_usd": {
+                "gte": 10000000,
+                "lte": 19999999
+              }
+            },
+            "standard_industries": [
+              "Manufacturing"
+            ],
+            "status_consensus": "active",
+            "stock_info_consensus": null,
+            "tags": [],
+            "total_funding_consensus": null,
+            "twitter_handles": [
+              "prismier"
+            ],
+            "websites": [
+              "prismier.com"
+            ],
+            "wellfound_slugs": [],
+            "youtube_urls": [],
+            "role_count_matches": null,
+            "num_matching_locations": null,
+            "linkedin_ids": [
+              "292497"
+            ],
+            "last_sort_key": "gAAAAABrAyig1HzkX4o5IiqSQbBlqXmqcRx4BV6YOXe78W7UyvUHvEIPz36nk0GUBMOxYMS3nK7bScmbPuy9RouiXJdKlGIjfZ3GZhhCZ1R5HZsJTfnJnAw=",
+            "relevance_score": 128.89981,
+            "technology_spend_usd": 18924,
+            "historical_headcount": null,
+            "cik_numbers": [],
+            "cage_codes": [],
+            "duns_numbers": [],
+            "num_li_locations": 2,
+            "location_name": "Bolingbrook, IL",
+            "crunchbase_slug": "prismier",
+            "primary_role": "company",
+            "roles": [
+              "company"
+            ],
+            "short_description": "Mechanical Contract Manufacturing",
+            "long_description": "Prismier is a vertically-integrated Mechanical Contract Manufacturer (MCM). Service offerings include design & engineers, assembly, rapid prototyping through production of metal and plastic parts. We also manufacture Electronic Packaging including enclosures, housings, and board level components such as board level shielding, contacts, and small form pluggable cages.",
+            "is_subsidiary": false,
+            "parent": null,
+            "num_funding_rounds": null,
+            "funding_rounds": null,
+            "num_exits": null,
+            "investors": null,
+            "acquisitions": null,
+            "best_funding_round": null,
+            "funding_stage": "no_funding_yet",
+            "alt_industries": [
+              "mechanical or industrial engineering",
+              "machinery"
+            ],
+            "alt_keywords": [
+              "prototype sheet metal",
+              "rapid injection molding",
+              "sheet metal fabrication",
+              "plastic injection molding",
+              "metal stamping",
+              "rapid prototyping",
+              "small metal stamping",
+              "cnc plastic machining",
+              "cnc machining",
+              "assembly",
+              "cnc turning",
+              "design",
+              "engineering",
+              "die casting",
+              "quality control",
+              "prototyping",
+              "prototype machining",
+              "tooling",
+              "progressive dies",
+              "rapid tooling",
+              "prototype tooling",
+              "enclosures",
+              "chassis",
+              "brackets",
+              "housings",
+              "emi",
+              "rfi shielding",
+              "battery contacts",
+              "cnc milling",
+              "mechanical or industrial engineering",
+              "machinery",
+              "manufacturing",
+              "custom manufacturing",
+              "metal parts",
+              "plastic parts",
+              "production",
+              "3d printing",
+              "injection molding",
+              "supply chain logistics",
+              "precision engineering",
+              "micro stamping",
+              "design for manufacturability",
+              "high-quality standards",
+              "iso 9001 certified",
+              "global manufacturing solutions",
+              "rapid turnaround",
+              "on-demand manufacturing",
+              "digital manufacturing",
+              "error-free production",
+              "flexible service",
+              "bulk production",
+              "small batch manufacturing",
+              "project management",
+              "engineering services",
+              "parts prototyping",
+              "fast quotes",
+              "automated fabrication",
+              "cad to sku",
+              "cost-effective solutions",
+              "expert fabrication",
+              "advanced manufacturing technology",
+              "complex part design",
+              "timely delivery",
+              "quality assurance",
+              "materials engineering",
+              "custom processes",
+              "manufacturing optimization",
+              "value-added services",
+              "assembly solutions",
+              "24/7 manufacturing support",
+              "state-of-the-art equipment",
+              "competitive pricing",
+              "proven results",
+              "multi-industry service",
+              "productivity",
+              "information technology & services"
+            ],
+            "alt_description": "Prismier is a digitally driven manufacturer offering sheet metal fabrication, CNC machining and turning, plastic injection molding, die casting, 3D printing, metal stamping & micro metal stamping, and assembly. We provide full product life cycle support from rapid prototyping through production. Prismier also offers complete finishing, assembly, packaging, and logistics services. Prismier specializes in rapid custom mechanical products and we pride ourselves in building partnerships with our customers. Realizing speed to market is essential, Prismier works around the clock to get parts in your hands in just a few days. Prismier's corporate headquarters and NPI/Short Run center are centrally located in Bolingbrook, Illinois. Prismier has various locations that span across the US, China, & Mexico in order to optimize the manufacturing of products based on your company's localization strategy.",
+            "employee_trends": null,
+            "logo_url": "https://img.imagecdn.dev/company-logo/at_ba4b2ae8c16ca2e41ed368c029c418a3.jpeg",
+            "similar_companies": [
+              {
+                "name": "JunYi Metal & Plastic Mold Co. Limited",
+                "industries": [
+                  "machinery"
+                ],
+                "employee_count": 12,
+                "revenue": 75000000,
+                "logo_url": "https://img.imagecdn.dev/company-logo/ct_63edac0a998f12000100b12d.jpeg"
+              },
+              {
+                "name": "AMS - Advanced Manufacturing Solutions, Inc.",
+                "industries": [
+                  "machinery",
+                  "mechanical or industrial engineering"
+                ],
+                "employee_count": 10,
+                "revenue": 32799999,
+                "logo_url": "https://img.imagecdn.dev/company-logo/ct_67c8034ccf880c0001639a03.jpeg"
+              },
+              {
+                "name": "Fourté",
+                "industries": [
+                  "mechanical or industrial engineering",
+                  "machinery"
+                ],
+                "employee_count": 51,
+                "revenue": 5300000,
+                "logo_url": "https://img.imagecdn.dev/company-logo/ct_67e667f9d9e39d0001daf4d9.jpeg"
+              },
+              {
+                "name": "Iskra ISD Group",
+                "industries": [
+                  "mechanical or industrial engineering"
+                ],
+                "employee_count": 100,
+                "revenue": null,
+                "logo_url": "https://img.imagecdn.dev/company-logo/ct_67bff989b8f15d00016d3834.jpeg"
+              },
+              {
+                "name": "Xiamen Stick Industry Co.,Ltd",
+                "industries": [
+                  "machinery"
+                ],
+                "employee_count": 9,
+                "revenue": null,
+                "logo_url": "https://img.imagecdn.dev/company-logo/ct_67adc0ce4e02620001ba037b.jpeg"
+              },
+              {
+                "name": "Krishani Engineering",
+                "industries": [
+                  "machinery"
+                ],
+                "employee_count": 3,
+                "revenue": null,
+                "logo_url": "https://img.imagecdn.dev/company-logo/ct_66fcd5a4d384d0000104c188.jpeg"
+              }
+            ],
+            "full_funding_rounds": null,
+            "funding_round_stats": null,
+            "investment_stats": null,
+            "is_investor": false,
+            "investor_type": null,
+            "investor_categories": null,
+            "technologies_used": [
+              {
+                "name": "slack"
+              }
+            ],
+            "platforms": {
+              "ecommerce": null,
+              "cms": [
+                "WordPress"
+              ],
+              "crm": [
+                "Hubspot",
+                "Salesforce"
+              ],
+              "marketing": [
+                "Hubspot",
+                "Pardot"
+              ],
+              "payment": null
+            }
+          },
+          {
+            "linkedin_id": "13654591",
+            "accelerator_statuses": [],
+            "accelerators": null,
+            "blog_urls": [],
+            "custom_data": null,
+            "domains": [
+              "djmolding.com"
+            ],
+            "emails": [
+              "info@jasonmolding.com"
+            ],
+            "phone_numbers": [
+              "867526682869"
+            ],
+            "employee_count_consensus": {
+              "gte": 218,
+              "lte": 218
+            },
+            "facebook_urls": [],
+            "fortune_rankings": null,
+            "founded_on_consensus": "2010-02-03T00:00:00.000Z",
+            "github_usernames": [],
+            "instagram_handles": [],
+            "latest_funding_consensus": null,
+            "linkedin_slugs": [
+              "plastic-injection-molding-or-moulding-company-manufacturer-from-china-jasonmould"
+            ],
+            "linkedin_primary_slug": "plastic-injection-molding-or-moulding-company-manufacturer-from-china-jasonmould",
+            "li_org_id": "13654591",
+            "li_category": "C",
+            "li_job_posts_stats": null,
+            "li_description": "Rapid prototyping(Sheet Metal,3D printing,CNC,Low-volume production)competitive quote-fast speed-Additive Manufacturing.\n\nHuizhou Djmolding Co., Ltd, established in 2010, is a leading injection moulding manufacturer in China. Djmolding specializes in plastic mould production for household appliances, medical equipments, electronic equipments, safety equipments as well as monitoring system.\n\nThe company has over 15000 square metres factory. With plastic injection tooling divisions possessing different machinery and expertise, Djmolding offers tools from small and precise mobile phone parts to as big as automotive parts. Our tools are mainly exported to U.S.A., Europe, Japan and UK. Djmolding’s diversification strategy and full service has won compliment from customers all over the world.\n\nOur mission is to provide our customers high quality moulding products and services. We aim to exceed our customers’ expectations of pricing, quality and on-time delivery. To achieve our mission, JasonMould:\n\nCommits to continually improve employee skills and efficiency,\nProvides our employees a clean and safe working environment,\nUpgrades machine technology and support equipment through a strict maintenance program, and\nMaintains customers’ tooling to its highest peak of performance\nFor more about Djmlding,please visit https://www.djmolding.com",
+            "li_follower_count": 6192,
+            "li_headline": "Rapid prototyping(Sheet Metal,3D printing,CNC,Low-volume production)competitive quote-fast speed-Additive Manufacturing.",
+            "li_industries": [
+              {
+                "id": "117",
+                "name": "Plastics Manufacturing",
+                "primary": true
+              }
+            ],
+            "li_locations": null,
+            "li_specialties": [
+              "Custom Plastic Injection Molding",
+              "plastic injection molding",
+              "CNC Machining Service",
+              "Rapid Prototyping Service",
+              "injection molding company"
+            ],
+            "location_consensus": {
+              "street_address": null,
+              "neighborhood": null,
+              "city": "Union City",
+              "state_name": "California",
+              "state_code": "CA",
+              "county": "Alameda County",
+              "postal_code": null,
+              "country_code": "USA",
+              "country_name": "United States",
+              "coordinates": {
+                "lat": 37.58792114,
+                "lon": -122.02786255
+              },
+              "timezone": "America/Los_Angeles",
+              "full_address": "Union City, California",
+              "formatted_address": "Union City, CA"
+            },
+            "locations_stats": {
+              "USA": 1,
+              "X-AMERICAS": 1,
+              "X-ANGLOSPHERE": 1,
+              "X-G20": 1,
+              "X-NORTH_AMERICA": 1,
+              "X-OECD": 1
+            },
+            "market_cap_usd": null,
+            "naics_codes": [
+              "326199",
+              "333511"
+            ],
+            "names": [
+              "Huizhou Djmolding Co",
+              "Huizhou Djmolding Co., Ltd",
+              "Plastic Injection Molding or Moulding Company Manufacturer From China Djmolding"
+            ],
+            "preferred_name": "Plastic Injection Molding or Moulding Company Manufacturer From China Djmolding",
+            "preferred_name_word_count": 10,
+            "revenue_estimate": {
+              "sources": [],
+              "fiscal_year": 2025,
+              "value_usd": {
+                "gte": 63874087,
+                "lte": 63874087
+              }
+            },
+            "standard_industries": [
+              "Manufacturing"
+            ],
+            "status_consensus": "active",
+            "stock_info_consensus": null,
+            "tags": [],
+            "total_funding_consensus": null,
+            "twitter_handles": [],
+            "websites": [
+              "djmolding.com"
+            ],
+            "wellfound_slugs": [],
+            "youtube_urls": [],
+            "role_count_matches": null,
+            "num_matching_locations": null,
+            "linkedin_ids": [
+              "13654591"
+            ],
+            "last_sort_key": "gAAAAABrAyig9WWLoRtmeLSgaHiONTFjxou0lS37k32tancQnzVV1Gui4TeCmPW2wZGUYB63g1uJJuWeGTejvJTpgcRAX9sl3mZtJxyEwqwxwCcAphYhaQY=",
+            "relevance_score": 128.88133,
+            "technology_spend_usd": 1118,
+            "historical_headcount": null,
+            "cik_numbers": [],
+            "cage_codes": [],
+            "duns_numbers": [],
+            "num_li_locations": 1,
+            "location_name": "Union City, California",
+            "crunchbase_slug": "huizhou-djmolding-co-ltd",
+            "primary_role": "company",
+            "roles": [
+              "company"
+            ],
+            "short_description": "Huizhou Djmolding Co., Ltd is a plastic injection molding manufacturer",
+            "long_description": "Huizhou Djmolding Co., Ltd is a plastic injection molding manufacturer",
+            "is_subsidiary": false,
+            "parent": null,
+            "num_funding_rounds": null,
+            "funding_rounds": null,
+            "num_exits": null,
+            "investors": null,
+            "acquisitions": null,
+            "best_funding_round": null,
+            "funding_stage": "no_funding_yet",
+            "alt_industries": [
+              "plastics"
+            ],
+            "alt_keywords": [
+              "plastic injection molding",
+              "injection molding company",
+              "cnc machining service",
+              "rapid prototyping service",
+              "custom plastic injection molding",
+              "plastics",
+              "plastics manufacturing",
+              "custom plastic injection",
+              "low volume manufacturing",
+              "high volume injection molding",
+              "recycled plastic molding",
+              "automotive plastic components",
+              "liquid silicone rubber injection",
+              "cnc machining",
+              "insert molding",
+              "overmolding",
+              "two color injection molding",
+              "on demand manufacturing",
+              "mold design",
+              "mold manufacturing",
+              "mold repair",
+              "precision molding",
+              "industrial plastic parts",
+              "medical devices injection molding",
+              "consumer products",
+              "electronic components",
+              "structural design",
+              "family molds",
+              "quality control system",
+              "high precision molds",
+              "thermoplastic injection molding",
+              "insert injection molding",
+              "manufacturing efficiency",
+              "production optimization",
+              "material selection",
+              "venting & cooling systems",
+              "part ejection",
+              "custom tooling",
+              "sustainable materials",
+              "biodegradable plastics",
+              "3d printing integration",
+              "product lifecycle management",
+              "automation in injection molding",
+              "cost-effective production",
+              "part finishing",
+              "surface finish quality",
+              "defect prevention",
+              "waste reduction",
+              "production scalability",
+              "industry 4.0 technologies",
+              "chemicals",
+              "machinery",
+              "mechanical or industrial engineering",
+              "consumer goods",
+              "consumers"
+            ],
+            "alt_description": "Rapid prototyping(Sheet Metal,3D printing,CNC,Low-volume production)competitive quote-fast speed-Additive Manufacturing.Huizhou Djmolding Co., Ltd, established in 2010, is a leading injection moulding manufacturer in China. Djmolding specializes in plastic mould production for household appliances, medical equipments, electronic equipments, safety equipments as well as monitoring system.The company has over 15000 square metres factory. With plastic injection tooling divisions possessing different machinery and expertise, Djmolding offers tools from small and precise mobile phone parts to as big as automotive parts. Our tools are mainly exported to U.S.A., Europe, Japan and UK. Djmolding's diversification strategy and full service has won compliment from customers all over the world.Our mission is to provide our customers high quality moulding products and services. We aim to exceed our customers' expectations of pricing, quality and on-time delivery. To achieve our mission, JasonMould:Commits to continually improve employee skills and efficiency,Provides our employees a clean and safe working environment,Upgrades machine technology and support equipment through a strict maintenance program, andMaintains customers' tooling to its highest peak of performanceFor more about Djmlding,please visit https://www.djmolding.com",
+            "employee_trends": null,
+            "logo_url": "https://img.imagecdn.dev/company-logo/at_j0buyaxqxgm2pgnhcvgg.jpeg",
+            "similar_companies": null,
+            "full_funding_rounds": null,
+            "funding_round_stats": null,
+            "investment_stats": null,
+            "is_investor": false,
+            "investor_type": null,
+            "investor_categories": null,
+            "technologies_used": [
+              {
+                "name": "woocommerce"
+              }
+            ],
+            "platforms": {
+              "ecommerce": [
+                "WooCommerce Version 7.6"
+              ],
+              "cms": [
+                "WordPress",
+                "WordPress 6.2"
+              ],
+              "crm": null,
+              "marketing": null,
+              "payment": null
+            }
+          },
+          {
+            "linkedin_id": "14036335",
+            "accelerator_statuses": [],
+            "accelerators": null,
+            "blog_urls": [],
+            "custom_data": null,
+            "domains": [
+              "prudentamerican.com"
+            ],
+            "emails": [
+              "kevin.h@prudentamerican.com"
+            ],
+            "phone_numbers": [
+              "18592310031"
+            ],
+            "employee_count_consensus": {
+              "gte": 45,
+              "lte": 45
+            },
+            "facebook_urls": [
+              "https://www.facebook.com/prudentamericantechnologies"
+            ],
+            "fortune_rankings": null,
+            "founded_on_consensus": "1984-01-01T00:00:00.000Z",
+            "github_usernames": [],
+            "instagram_handles": [],
+            "latest_funding_consensus": null,
+            "linkedin_slugs": [
+              "prudent-american-technologies-inc"
+            ],
+            "linkedin_primary_slug": "prudent-american-technologies-inc",
+            "li_org_id": "14036335",
+            "li_category": "C",
+            "li_job_posts_stats": {
+              "total_count": 1,
+              "seniority_stats": {
+                "Entry level": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              },
+              "employment_type_stats": {
+                "Full-time": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              },
+              "country_location_stats": {
+                "USA": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              },
+              "puree_job_functions_stats": {
+                "Management": {
+                  "count": 1,
+                  "fraction": 1
+                },
+                "Manufacturing": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              },
+              "standard_industries_stats": {
+                "Manufacturing": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              },
+              "job_location_type_stats": {
+                "On-site": {
+                  "count": 1,
+                  "fraction": 1
+                }
+              }
+            },
+            "li_description": "Prudent American is a Full Service Contract Manufacturer- USA based ISO, ITAR and Aerospace certified operations (multi location) with injection molding and precision machining capabilities including in-house design engineering, product development, design for manufacturability (DFM), BOM management, cost effective tooling & component-part 3D print prototyping with complete turn-key assembly, kitting and packaging, order fulfillment & vendor managed inventory services. We are a Small Business with a SDVOSB partner serving diverse end markets: Aerospace, Automotive, Electronics, Food & Beverage, Medical/Life Sciences, Defense & Military, Firearms, Oil Field and Energy.\n\nContact us today: \nInjection Molding Operations (HQ)\n781 Enterprise Drive\nLexington, KY 40510\nkelsey.s@prudentamerican.com\nphone: 859-231-0031\n\nPrecision Machining Operations\n708 State Docks Road\nDecatur, AL 35601\nkelsey.s@prudentamerican.com\nphone: 859-231-0031",
+            "li_follower_count": 1057,
+            "li_headline": "USA Based Full Service Contract Manufacturing & Solutions: Silicone/Plastics Injection Molding and Precision Machining",
+            "li_industries": [
+              {
+                "id": "135",
+                "name": "Industrial Machinery Manufacturing",
+                "primary": true
+              }
+            ],
+            "li_locations": null,
+            "li_specialties": [
+              "product development",
+              "Design Engineering",
+              "Injection Molding",
+              "CNC Machining",
+              "prototyping",
+              "Production Assembly",
+              "Thermoset"
+            ],
+            "location_consensus": {
+              "street_address": null,
+              "neighborhood": null,
+              "city": "Lexington",
+              "state_name": "Kentucky",
+              "state_code": "KY",
+              "county": "Fayette County",
+              "postal_code": null,
+              "country_code": "USA",
+              "country_name": "United States",
+              "coordinates": {
+                "lat": 38.0463562,
+                "lon": -84.49702454
+              },
+              "timezone": "America/New_York",
+              "full_address": "Lexington, Kentucky",
+              "formatted_address": "Lexington, KY"
+            },
+            "locations_stats": {
+              "USA": 2,
+              "X-AMERICAS": 2,
+              "X-ANGLOSPHERE": 2,
+              "X-G20": 2,
+              "X-NORTH_AMERICA": 2,
+              "X-OECD": 2
+            },
+            "market_cap_usd": null,
+            "naics_codes": [
+              "332999",
+              "333517"
+            ],
+            "names": [
+              "Prudent American",
+              "Prudent American Technologies",
+              "Prudent American Technologies, Inc."
+            ],
+            "preferred_name": "Prudent American",
+            "preferred_name_word_count": 2,
+            "revenue_estimate": {
+              "sources": [],
+              "fiscal_year": 2025,
+              "value_usd": {
+                "gte": 9401618,
+                "lte": 9401618
+              }
+            },
+            "standard_industries": [
+              "Business Services",
+              "Manufacturing",
+              "Science & Engineering"
+            ],
+            "status_consensus": "active",
+            "stock_info_consensus": null,
+            "tags": [],
+            "total_funding_consensus": null,
+            "twitter_handles": [],
+            "websites": [
+              "prudentamerican.com"
+            ],
+            "wellfound_slugs": [],
+            "youtube_urls": [],
+            "role_count_matches": null,
+            "num_matching_locations": null,
+            "linkedin_ids": [
+              "14036335"
+            ],
+            "last_sort_key": "gAAAAABrAyigL-_VnxTFqr4YJ3nuffc4pv5Bb7LQmFrM-FDjbYn13Ic8I5l969T7npgNgW2F8BvIDPVIHGlCtGekAZ6xO7YPlbUx5CC0k3vVwTRXsKuH2Q0=",
+            "relevance_score": 126.072075,
+            "technology_spend_usd": null,
+            "historical_headcount": null,
+            "cik_numbers": [],
+            "cage_codes": [],
+            "duns_numbers": [],
+            "num_li_locations": 2,
+            "location_name": "Lexington, Kentucky",
+            "crunchbase_slug": "prudent-american-technologies",
+            "primary_role": "company",
+            "roles": [
+              "company"
+            ],
+            "short_description": "Prudent American Technologies is a manufacturer product design of engineered plastics and CNC machined metal components.",
+            "long_description": null,
+            "is_subsidiary": false,
+            "parent": null,
+            "num_funding_rounds": null,
+            "funding_rounds": null,
+            "num_exits": null,
+            "investors": null,
+            "acquisitions": null,
+            "best_funding_round": null,
+            "funding_stage": "no_funding_yet",
+            "alt_industries": [
+              "machinery"
+            ],
+            "alt_keywords": [
+              "injection molding",
+              "thermoset",
+              "cnc machining",
+              "production assembly",
+              "design engineering",
+              "product development",
+              "prototyping",
+              "machinery",
+              "industrial machinery manufacturing",
+              "contract manufacturing",
+              "precision machining",
+              "advanced engineering",
+              "full service manufacturing",
+              "aerospace components",
+              "automotive parts",
+              "defense parts",
+              "military manufacturing",
+              "firearm components",
+              "medical device manufacturing",
+              "life sciences",
+              "3d modeling",
+              "product prototyping",
+              "custom packaging",
+              "quality assurance",
+              "iso certified",
+              "as9100d",
+              "electronic connectors",
+              "spring dampeners",
+              "liquid silicon molding",
+              "cmm capabilities",
+              "lean manufacturing",
+              "temperature controlled facility",
+              "supply chain solutions",
+              "rapid prototyping",
+              "assembly solutions",
+              "faster time to market",
+              "component design",
+              "tooling services",
+              "in-house testing",
+              "materials sourcing",
+              "custom testing",
+              "engineering support",
+              "global shipping",
+              "high precision parts",
+              "component assemblies",
+              "uav parts",
+              "mil-spec parts",
+              "federal contracts",
+              "dod registered",
+              "itar compliance",
+              "manufacturing equipment",
+              "oem components",
+              "subassemblies",
+              "custom solutions",
+              "technical capability",
+              "quality improvement",
+              "manufacturing technology",
+              "mechanical or industrial engineering"
+            ],
+            "alt_description": "Prudent American Technologies Inc is a Full Service Contract Manufacturer- USA based ISO, ITAR and Aerospace certified operations (multi location) with injection molding and precision machining capabilities including in-house design engineering, product development, design for manufacturability (DFM), BOM management, cost effective tooling & component-part 3D print prototyping with complete turn-key assembly, kitting and packaging, order fulfillment & vendor managed inventory services. We are a Small Business with a SDVOSB partner serving diverse end markets: Aerospace, Automotive, Electronics, Food & Beverage, Medical/Life Sciences, Defense & Military, Firearms, Oil Field and Energy.Contact us today: Injection Molding Operations (HQ)781 Enterprise DriveLexington, KY 40510kelsey.s@prudentamerican.comphone: 859-231-0031Precision Machining Operations708 State Docks RoadDecatur, AL 35601kelsey.s@prudentamerican.comphone: 859-231-0031",
+            "employee_trends": null,
+            "logo_url": "https://img.imagecdn.dev/company-logo/at_omz1ru1uyqj7i3k2e3cv.jpeg",
+            "similar_companies": null,
+            "full_funding_rounds": null,
+            "funding_round_stats": null,
+            "investment_stats": null,
+            "is_investor": false,
+            "investor_type": null,
+            "investor_categories": null,
+            "technologies_used": null,
+            "platforms": null
+          },
+          {
+            "linkedin_id": "373345",
+            "accelerator_statuses": [],
+            "accelerators": null,
+            "blog_urls": [],
+            "custom_data": null,
+            "domains": [
+              "wiseplastics.com"
+            ],
+            "emails": [
+              "custsvc@wiseplastics.com"
+            ],
+            "phone_numbers": [
+              "16305840222",
+              "18476972840",
+              "6303776370"
+            ],
+            "employee_count_consensus": {
+              "gte": 108,
+              "lte": 108
+            },
+            "facebook_urls": [],
+            "fortune_rankings": null,
+            "founded_on_consensus": "1974-01-01T00:00:00.000Z",
+            "github_usernames": [],
+            "instagram_handles": [],
+            "latest_funding_consensus": null,
+            "linkedin_slugs": [
+              "wise-plastics-technologies_2"
+            ],
+            "linkedin_primary_slug": "wise-plastics-technologies_2",
+            "li_org_id": "373345",
+            "li_category": "C",
+            "li_job_posts_stats": {
+              "total_count": 9,
+              "seniority_stats": {
+                "Associate": {
+                  "count": 1,
+                  "fraction": 0.1111111111111111
+                },
+                "Entry level": {
+                  "count": 3,
+                  "fraction": 0.3333333333333333
+                },
+                "Mid-Senior level": {
+                  "count": 2,
+                  "fraction": 0.2222222222222222
+                },
+                "Not Applicable": {
+                  "count": 3,
+                  "fraction": 0.3333333333333333
+                }
+              },
+              "employment_type_stats": {
+                "Full-time": {
+                  "count": 8,
+                  "fraction": 0.8888888888888888
+                },
+                "Internship": {
+                  "count": 1,
+                  "fraction": 0.1111111111111111
+                }
+              },
+              "country_location_stats": {
+                "USA": {
+                  "count": 9,
+                  "fraction": 1
+                }
+              },
+              "puree_job_functions_stats": {
+                "Administrative": {
+                  "count": 1,
+                  "fraction": 0.1111111111111111
+                },
+                "Engineering": {
+                  "count": 1,
+                  "fraction": 0.1111111111111111
+                },
+                "Information Technology": {
+                  "count": 1,
+                  "fraction": 0.1111111111111111
+                },
+                "Management": {
+                  "count": 5,
+                  "fraction": 0.5555555555555556
+                },
+                "Manufacturing": {
+                  "count": 5,
+                  "fraction": 0.5555555555555556
+                }
+              },
+              "standard_industries_stats": {
+                "Manufacturing": {
+                  "count": 9,
+                  "fraction": 1
+                }
+              },
+              "job_location_type_stats": {
+                "On-site": {
+                  "count": 9,
+                  "fraction": 1
+                }
+              }
+            },
+            "li_description": "Since 1974 Wise Plastics has been the preferred full turnkey contract manufacturing company across a wide range of industries. Wise specializes in custom plastic injection molding, liquid silicone injection molding (LSR), and a multitude of value-added & secondary operations. Three modern facilities with the most advanced manufacturing technology systems and processes in the industry. Engineering services and solutions to meet or exceed expectations and requirements. In-house Secondary Operations & Value-Added Services include an extensive range of capabilities for product testing, assembling, part decorating, and packaging concepts. ISO 9001:2015 and ISO 13485:2016. ITAR Registered and UL recognized.  \nTo explore how your business can benefit from how Wise does business, we invite you to give us a call or visit our website.",
+            "li_follower_count": 7241,
+            "li_headline": "Complete turnkey contract manufacturing, custom plastic injection molding, and Liquid Silicone Rubber injection molding.",
+            "li_industries": [
+              {
+                "id": "117",
+                "name": "Plastics Manufacturing",
+                "primary": true
+              }
+            ],
+            "li_locations": null,
+            "li_specialties": [
+              "Design for Manufacturability",
+              "Custom Plastic Injection Molding",
+              "Liquid Silicone Rubber Injection Molding",
+              "Assembly and Testing Specifications",
+              "Production and Inventory Planning",
+              "Tooling & Engineering",
+              "Complete Turn-key Contract Manufacturing"
+            ],
+            "location_consensus": {
+              "street_address": null,
+              "neighborhood": null,
+              "city": "St Charles",
+              "state_name": "Illinois",
+              "state_code": "IL",
+              "county": "Kane County",
+              "postal_code": null,
+              "country_code": "USA",
+              "country_name": "United States",
+              "coordinates": {
+                "lat": 41.91337585,
+                "lon": -88.31557465
+              },
+              "timezone": "America/Chicago",
+              "full_address": "St. Charles, IL",
+              "formatted_address": "St Charles, IL"
+            },
+            "locations_stats": {
+              "USA": 3,
+              "X-AMERICAS": 3,
+              "X-ANGLOSPHERE": 3,
+              "X-G20": 3,
+              "X-NORTH_AMERICA": 3,
+              "X-OECD": 3
+            },
+            "market_cap_usd": null,
+            "naics_codes": [
+              "326199"
+            ],
+            "names": [
+              "Wise Plastics Technologies"
+            ],
+            "preferred_name": "Wise Plastics Technologies",
+            "preferred_name_word_count": 3,
+            "revenue_estimate": {
+              "sources": [],
+              "fiscal_year": 2025,
+              "value_usd": {
+                "gte": 55477096,
+                "lte": 55477096
+              }
+            },
+            "standard_industries": [
+              "Manufacturing"
+            ],
+            "status_consensus": "active",
+            "stock_info_consensus": null,
+            "tags": [],
+            "total_funding_consensus": null,
+            "twitter_handles": [],
+            "websites": [
+              "wiseplastics.com"
+            ],
+            "wellfound_slugs": [],
+            "youtube_urls": [],
+            "role_count_matches": null,
+            "num_matching_locations": null,
+            "linkedin_ids": [
+              "373345"
+            ],
+            "last_sort_key": "gAAAAABrAyigSTP6jWe08UVWQumFMTM6wYGNt142JC4bc6KY0A2i4Woj_qBMEfriY8yqMKhVdiTwcMZWFxVQYsQ3UiJTjkFHZreUXToNXduvZP4cv8bCNaQ=",
+            "relevance_score": 124.40281,
+            "technology_spend_usd": 1118,
+            "historical_headcount": null,
+            "cik_numbers": [],
+            "cage_codes": [],
+            "duns_numbers": [],
+            "num_li_locations": 3,
+            "location_name": "St. Charles, IL",
+            "crunchbase_slug": "wise-plastics-technologies",
+            "primary_role": "company",
+            "roles": [
+              "company"
+            ],
+            "short_description": "Wise Plastics Technologies is a plastics company providing high-precision plastic injection molds and custom molded plastic components.",
+            "long_description": null,
+            "is_subsidiary": false,
+            "parent": null,
+            "num_funding_rounds": null,
+            "funding_rounds": null,
+            "num_exits": null,
+            "investors": null,
+            "acquisitions": null,
+            "best_funding_round": null,
+            "funding_stage": "no_funding_yet",
+            "alt_industries": [
+              "plastics"
+            ],
+            "alt_keywords": [
+              "custom plastic injection molding",
+              "design for manufacturability",
+              "assembly & testing specifications",
+              "production & inventory planning",
+              "complete turnkey contract manufacturing",
+              "liquid silicone rubber injection molding",
+              "tooling",
+              "engineering",
+              "plastics",
+              "plastics manufacturing",
+              "custom injection molding",
+              "liquid silicone molding",
+              "contract manufacturing",
+              "value-added operations",
+              "engineering design",
+              "quality management",
+              "thermoplastic resins",
+              "iso certification",
+              "scientific molding",
+              "automated assembly",
+              "post-molding assembly",
+              "product lifecycle management",
+              "manufacturing solutions",
+              "precision engineering",
+              "injection molding presses",
+              "multi-shot molding",
+              "insert molding",
+              "electro-mechanical assembly",
+              "tooling & prototyping",
+              "packaging services",
+              "climate-controlled environment",
+              "lean manufacturing",
+              "supply chain management",
+              "product testing",
+              "quality assurance",
+              "risk mitigation",
+              "industry standards",
+              "customer satisfaction",
+              "manufacturing technologies",
+              "assembly automation",
+              "project management",
+              "advanced robotics",
+              "mold design",
+              "thermal resistance",
+              "consumer products",
+              "automotive components",
+              "healthcare applications",
+              "industrial manufacturing",
+              "aerospace parts",
+              "medical devices",
+              "contract manufacturing solutions",
+              "product development",
+              "decorative molding",
+              "functional testing",
+              "high-value assemblies",
+              "resin selection expertise",
+              "flexible manufacturing",
+              "chemicals",
+              "mechanical or industrial engineering",
+              "logistics & supply chain",
+              "productivity",
+              "consumer goods",
+              "consumers",
+              "hospital & health care"
+            ],
+            "alt_description": "Since 1974 Wise Plastics has been the preferred full turnkey contract manufacturing company across a wide range of industries. Wise specializes in custom plastic injection molding, liquid silicone injection molding (LSR), and a multitude of value-added & secondary operations. Three modern facilities with the most advanced manufacturing technology systems and processes in the industry. Engineering services and solutions to meet or exceed expectations and requirements. In-house Secondary Operations & Value-Added Services include an extensive range of capabilities for product testing, assembling, part decorating, and packaging concepts. ISO 9001:2015 and ISO 13485:2016. ITAR Registered and UL recognized.  To explore how your business can benefit from how Wise does business, we invite you to give us a call or visit our website.",
+            "employee_trends": null,
+            "logo_url": "https://img.imagecdn.dev/company-logo/at_swtrdmpt7muy8c61ry4z.jpeg",
+            "similar_companies": [
+              {
+                "name": "Alliance Precision Plastics",
+                "industries": [
+                  "plastics"
+                ],
+                "employee_count": 140,
+                "revenue": 23600000,
+                "logo_url": "https://img.imagecdn.dev/company-logo/ct_67b082317ffc130001d03e3f.jpeg"
+              },
+              {
+                "name": "Wilco Molding, Inc",
+                "industries": [
+                  "plastics"
+                ],
+                "employee_count": 7,
+                "revenue": 13100000,
+                "logo_url": "https://img.imagecdn.dev/company-logo/ct_676f20a94b881e0001d2bfc1.jpeg"
+              }
+            ],
+            "full_funding_rounds": null,
+            "funding_round_stats": null,
+            "investment_stats": null,
+            "is_investor": false,
+            "investor_type": null,
+            "investor_categories": null,
+            "technologies_used": [
+              {
+                "name": "slack"
+              }
+            ],
+            "platforms": {
+              "ecommerce": null,
+              "cms": [
+                "WordPress",
+                "WordPress 6.7",
+                "WordPress 6.8"
+              ],
+              "crm": null,
+              "marketing": null,
+              "payment": [
+                "PayPal"
+              ]
+            }
+          },
+          {
+            "linkedin_id": "866335",
+            "accelerator_statuses": [],
+            "accelerators": null,
+            "blog_urls": [],
+            "custom_data": null,
+            "domains": [
+              "seawayplastics.com"
+            ],
+            "emails": [
+              "eng@seawaype.com",
+              "eng@seawayplastics.com"
+            ],
+            "phone_numbers": [
+              "13525440055",
+              "16514828118",
+              "17075751218",
+              "17278422034",
+              "17278453235",
+              "7278422034"
+            ],
+            "employee_count_consensus": {
+              "gte": 116,
+              "lte": 116
+            },
+            "facebook_urls": [
+              "https://facebook.com/seawayplastics",
+              "https://www.facebook.com/seawayplastics",
+              "www.facebook.com/seawayplastics"
+            ],
+            "fortune_rankings": null,
+            "founded_on_consensus": "1974-01-01T00:00:00.000Z",
+            "github_usernames": [],
+            "instagram_handles": [],
+            "latest_funding_consensus": null,
+            "linkedin_slugs": [
+              "seaway-plastics-engineering",
+              "seaway-plastics-engineering-inc."
+            ],
+            "linkedin_primary_slug": "seaway-plastics-engineering",
+            "li_org_id": "866335",
+            "li_category": "C",
+            "li_job_posts_stats": {
+              "total_count": 7,
+              "seniority_stats": {
+                "Entry level": {
+                  "count": 7,
+                  "fraction": 1
+                }
+              },
+              "employment_type_stats": {
+                "Full-time": {
+                  "count": 7,
+                  "fraction": 1
+                }
+              },
+              "country_location_stats": {
+                "USA": {
+                  "count": 7,
+                  "fraction": 1
+                }
+              },
+              "puree_job_functions_stats": {
+                "Engineering": {
+                  "count": 2,
+                  "fraction": 0.2857142857142857
+                },
+                "Human Resources": {
+                  "count": 1,
+                  "fraction": 0.14285714285714285
+                },
+                "Information Technology": {
+                  "count": 3,
+                  "fraction": 0.42857142857142855
+                },
+                "Management": {
+                  "count": 2,
+                  "fraction": 0.2857142857142857
+                },
+                "Manufacturing": {
+                  "count": 2,
+                  "fraction": 0.2857142857142857
+                },
+                "Project Management": {
+                  "count": 1,
+                  "fraction": 0.14285714285714285
+                },
+                "Quality Assurance": {
+                  "count": 1,
+                  "fraction": 0.14285714285714285
+                }
+              },
+              "standard_industries_stats": {
+                "Manufacturing": {
+                  "count": 7,
+                  "fraction": 1
+                }
+              },
+              "job_location_type_stats": {
+                "On-site": {
+                  "count": 4,
+                  "fraction": 0.5714285714285714
+                }
+              }
+            },
+            "li_description": "Seaway Plastics Engineering is a Hopkins, Minnesota-based, full-service plastic injection molding company founded in 1974. They specialize in prototype injection molding, low to medium-volume production, and mold making. Their services extend to surface finishing, enabling them to help clients solve complex challenges. Seaway Plastics Engineering serves a variety of markets, including medical, defense, packaging, consumer products, and industrial electronics.",
+            "li_follower_count": 4403,
+            "li_headline": "Complete Solutions For Complex Challenges",
+            "li_industries": [
+              {
+                "id": "synth-Plastics Manufacturing",
+                "name": "Plastics Manufacturing"
+              }
+            ],
+            "li_locations": null,
+            "li_specialties": [
+              "Plastics & Rubber Products"
+            ],
+            "location_consensus": {
+              "street_address": "Port Richey",
+              "neighborhood": null,
+              "city": "Port Richey",
+              "state_name": "Florida",
+              "state_code": "FL",
+              "county": "Pasco County",
+              "postal_code": null,
+              "country_code": "USA",
+              "country_name": "United States",
+              "coordinates": {
+                "lat": 28.271183,
+                "lon": -82.724383
+              },
+              "timezone": "America/New_York",
+              "full_address": "Port Richey, Florida, United States",
+              "formatted_address": "Port Richey, Florida, United States"
+            },
+            "locations_stats": {
+              "USA": 1,
+              "X-AMERICAS": 1,
+              "X-ANGLOSPHERE": 1,
+              "X-G20": 1,
+              "X-NORTH_AMERICA": 1,
+              "X-OECD": 1
+            },
+            "market_cap_usd": null,
+            "naics_codes": [
+              "326199"
+            ],
+            "names": [
+              "Seaway Plastics",
+              "Seaway Plastics Engineering",
+              "Seaway Plastics Engineering, LLC"
+            ],
+            "preferred_name": "Seaway Plastics Engineering",
+            "preferred_name_word_count": 3,
+            "revenue_estimate": {
+              "sources": [],
+              "fiscal_year": 2025,
+              "value_usd": {
+                "gte": 50000000,
+                "lte": 99999999
+              }
+            },
+            "standard_industries": [
+              "Manufacturing",
+              "Science & Engineering"
+            ],
+            "status_consensus": "acquired",
+            "stock_info_consensus": null,
+            "tags": [],
+            "total_funding_consensus": null,
+            "twitter_handles": [
+              "seawayplastics"
+            ],
+            "websites": [
+              "seawayplastics.com"
+            ],
+            "wellfound_slugs": [],
+            "youtube_urls": [],
+            "role_count_matches": null,
+            "num_matching_locations": null,
+            "linkedin_ids": [
+              "866335"
+            ],
+            "last_sort_key": "gAAAAABrAyig23_kvIducnQkB5Zdokh-6hcz287EhX6ygKMn9U_OWqmXXFhE8wN84xSqjr-khv2r0FR_5vtXlLVZExZtkuTyifLUuq9qz34vAsriVubwSC8=",
+            "relevance_score": 123.14712,
+            "technology_spend_usd": 5368,
+            "historical_headcount": {
+              "latest_snapshot_date": "2025-10-01",
+              "snapshots": [
+                {
+                  "date": "2022-06-01",
+                  "employees": 189
+                },
+                {
+                  "date": "2022-07-01",
+                  "employees": 186
+                },
+                {
+                  "date": "2022-08-01",
+                  "employees": 195
+                },
+                {
+                  "date": "2022-09-01",
+                  "employees": 198
+                },
+                {
+                  "date": "2022-10-01",
+                  "employees": 201
+                },
+                {
+                  "date": "2022-11-01",
+                  "employees": 195
+                },
+                {
+                  "date": "2022-12-01",
+                  "employees": 192
+                },
+                {
+                  "date": "2023-01-01",
+                  "employees": 192
+                },
+                {
+                  "date": "2023-02-01",
+                  "employees": 189
+                },
+                {
+                  "date": "2023-03-01",
+                  "employees": 189
+                },
+                {
+                  "date": "2023-04-01",
+                  "employees": 189
+                },
+                {
+                  "date": "2023-05-01",
+                  "employees": 195
+                },
+                {
+                  "date": "2023-06-01",
+                  "employees": 201
+                },
+                {
+                  "date": "2023-07-01",
+                  "employees": 207
+                },
+                {
+                  "date": "2023-08-01",
+                  "employees": 201
+                },
+                {
+                  "date": "2023-09-01",
+                  "employees": 198
+                },
+                {
+                  "date": "2023-10-01",
+                  "employees": 192
+                },
+                {
+                  "date": "2023-11-01",
+                  "employees": 195
+                },
+                {
+                  "date": "2024-01-01",
+                  "employees": 198
+                },
+                {
+                  "date": "2024-03-01",
+                  "employees": 195
+                },
+                {
+                  "date": "2024-05-01",
+                  "employees": 189
+                },
+                {
+                  "date": "2024-06-01",
+                  "employees": 192
+                },
+                {
+                  "date": "2024-07-01",
+                  "employees": 186
+                },
+                {
+                  "date": "2024-08-01",
+                  "employees": 186
+                },
+                {
+                  "date": "2024-09-01",
+                  "employees": 192
+                },
+                {
+                  "date": "2024-11-01",
+                  "employees": 192
+                },
+                {
+                  "date": "2024-12-01",
+                  "employees": 189
+                },
+                {
+                  "date": "2025-01-01",
+                  "employees": 195
+                },
+                {
+                  "date": "2025-02-01",
+                  "employees": 192
+                },
+                {
+                  "date": "2025-03-01",
+                  "employees": 195
+                },
+                {
+                  "date": "2025-04-01",
+                  "employees": 198
+                },
+                {
+                  "date": "2025-05-01",
+                  "employees": 201
+                },
+                {
+                  "date": "2025-06-01",
+                  "employees": 198
+                },
+                {
+                  "date": "2025-07-01",
+                  "employees": 195
+                },
+                {
+                  "date": "2025-08-01",
+                  "employees": 198
+                },
+                {
+                  "date": "2025-09-01",
+                  "employees": 201
+                },
+                {
+                  "date": "2025-10-01",
+                  "employees": 201
+                }
+              ],
+              "growth": {
+                "1m": {
+                  "percent": 0,
+                  "quantity": 0
+                },
+                "2m": {
+                  "percent": 0.01515,
+                  "quantity": 3
+                },
+                "3m": {
+                  "percent": 0.03077,
+                  "quantity": 6
+                },
+                "6m": {
+                  "percent": 0.01515,
+                  "quantity": 3
+                },
+                "12m": {
+                  "percent": 0.04688,
+                  "quantity": 9
+                },
+                "18m": {
+                  "percent": 0.06349,
+                  "quantity": 12
+                },
+                "24m": {
+                  "percent": 0.04688,
+                  "quantity": 9
+                },
+                "36m": {
+                  "percent": 0,
+                  "quantity": 0
+                }
+              }
+            },
+            "cik_numbers": [],
+            "cage_codes": [],
+            "duns_numbers": [],
+            "num_li_locations": 4,
+            "location_name": "Port Richey",
+            "crunchbase_slug": "seaway-plastics-engineering-llc",
+            "primary_role": "company",
+            "roles": [
+              "company"
+            ],
+            "short_description": "Seaway Plastics Engineering is a plastics company that offers prototype injection molding and mold making.",
+            "long_description": "Seaway Plastics Engineering is a full-service plastic injection molding company specializing in prototype injection molding, low-volume production, and mold making.",
+            "is_subsidiary": true,
+            "parent": "Intermediate Capital Group",
+            "num_funding_rounds": null,
+            "funding_rounds": [
+              {
+                "round_type": "private_equity",
+                "announced_on_date": "2026-10-01T00:00:00+00:00",
+                "raised_amount_usd": null,
+                "post_money_valuation_usd": null
+              }
+            ],
+            "num_exits": null,
+            "investors": [
+              {
+                "logo_url": null,
+                "entity_type": "organization",
+                "investor_name": "Seventeen Capital",
+                "linkedin_slug": "seventeen-capital",
+                "investor_types": null
+              }
+            ],
+            "acquisitions": [
+              {
+                "price_usd": null,
+                "acquiree_name": "MME Group",
+                "acquisition_date": "2022-10-26T00:00:00+00:00"
+              },
+              {
+                "price_usd": null,
+                "acquiree_name": "Wright Engineered Plastics",
+                "acquisition_date": "2020-12-31T00:00:00+00:00"
+              }
+            ],
+            "best_funding_round": {
+              "round_type": "private_equity",
+              "announced_on_date": "2026-10-01T00:00:00+00:00",
+              "raised_amount_usd": null,
+              "post_money_valuation_usd": null
+            },
+            "funding_stage": "acquired",
+            "alt_industries": [
+              "plastics"
+            ],
+            "alt_keywords": [
+              "speed merchant of injection molded products from concept to lowvolume production & fastturn service",
+              "plastic injection molding",
+              "post production plastic services",
+              "low volume",
+              "mid volume",
+              "medical device",
+              "aerospace",
+              "defense",
+              "highly regulated products",
+              "medical",
+              "plastics",
+              "plastics manufacturing",
+              "injection molding",
+              "liquid silicone rubber",
+              "cleanroom molding",
+              "low-volume injection molding",
+              "mold designing",
+              "tooling services",
+              "post molding operations",
+              "engineering partnerships",
+              "iso 13485 certified",
+              "medical device manufacturing",
+              "aerospace components",
+              "consumer products",
+              "precision industrial manufacturing",
+              "thermoplastic resins",
+              "two-shot molding",
+              "overmolding",
+              "custom plastic parts",
+              "assembly services",
+              "heat staking",
+              "sonic welding",
+              "cnc machining",
+              "product kitting",
+              "quality assurance",
+              "fda compliance",
+              "itar registered",
+              "nadcap certified",
+              "low to mid volume production",
+              "manufacturing automation",
+              "end-to-end support",
+              "prototype development",
+              "value-added services",
+              "production capabilities",
+              "components assembly",
+              "design for manufacturing (dfm)",
+              "high-precision components",
+              "automotive molding solutions",
+              "electronics molded parts",
+              "advanced inspection capabilities",
+              "resin additives",
+              "thermal-mechanical properties",
+              "engineering support",
+              "rapid prototyping",
+              "material selection assistance",
+              "customer-centric solutions",
+              "vertical integration",
+              "manufacturing agility",
+              "supply chain management",
+              "hospital & health care",
+              "chemicals",
+              "consumer goods",
+              "consumers",
+              "machinery",
+              "mechanical or industrial engineering",
+              "logistics & supply chain"
+            ],
+            "alt_description": "Seaway Plastics Engineering is a full service contract manufacturing company specializing in plastic injection molding, Liquid Silicone Rubber (LSR), and assembly. The company focuses on prototype injection molding, low to mid volume production and mold making. The company is headquartered in the Tampa Bay/Clearwater Beach area.  The company has five total manufacturing locations in Florida, California, and Minnesota. Employing over 400, Seaway strives to provide technology leadership and performance excellence in Medical, Aerospace, Military, Packaging, Industrial and Consumer products.",
+            "employee_trends": null,
+            "logo_url": "https://img.imagecdn.dev/company-logo/at_dtce2ddkvzrmog0jfj5j.jpeg",
+            "similar_companies": null,
+            "full_funding_rounds": [
+              {
+                "investors": [
+                  {
+                    "is_lead": false,
+                    "investor_name": "Seventeen Capital",
+                    "investor_type": "organization",
+                    "investor_domain": null,
+                    "investor_categories": null,
+                    "investor_linkedin_url": "https://www.linkedin.com/company/seventeen-capital",
+                    "investor_linkedin_org_id": "79107914"
+                  }
+                ],
+                "round_city": null,
+                "round_date": "2026-10-01T00:00:00.000Z",
+                "round_type": "private_equity",
+                "round_state": null,
+                "investor_count": null,
+                "round_raised_usd": null,
+                "round_country_code": null,
+                "round_valuation_usd": null
+              }
+            ],
+            "funding_round_stats": {
+              "round_count": 1,
+              "total_raised_usd": null,
+              "peak_valuation_usd": null,
+              "unique_investor_count": 1,
+              "individual_investor_stats": [
+                {
+                  "investor_name": "Seventeen Capital",
+                  "investor_type": "organization",
+                  "investor_domain": null,
+                  "investment_count": 1,
+                  "participated_round_types": [
+                    "private_equity"
+                  ]
+                }
+              ],
+              "unique_personal_investor_count": 0,
+              "unique_organizational_investor_count": 1
+            },
+            "investment_stats": null,
+            "is_investor": false,
+            "investor_type": null,
+            "investor_categories": null,
+            "technologies_used": [
+              {
+                "name": "digital_ocean"
+              },
+              {
+                "name": "cloudflare_web_analytics"
+              },
+              {
+                "name": "fastly"
+              },
+              {
+                "name": "slack"
+              },
+              {
+                "name": "postmark"
+              },
+              {
+                "name": "new_relic"
+              },
+              {
+                "name": "appcues"
+              },
+              {
+                "name": "apple_pay"
+              },
+              {
+                "name": "brevo"
+              },
+              {
+                "name": "canva_websites"
+              },
+              {
+                "name": "cloudflare_radar"
+              },
+              {
+                "name": "cloudflare_rocket_loader"
+              },
+              {
+                "name": "datadog"
+              },
+              {
+                "name": "facebook_custom_audiences"
+              },
+              {
+                "name": "facebook_pixel"
+              },
+              {
+                "name": "facebook_signal"
+              },
+              {
+                "name": "google_conversion_linker"
+              },
+              {
+                "name": "google_conversion_tracking"
+              },
+              {
+                "name": "google_pay"
+              },
+              {
+                "name": "google_remarketing"
+              },
+              {
+                "name": "google_search_appliance"
+              },
+              {
+                "name": "leaseweb"
+              },
+              {
+                "name": "linkedin_insights"
+              },
+              {
+                "name": "mailchimp_spf"
+              },
+              {
+                "name": "mailjet"
+              },
+              {
+                "name": "material_ui"
+              },
+              {
+                "name": "microsoft_clarity"
+              },
+              {
+                "name": "paypal_button"
+              },
+              {
+                "name": "perplexity"
+              },
+              {
+                "name": "pinterest"
+              },
+              {
+                "name": "pinterest_domain_verify"
+              },
+              {
+                "name": "shopify_hosted"
+              },
+              {
+                "name": "squarespace_add_to_cart"
+              },
+              {
+                "name": "tailwind_css"
+              },
+              {
+                "name": "tencent_cloud"
+              },
+              {
+                "name": "typeform"
+              },
+              {
+                "name": "vercel"
+              },
+              {
+                "name": "weebly"
+              },
+              {
+                "name": "wix_bookings"
+              },
+              {
+                "name": "zoho_mail"
+              }
+            ],
+            "platforms": {
+              "ecommerce": null,
+              "cms": [
+                "Beaver Builder",
+                "WordPress",
+                "WordPress 6.7",
+                "WordPress 6.8"
+              ],
+              "crm": null,
+              "marketing": null,
+              "payment": [
+                "PayPal"
+              ]
+            }
+          },
+          {
+            "linkedin_id": "126625",
+            "accelerator_statuses": [],
+            "accelerators": null,
+            "blog_urls": [],
+            "custom_data": null,
+            "domains": [
+              "tth.com"
+            ],
+            "emails": [
+              "info@tth.com",
+              "purchasing@tth.com",
+              "sales@tth.com"
+            ],
+            "phone_numbers": [
+              "14402483882",
+              "4402483025"
+            ],
+            "employee_count_consensus": {
+              "gte": 59,
+              "lte": 59
+            },
+            "facebook_urls": [
+              "https://www.facebook.com/techhouserp/"
+            ],
+            "fortune_rankings": null,
+            "founded_on_consensus": "1996-08-01T00:00:00.000Z",
+            "github_usernames": [],
+            "instagram_handles": [],
+            "latest_funding_consensus": null,
+            "linkedin_slugs": [
+              "the-technology-house"
+            ],
+            "linkedin_primary_slug": "the-technology-house",
+            "li_org_id": "126625",
+            "li_category": "C",
+            "li_job_posts_stats": {
+              "total_count": 15,
+              "seniority_stats": {
+                "Entry level": {
+                  "count": 11,
+                  "fraction": 0.7333333333333333
+                },
+                "Mid-Senior level": {
+                  "count": 1,
+                  "fraction": 0.06666666666666667
+                },
+                "Not Applicable": {
+                  "count": 3,
+                  "fraction": 0.2
+                }
+              },
+              "employment_type_stats": {
+                "Contract": {
+                  "count": 1,
+                  "fraction": 0.06666666666666667
+                },
+                "Full-time": {
+                  "count": 13,
+                  "fraction": 0.8666666666666667
+                },
+                "Part-time": {
+                  "count": 1,
+                  "fraction": 0.06666666666666667
+                }
+              },
+              "country_location_stats": {
+                "USA": {
+                  "count": 15,
+                  "fraction": 1
+                }
+              },
+              "puree_job_functions_stats": {
+                "Administrative": {
+                  "count": 1,
+                  "fraction": 0.06666666666666667
+                },
+                "Art / Creative": {
+                  "count": 1,
+                  "fraction": 0.06666666666666667
+                },
+                "Design": {
+                  "count": 1,
+                  "fraction": 0.06666666666666667
+                },
+                "Engineering": {
+                  "count": 2,
+                  "fraction": 0.13333333333333333
+                },
+                "Human Resources": {
+                  "count": 1,
+                  "fraction": 0.06666666666666667
+                },
+                "Information Technology": {
+                  "count": 3,
+                  "fraction": 0.2
+                },
+                "Management": {
+                  "count": 7,
+                  "fraction": 0.4666666666666667
+                },
+                "Manufacturing": {
+                  "count": 7,
+                  "fraction": 0.4666666666666667
+                },
+                "Quality Assurance": {
+                  "count": 1,
+                  "fraction": 0.06666666666666667
+                }
+              },
+              "standard_industries_stats": {
+                "Manufacturing": {
+                  "count": 15,
+                  "fraction": 1
+                }
+              },
+              "job_location_type_stats": {
+                "On-site": {
+                  "count": 15,
+                  "fraction": 1
+                }
+              }
+            },
+            "li_description": "The Technology House (TTH) is a leading U.S.-based contract manufacturer offering advanced solutions for all of your project needs—from concept through production. Since 1996, we’ve partnered with startups to Fortune 500 companies to turn ideas into reality—faster, effectively, and with precision.\n\nOur core capabilities include additive manufacturing, CNC machining, injection molding, urethane casting, and more, all supported by an extensive range of post-processing options to elevate your parts to the next level. From rapid prototyping to high-volume production, we deliver high-quality parts with speed, consistency, and scalability.\n\nTrusted across industries including medical devices, aerospace/defense, consumer products, and more, TTH is your single-source solution for advanced manufacturing.",
+            "li_follower_count": 3517,
+            "li_headline": "Trusted contract manufacturer helping turn today's ideas into tomorrow's products since 1996. 💡",
+            "li_industries": [
+              {
+                "id": "25",
+                "name": "Manufacturing",
+                "primary": true
+              }
+            ],
+            "li_locations": null,
+            "li_specialties": [
+              "Rapid Prototyping",
+              "EDM",
+              "Injection Molding",
+              "Contract Manufacturing",
+              "CNC Machining",
+              "Engineering",
+              "CAD Design",
+              "3D Printing",
+              "Reverse Engineering",
+              "Paint",
+              "Turning",
+              "Additive Manufacturing",
+              "Milling",
+              "Metal Casting",
+              "Fused Deposition Modeling (FDM)",
+              "Stereolithography (SLA)",
+              "5-Axis CNC Machining",
+              "Urethane Molding",
+              "Carbon DLS",
+              "3-Axis CNC Machining",
+              "HP Multi-Jet Fusion",
+              "Microprinting (Nano)",
+              "Specialty Post-Processing"
+            ],
+            "location_consensus": {
+              "street_address": null,
+              "neighborhood": null,
+              "city": "Streetsboro",
+              "state_name": "Ohio",
+              "state_code": "OH",
+              "county": "Portage County",
+              "postal_code": null,
+              "country_code": "USA",
+              "country_name": "United States",
+              "coordinates": {
+                "lat": 41.23931122,
+                "lon": -81.34469604
+              },
+              "timezone": "America/New_York",
+              "full_address": "Streetsboro, Ohio",
+              "formatted_address": "Streetsboro, OH"
+            },
+            "locations_stats": {
+              "USA": 2,
+              "X-AMERICAS": 2,
+              "X-ANGLOSPHERE": 2,
+              "X-G20": 2,
+              "X-NORTH_AMERICA": 2,
+              "X-OECD": 2
+            },
+            "market_cap_usd": null,
+            "naics_codes": [
+              "332710",
+              "333517"
+            ],
+            "names": [
+              "The Technology House",
+              "The Technology House, Ltd."
+            ],
+            "preferred_name": "The Technology House",
+            "preferred_name_word_count": 3,
+            "revenue_estimate": {
+              "sources": [],
+              "fiscal_year": 2025,
+              "value_usd": {
+                "gte": 10000000,
+                "lte": 19999999
+              }
+            },
+            "standard_industries": [
+              "Design",
+              "Manufacturing",
+              "Science & Engineering"
+            ],
+            "status_consensus": "active",
+            "stock_info_consensus": null,
+            "tags": [],
+            "total_funding_consensus": null,
+            "twitter_handles": [],
+            "websites": [
+              "tth.com"
+            ],
+            "wellfound_slugs": [],
+            "youtube_urls": [],
+            "role_count_matches": null,
+            "num_matching_locations": null,
+            "linkedin_ids": [
+              "126625"
+            ],
+            "last_sort_key": "gAAAAABrAyigbCXaWm6vi0VR5BvwX4pfAzKHTwqUv0yumg76zthFCAfPBFoKnRv5_lQltwjRSJ7IJzhGVi1GdhKPH2jVnOMvDpAAojixIxi1-lQK9EOX9bU=",
+            "relevance_score": 119.737724,
+            "technology_spend_usd": 5811,
+            "historical_headcount": null,
+            "cik_numbers": [],
+            "cage_codes": [],
+            "duns_numbers": [],
+            "num_li_locations": 2,
+            "location_name": "Streetsboro, Ohio",
+            "crunchbase_slug": "the-technology-house",
+            "primary_role": "company",
+            "roles": [
+              "company"
+            ],
+            "short_description": "Turning today's ideas into tomorrow's products since 1996.",
+            "long_description": "Established in 1996, The Technology House is a one-stop manufacturing hub offering an array of advanced solutions for every stage of product creation, from concept to reality. Their wide range of capabilities include 3D printing, CNC machining, injection molding, urethane casting, and much more. TTH's dedicated team strives for the utmost precision and excellence to deliver superior service and flawless executions for projects requiring individual components or thousands of parts.",
+            "is_subsidiary": false,
+            "parent": null,
+            "num_funding_rounds": null,
+            "funding_rounds": null,
+            "num_exits": null,
+            "investors": null,
+            "acquisitions": null,
+            "best_funding_round": null,
+            "funding_stage": "no_funding_yet",
+            "alt_industries": [
+              "mechanical or industrial engineering",
+              "machinery"
+            ],
+            "alt_keywords": [
+              "cad design",
+              "rapid prototyping",
+              "reverse engineering",
+              "stereolithography",
+              "urethane molding",
+              "cnc machining",
+              "additive manufacturing",
+              "3d printing",
+              "fused deposition modeling",
+              "5axis cnc machining",
+              "contract manufacturing",
+              "engineering",
+              "carbon dls",
+              "edm",
+              "3axis cnc machining",
+              "injection molding",
+              "microprinting",
+              "hp multijet fusion",
+              "milling",
+              "turning",
+              "paint",
+              "specialty postprocessing",
+              "metal casting",
+              "mechanical or industrial engineering",
+              "machinery",
+              "manufacturing",
+              "digital manufacturing",
+              "design for manufacturing",
+              "urethane casting",
+              "selective laser sintering",
+              "polyjet",
+              "micro dlp",
+              "post-processing",
+              "custom finishes",
+              "prototyping services",
+              "engineering services",
+              "value-added services",
+              "manufacturing technologies",
+              "medical device manufacturing",
+              "aerospace manufacturing",
+              "consumer products",
+              "industrial equipment",
+              "materials science",
+              "rapid tooling",
+              "part consolidation",
+              "custom parts",
+              "material selection",
+              "quality assurance",
+              "iso certifications",
+              "industry 4.0",
+              "design optimization",
+              "material performance",
+              "mechanical properties",
+              "production parts",
+              "high-precision machining",
+              "project management",
+              "cost reduction analysis",
+              "thermoset materials",
+              "biocompatible materials",
+              "complex geometries",
+              "functional testing",
+              "mechanical testing",
+              "production ready parts",
+              "prototype development",
+              "manufacturing innovation",
+              "information technology & services",
+              "consumer goods",
+              "consumers",
+              "productivity"
+            ],
+            "alt_description": "Established in 1996, The Technology House is a one-stop manufacturing hub offering an array of advanced solutions for every stage of product creation, from concept to reality. Their wide range of capabilities include 3D printing, CNC machining, injection molding, urethane casting, and much more. TTH's dedicated team strives for the utmost precision and excellence to deliver superior service and flawless executions for projects requiring individual components or thousands of parts.",
+            "employee_trends": null,
+            "logo_url": "https://img.imagecdn.dev/company-logo/at_pztg8saqcl5wy0xhuhje.jpeg",
+            "similar_companies": null,
+            "full_funding_rounds": null,
+            "funding_round_stats": null,
+            "investment_stats": null,
+            "is_investor": false,
+            "investor_type": null,
+            "investor_categories": null,
+            "technologies_used": [
+              {
+                "name": "hubspot"
+              }
+            ],
+            "platforms": {
+              "ecommerce": null,
+              "cms": [
+                "HubSpot CMS Hub",
+                "HubSpot COS"
+              ],
+              "crm": [
+                "Hubspot"
+              ],
+              "marketing": [
+                "Hubspot"
+              ],
+              "payment": null
+            }
+          },
+          {
+            "linkedin_id": "477806",
+            "accelerator_statuses": [],
+            "accelerators": null,
+            "blog_urls": [],
+            "custom_data": null,
+            "domains": [
+              "teameliteonline.com"
+            ],
+            "emails": [
+              "sales@teameliteonline.com"
+            ],
+            "phone_numbers": [
+              "15863144000"
+            ],
+            "employee_count_consensus": {
+              "gte": 18,
+              "lte": 18
+            },
+            "facebook_urls": [],
+            "fortune_rankings": null,
+            "founded_on_consensus": "1982-01-01T00:00:00.000Z",
+            "github_usernames": [],
+            "instagram_handles": [],
+            "latest_funding_consensus": 25000,
+            "linkedin_slugs": [
+              "elite-mold-&-engineering"
+            ],
+            "linkedin_primary_slug": "elite-mold-&-engineering",
+            "li_org_id": "477806",
+            "li_category": "C",
+            "li_job_posts_stats": null,
+            "li_description": "Elite Mold & Engineering is an injection mold supplier specializing in prototype, low-volume, and high-volume injection molding, as well as CNC machining. They serve a diverse range of industries including automotive, consumer, aerospace and defense, industrial, and medical sectors.",
+            "li_follower_count": 1369,
+            "li_headline": "We will create a fail free world – allowing inventive companies to innovate more rapidly and design a better future.",
+            "li_industries": [
+              {
+                "id": "synth-Plastics Manufacturing",
+                "name": "Plastics Manufacturing"
+              }
+            ],
+            "li_locations": null,
+            "li_specialties": [
+              "Plastics & Rubber Products",
+              "Metal Fabrication & Products",
+              "Automotive Parts & Suppliers"
+            ],
+            "location_consensus": {
+              "street_address": "Shelby",
+              "neighborhood": null,
+              "city": "Shelby",
+              "state_name": "Michigan",
+              "state_code": "MI",
+              "county": "Oceana County",
+              "postal_code": null,
+              "country_code": "USA",
+              "country_name": "United States",
+              "coordinates": {
+                "lat": 43.612783,
+                "lon": -86.363898
+              },
+              "timezone": "America/Detroit",
+              "full_address": "Shelby, Michigan, United States",
+              "formatted_address": "Shelby, Michigan, United States"
+            },
+            "locations_stats": {
+              "USA": 1,
+              "X-AMERICAS": 1,
+              "X-ANGLOSPHERE": 1,
+              "X-G20": 1,
+              "X-NORTH_AMERICA": 1,
+              "X-OECD": 1
+            },
+            "market_cap_usd": null,
+            "naics_codes": [
+              "333511",
+              "326199"
+            ],
+            "names": [
+              "Elite Mold & Engineering",
+              "Elite Mold & Engineering, Inc."
+            ],
+            "preferred_name": "Elite Mold & Engineering",
+            "preferred_name_word_count": 3,
+            "revenue_estimate": {
+              "sources": [],
+              "fiscal_year": 2025,
+              "value_usd": {
+                "gte": 2500000,
+                "lte": 4999999
+              }
+            },
+            "standard_industries": [
+              "Industrials",
+              "Manufacturing",
+              "Science & Engineering"
+            ],
+            "status_consensus": "active",
+            "stock_info_consensus": null,
+            "tags": [
+              "venture-backed-startup"
+            ],
+            "total_funding_consensus": 25000,
+            "twitter_handles": [
+              "elitemold"
+            ],
+            "websites": [
+              "teameliteonline.com"
+            ],
+            "wellfound_slugs": [],
+            "youtube_urls": [],
+            "role_count_matches": null,
+            "num_matching_locations": null,
+            "linkedin_ids": [
+              "477806"
+            ],
+            "last_sort_key": "gAAAAABrAyiguDVEznJRu9BdoMfoFq-tQqaTTelt1VsHzwE_o2GyDkP8rn0kV7FoDVNidedJhzhP5N8hYPbWyarb9sBPk1tL9_1g5HiMYFCPsVYWC-kyqxs=",
+            "relevance_score": 119.64761,
+            "technology_spend_usd": null,
+            "historical_headcount": {
+              "latest_snapshot_date": "2025-10-01",
+              "snapshots": [
+                {
+                  "date": "2014-01-01",
+                  "employees": 15
+                },
+                {
+                  "date": "2014-06-01",
+                  "employees": 16
+                },
+                {
+                  "date": "2014-10-01",
+                  "employees": 17
+                },
+                {
+                  "date": "2014-11-01",
+                  "employees": 16
+                },
+                {
+                  "date": "2015-06-01",
+                  "employees": 15
+                },
+                {
+                  "date": "2015-07-01",
+                  "employees": 15
+                },
+                {
+                  "date": "2015-11-01",
+                  "employees": 15
+                },
+                {
+                  "date": "2015-12-01",
+                  "employees": 14
+                },
+                {
+                  "date": "2016-06-01",
+                  "employees": 12
+                },
+                {
+                  "date": "2016-10-01",
+                  "employees": 13
+                },
+                {
+                  "date": "2016-12-01",
+                  "employees": 14
+                },
+                {
+                  "date": "2017-05-01",
+                  "employees": 15
+                },
+                {
+                  "date": "2017-07-01",
+                  "employees": 14
+                },
+                {
+                  "date": "2017-08-01",
+                  "employees": 13
+                },
+                {
+                  "date": "2017-09-01",
+                  "employees": 12
+                },
+                {
+                  "date": "2018-06-01",
+                  "employees": 13
+                },
+                {
+                  "date": "2018-12-01",
+                  "employees": 12
+                },
+                {
+                  "date": "2019-04-01",
+                  "employees": 11
+                },
+                {
+                  "date": "2019-12-01",
+                  "employees": 12
+                },
+                {
+                  "date": "2020-08-01",
+                  "employees": 11
+                },
+                {
+                  "date": "2020-10-01",
+                  "employees": 10
+                },
+                {
+                  "date": "2021-08-01",
+                  "employees": 11
+                },
+                {
+                  "date": "2021-11-01",
+                  "employees": 12
+                },
+                {
+                  "date": "2021-12-01",
+                  "employees": 13
+                },
+                {
+                  "date": "2022-08-01",
+                  "employees": 13
+                },
+                {
+                  "date": "2022-09-01",
+                  "employees": 14
+                },
+                {
+                  "date": "2023-03-01",
+                  "employees": 12
+                },
+                {
+                  "date": "2023-05-01",
+                  "employees": 13
+                },
+                {
+                  "date": "2023-06-01",
+                  "employees": 14
+                },
+                {
+                  "date": "2024-03-01",
+                  "employees": 11
+                },
+                {
+                  "date": "2024-04-01",
+                  "employees": 12
+                },
+                {
+                  "date": "2024-06-01",
+                  "employees": 13
+                },
+                {
+                  "date": "2024-09-01",
+                  "employees": 12
+                },
+                {
+                  "date": "2024-10-01",
+                  "employees": 13
+                },
+                {
+                  "date": "2024-11-01",
+                  "employees": 12
+                },
+                {
+                  "date": "2025-02-01",
+                  "employees": 11
+                },
+                {
+                  "date": "2025-10-01",
+                  "employees": 12
+                }
+              ],
+              "growth": {
+                "1m": {
+                  "percent": 0,
+                  "quantity": 0
+                },
+                "2m": {
+                  "percent": 0,
+                  "quantity": 0
+                },
+                "3m": {
+                  "percent": 0,
+                  "quantity": 0
+                },
+                "6m": {
+                  "percent": 0.09091,
+                  "quantity": 1
+                },
+                "12m": {
+                  "percent": -0.07692,
+                  "quantity": -1
+                },
+                "18m": {
+                  "percent": 0,
+                  "quantity": 0
+                },
+                "24m": {
+                  "percent": -0.14286,
+                  "quantity": -2
+                },
+                "36m": {
+                  "percent": -0.14286,
+                  "quantity": -2
+                }
+              }
+            },
+            "cik_numbers": [],
+            "cage_codes": [],
+            "duns_numbers": [],
+            "num_li_locations": 1,
+            "location_name": "Shelby",
+            "crunchbase_slug": "elite-mold-engineering",
+            "primary_role": "company",
+            "roles": [
+              "company"
+            ],
+            "short_description": "Elite Mold & Engineering is a supplier of plastic injection molding parts.",
+            "long_description": "Elite Mold & Engineering injection mold supplier. Their molding services are prototype injection molding, low-volume injection molding, high-volume injection molding, and CNC machining. They served the industries that are automotive, consumer, aerospace and defense, industrial, and medical.",
+            "is_subsidiary": false,
+            "parent": null,
+            "num_funding_rounds": 1,
+            "funding_rounds": [
+              {
+                "round_type": "grant",
+                "announced_on_date": "2022-07-27T00:00:00+00:00",
+                "raised_amount_usd": 25000,
+                "post_money_valuation_usd": null
+              }
+            ],
+            "num_exits": null,
+            "investors": [
+              {
+                "logo_url": "https://img.imagecdn.dev/company-logo/at_94758160d6a14d7ba0d27074dea8dfec.jpeg",
+                "entity_type": "organization",
+                "investor_name": "Michigan Economic Development Corporation",
+                "linkedin_slug": "27036",
+                "investor_types": [
+                  "micro_vc"
+                ]
+              }
+            ],
+            "acquisitions": null,
+            "best_funding_round": {
+              "round_type": "grant",
+              "announced_on_date": "2022-07-27T00:00:00+00:00",
+              "raised_amount_usd": 25000,
+              "post_money_valuation_usd": null
+            },
+            "funding_stage": "grant",
+            "alt_industries": [
+              "plastics"
+            ],
+            "alt_keywords": [
+              "plastic injection molds usa & asia",
+              "low volume plastic injection molds",
+              "fast to market advanced production",
+              "plastics experts",
+              "mold construction",
+              "automotive plastic parts",
+              "consumer plastic parts",
+              "shortrun plastic injection molding",
+              "plastics",
+              "plastics manufacturing",
+              "plastic injection molding",
+              "additive manufacturing",
+              "prototype injection molding",
+              "low-volume injection molding",
+              "high-volume injection molding",
+              "cnc machining",
+              "tooling services",
+              "mold classifications",
+              "automotive industry",
+              "aerospace & defense",
+              "medical manufacturing",
+              "consumer products",
+              "industrial applications",
+              "precision molds",
+              "quality assurance",
+              "iso 9001 certification",
+              "rapid prototyping",
+              "3d printing services",
+              "carbon dls technology",
+              "custom molds",
+              "part testing",
+              "low-cost manufacturing",
+              "fast lead times",
+              "high-quality components",
+              "production parts",
+              "in-process inspections",
+              "cnc machined parts",
+              "edm machines",
+              "soft tooling",
+              "engineering expertise",
+              "thermoplastics",
+              "quick turnaround",
+              "production efficiency",
+              "on-demand manufacturing",
+              "u.s. based manufacturing",
+              "mold design solutions",
+              "aluminum tooling",
+              "veteran-owned business",
+              "minority business enterprise",
+              "economic development",
+              "supply chain solutions",
+              "3d model prototyping",
+              "custom design engineering",
+              "injection mold design",
+              "high performance materials",
+              "technology-driven solutions",
+              "chemicals",
+              "machinery",
+              "mechanical or industrial engineering",
+              "consumer goods",
+              "consumers"
+            ],
+            "alt_description": "Elite Mold & Engineering is a distinguished leader in the manufacturing sector, offering a comprehensive range of services, including plastic injection molding, mold construction, and additive manufacturing solutions.We specialize in delivering high-quality, precision plastic parts across diverse industries, such as automotive, aerospace, consumer products, electronics, and medical devices. Our expertise lies in rapid-cut tooling and low-volume molding, enabling us to meet stringent timelines while producing top-tier, production-quality prototypes.At Elite, our commitment to excellence ensures that we provide innovative and reliable solutions tailored to meet your most demanding requirements.",
+            "employee_trends": null,
+            "logo_url": "https://img.imagecdn.dev/company-logo/at_fl5j7yu29hdjpz4peeqs.jpeg",
+            "similar_companies": null,
+            "full_funding_rounds": [
+              {
+                "investors": [
+                  {
+                    "is_lead": true,
+                    "investor_name": "Michigan Economic Development Corporation",
+                    "investor_type": "organization",
+                    "investor_domain": "michiganbusiness.org",
+                    "investor_categories": [
+                      "micro_vc"
+                    ],
+                    "investor_linkedin_url": "https://www.linkedin.com/company/medc/",
+                    "investor_linkedin_org_id": "27036"
+                  }
+                ],
+                "round_city": "Shelby",
+                "round_date": "2022-07-27T00:00:00.000Z",
+                "round_type": "grant",
+                "round_state": "Michigan",
+                "investor_count": 1,
+                "round_raised_usd": 25000,
+                "round_country_code": "USA",
+                "round_valuation_usd": null
+              }
+            ],
+            "funding_round_stats": {
+              "round_count": 1,
+              "total_raised_usd": 25000,
+              "peak_valuation_usd": null,
+              "unique_investor_count": 1,
+              "individual_investor_stats": [
+                {
+                  "investor_name": "Michigan Economic Development Corporation",
+                  "investor_type": "organization",
+                  "investor_domain": "michiganbusiness.org",
+                  "investment_count": 1,
+                  "participated_round_types": [
+                    "grant"
+                  ]
+                }
+              ],
+              "unique_personal_investor_count": 0,
+              "unique_organizational_investor_count": 1
+            },
+            "investment_stats": null,
+            "is_investor": false,
+            "investor_type": null,
+            "investor_categories": null,
+            "technologies_used": null,
+            "platforms": null
+          }
+        ],
+        "estimatedCount": null,
+        "nextCursor": "gAAAAABrAyiguDVEznJRu9BdoMfoFq-tQqaTTelt1VsHzwE_o2GyDkP8rn0kV7FoDVNidedJhzhP5N8hYPbWyarb9sBPk1tL9_1g5HiMYFCPsVYWC-kyqxs="
+      },
+      "chargeInfo": {
+        "method": "charged-now",
+        "creditsCharged": 0
+      },
+      "advice": [
+        "Your search returned 10 companies. Use paginated combined search to find decision-makers at these companies in one API call.",
+        "Use exclusion lists to filter out companies you've already contacted in future searches.",
+        "After finding target companies, use depth chart to understand their org structure, or people search to find specific roles."
+      ]
+    }
+  }
+}
