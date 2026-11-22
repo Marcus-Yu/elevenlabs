@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import type { CriteriaChange, HireCriteriaInput } from '../matches/candidates';
 import type { HireRun, HireShortlistEntry } from '../matches/hireFlow';
 import type { SourceRef } from '../../shared/contracts';
-import { candidateDisplayName, hideCandidateIdentity, proposalSentence, sourceSummary } from './candidate-display';
+import { assignCandidateNames, hideCandidateIdentity, proposalSentence, sourceSummary } from './candidate-display';
 import { CalibrationCard, type CalibrationProfile, type CalibrationReaction } from './CalibrationCard';
 import { CalibrationCriteriaReview } from './CalibrationCriteriaReview';
 import { ThreadApprovalCard } from './ThreadApprovalCard';
@@ -51,7 +51,9 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
   const [error, setError] = useState('');
   const lock = useRef(false);
   const knownEntries = useRef(new Map<string, HireShortlistEntry>());
+  const names = useRef(new Map<string, string>());
   function showShortlist(next: HireShortlistEntry[]) {
+    names.current = assignCandidateNames(names.current, next.map((entry) => entry.matchId));
     for (const entry of next) {
       if (!knownEntries.current.has(entry.matchId)) knownEntries.current.set(entry.matchId, entry);
     }
@@ -59,8 +61,8 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
   }
   const known = [...knownEntries.current.values()];
   const safe = (text: string) => hideCandidateIdentity(text, known);
-  // Internal alias A/B/C stays the position in knownEntries; the screen shows its fictional name.
-  const nameFor = (id: string) => candidateDisplayName([...knownEntries.current.keys()].indexOf(id));
+  // Fictional names are keyed by the stable matchId (goal + profile), so they follow the person.
+  const nameFor = (id: string) => names.current.get(id) ?? 'Candidate';
   const aliasTag = <small style={{ color: '#888', fontWeight: 'normal', marginLeft: 4 }}>alias</small>;
   const appliedDraft = useRef<typeof reviewedDraft>(undefined);
   useEffect(() => {
@@ -142,6 +144,7 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
     setGoalId('');
     setEntries(null);
     knownEntries.current.clear();
+    names.current = new Map();
     setProposal(null);
     setReasons({});
     setComparison(null);

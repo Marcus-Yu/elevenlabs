@@ -19,6 +19,16 @@ export function candidateDisplayName(index: number): string {
   return ALIAS_NAMES[index] ?? candidateLabel(index);
 }
 
+/**
+ * Names follow the person, not the list position: ids already named keep their name for the whole
+ * goal (including rejected ones), and each new id gets the next unused name. Pass the stable matchId.
+ */
+export function assignCandidateNames(current: ReadonlyMap<string, string>, ids: readonly string[]): Map<string, string> {
+  const next = new Map(current);
+  for (const id of ids) if (!next.has(id)) next.set(id, candidateDisplayName(next.size));
+  return next;
+}
+
 /** "Jordan Ellis looks too junior. Raise the minimum to 4 years?" for a proposed criteria change. */
 export function proposalSentence(name: string, change: { field: string; to: unknown } | undefined): string {
   if (change?.field === 'minYearsExperience') return `${name} looks too junior. Raise the minimum to ${String(change.to)} years?`;
