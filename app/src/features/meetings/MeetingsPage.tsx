@@ -1,4 +1,4 @@
-import { useQuery, listPendingMeetingProposals, dismissMeetingProposal } from "wasp/client/operations";
+import { useQuery, listPendingMeetingProposals, dismissMeetingProposal, approveMeetingProposal } from "wasp/client/operations";
 import { MeetingProposalCard } from "./MeetingProposalCard";
 
 export function MeetingsPage() {
@@ -11,7 +11,7 @@ export function MeetingsPage() {
     {error && <p role="alert">Could not load proposals.</p>}
     {data?.length === 0 && <p>No pending proposals.</p>}
     {data?.map(({ id, proposal }) => <MeetingProposalCard key={id} proposalId={id} proposal={proposal}
-      approvalAvailable={false} onApprove={async () => { throw new Error("Goal approval unavailable"); }}
+      onApprove={async (proposalId, goal) => { await approveMeetingProposal({ proposalId, statement: goal.statement, autonomy: goal.autonomy }); }}
       onDismiss={async proposalId => { await dismissMeetingProposal({ proposalId }); }} />)}
   </main>;
 }
