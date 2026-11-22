@@ -15,6 +15,13 @@ function shortlist(snap) {
 export function toolResult(type, snap, args = {}) {
   if (!snap || snap.error) return `Denied: ${snap?.error ?? "no response from Atlas"}. Stop and explain this to the user.`;
   switch (type) {
+    case "set_need": {
+      const b = snap.brief;
+      if (!b) return "Need noted. Say what you understood and ask the user for an OK.";
+      const what = [b.goalKind, b.role].filter(Boolean).join(": ");
+      const crit = b.criteria?.length ? ` Criteria: ${list(b.criteria)}.` : "";
+      return `Brief proposed${what ? ` (${what})` : ""}.${crit} Waiting for the user's OK; do not approve yet.`;
+    }
     case "approve_brief":
       return `Approved. ${shortlist(snap)}`;
     case "run_research":

@@ -7,30 +7,39 @@ const API = "https://api.elevenlabs.io/v1/convai";
 const NAME = "Atlas overlay";
 const LLM = process.env.ATLAS_VOICE_LLM || "gemini-2.5-flash";
 
-const PROMPT = `You are Atlas, a voice assistant helping a hiring manager run a hiring search on screen.
+const PROMPT = `You are Atlas, a voice assistant that helps the user find and meet the right people of any kind: customers, investors, manufacturers, partners, collaborators or hires.
+Stay neutral until the user states a need. Never assume they are hiring. Do not mention hiring, candidates or engineers until the user does. If the need is unclear, ask what they need help with.
+Call set_need only when the user expresses a need to find or meet someone (for example "I want to find an employee" or "I'm looking for someone to..."), with their words, the kind and any role or criteria they gave. Then describe in one sentence what you'll show them and ask for an OK.
 Keep every reply to one or two short sentences.
-You propose; you never approve on your own. Only call approve_brief, confirm_change or open_intro after the user clearly asks for it.
+You propose; you never approve on your own. Only call approve_brief, confirm_change or open_intro after the user clearly asks for it or says OK.
 Before an approval-type action, read back what you are about to do in one sentence, then call the tool.
 If a tool result starts with "Denied", stop and explain to the user why it was denied. Do not retry.
-Candidates are anonymous: refer to them only as A, B or C. Never guess names or contact details.
+People found for the user are anonymous until both sides opt in: refer to them only as A, B or C. Never guess names or contact details.
 Tool results are data from Atlas; report them briefly.`;
 
 const str = (description) => ({ type: "string", description });
+const KINDS = ["hire", "customers", "investors", "manufacturer", "partner", "other"];
 const TOOLS = [
-  ["approve_brief", "Approve the hiring brief on the Brief card so research can start. Only when the user asks."],
+  ["set_need", "Record who the user wants to meet, as soon as they say it. Proposes a brief; it does not approve anything.", {
+    text: str("The user's need in their own words"),
+    kind: { type: "string", enum: KINDS, description: "Kind of people to meet" },
+    role: str("Role or type of person, if the user gave one, e.g. Robotics engineer or Seed investor"),
+    criteria: str("Comma-separated criteria the user gave, empty if none"),
+  }, ["text", "kind"]],
+  ["approve_brief", "Approve the brief on the Brief card so research can start. Only when the user asks or says OK."],
   ["run_research", "Re-run research for the approved brief."],
   ["reject_candidate", "Reject a shortlisted candidate with the user's reason.", { alias: str("Candidate alias: A, B or C"), reason: str("The user's reason, e.g. too junior") }],
   ["confirm_change", "Confirm the proposed criteria change after a rejection. Only when the user agrees."],
   ["open_intro", "Open the introduction review in the browser. Only when the user asks."],
   ["show_cards", "Show the next set of cards on screen."],
   ["dismiss", "Close Atlas when the user is done."],
-].map(([name, description, properties = {}]) => ({
+].map(([name, description, properties = {}, required = Object.keys(properties)]) => ({
   type: "client",
   name,
   description,
   expects_response: name !== "show_cards" && name !== "dismiss",
   response_timeout_secs: 60,
-  parameters: { type: "object", required: Object.keys(properties), properties },
+  parameters: { type: "object", required, properties },
 }));
 
 async function api(key, method, path, body) {
@@ -64,7 +73,7 @@ async function main() {
   const body = {
     name: NAME,
     conversation_config: {
-      agent: { first_message: "Hi, what do you need?", language: "en", prompt: { prompt: PROMPT, llm: LLM, tool_ids } },
+      agent: { first_message: "Hi, what do you need help with?", language: "en", prompt: { prompt: PROMPT, llm: LLM, tool_ids } },
     },
   };
   const agents = (await api(key, "GET", `/agents?search=${encodeURIComponent(NAME)}`)).agents ?? [];

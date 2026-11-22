@@ -9,7 +9,7 @@ export interface NavItem {
 
 export const NAV_ITEMS: readonly NavItem[] = [
   { path: "/", label: "Demo" },
-  { path: "/thread", label: "1. Hiring" },
+  { path: "/thread", label: "1. Goal (example: hire)" },
   { path: "/match", label: "2. Match (opt-in)" },
   { path: "/approvals", label: "Approvals" },
   { path: "/activity", label: "Activity" },
