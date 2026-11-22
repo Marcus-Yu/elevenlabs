@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "provider": "fiber",
+  "hash": "2deb433a47ae8069",
+  "recordedAt": "2026-11-22T17:38:41.300Z",
+  "request": {
+    "method": "POST",
+    "url": "https://api.fiber.ai/v1/people-search",
+    "body": {
+      "apiKey": "[REDACTED]",
+      "pageSize": 3,
+      "currentCompanies": [
+        {
+          "domain": "iwla.com"
+        }
+      ],
+      "searchParams": {
+        "jobTitleV2": {
+          "anyOf": [
+            {
+              "type": "term",
+              "term": "operations"
+            },
+            {
+              "type": "term",
+              "term": "supply chain"
+            },
+            {
+              "type": "term",
+              "term": "fulfillment"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "body": {
+      "output": {
+        "data": [
+          {
+            "name": "Anne Schroeder",
+            "first_name": "Anne",
+            "last_name": "Schroeder",
+            "url": "https://linkedin.com/in/anne-schroeder-7a6a2a12",
+            "primary_slug": "anne-schroeder-7a6a2a12",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Director of Operations & Special Projects",
+                "company_name": "International Warehouse Logistics Association"
+              }
+            ]
+          }
+        ],
+        "estimatedCount": null,
+        "nextCursor": "gAAAAABrAyigqWkYaNPtnYWZllnp1WyKA6jcr0uqOi-Cli7qCtqufJwbb2vMRC_mUyFXgrHaNaBCXaZI5o6zAwrm2I-tkVcHkEu5kVAWNQNH3GCFejmgfVG9exC0pfB3U_0OiYQHyAr1JCLHQkfnavpJW8QW2OoF6OxwVxSfra-gVlH8W_QP3zq3B9anRdzdpfu1tvzxiEQb6ZIfwWqAZ44zFH3CydEhZDGpVb6nQFa4zbgzoxB1xSmGxMSOb-_9otoMWG3rwfJYwDFIUxeo5G7QRlzh7kXGMheGmw5waO6T9uN_yOxetPM="
+      },
+      "chargeInfo": {
+        "method": "charged-now",
+        "creditsCharged": 0
+      },
+      "advice": [
+        "Your search returned 1 profiles. Use lite reveal to get verified emails at the lowest cost per contact on the market.",
+        "For emails + phone numbers, use standard reveal. For maximum coverage, try exhaustive reveal.",
+        "Add prospect exclusion lists to automatically skip people you've already contacted."
+      ]
+    }
+  },
+  "trimmed": "people fields reduced to name, LinkedIn URL and current roles (public repo)"
+}

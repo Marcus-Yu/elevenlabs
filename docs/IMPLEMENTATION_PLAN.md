@@ -42,8 +42,8 @@ Codevisor is the build tool: each work package is one Codevisor agent.
 |---|---|---|
 | person-1 | WP1, plus `hire`, `opt_in_only` and share-card field stripping | WP7 for the introduction send and the TraceRoot rerun comparison |
 | person-2 | WP5 for hiring: criteria → shortlist → confirmed rerun | WP10 delegated research, then the WP12 Rowboat timebox |
-| person-3 | WP3 calibration endpoints | WP9 voice input and spoken match briefing |
-| person-4 | WP13 double opt-in, including seeding user B | WP4 thread cards, then WP6 approvals and activity log, then WP15 |
+| person-3 | WP3 calibration endpoints | WP4 thread (moved from person-4 at 18:15 UTC), then WP9 voice input and spoken match briefing |
+| person-4 | WP13 double opt-in, including seeding user B | WP6 approvals and activity log, then WP15 |
 
 ---
 
