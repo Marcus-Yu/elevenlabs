@@ -77,6 +77,7 @@ function tools() {
     return toolResult(action.type, snap, action);
   };
   return {
+    set_need: (args = {}) => run(needAction(args)),
     approve_brief: () => run({ type: "approve_brief" }),
     run_research: () => run({ type: "run_research" }),
     reject_candidate: ({ alias, reason } = {}) =>
@@ -92,6 +93,19 @@ function tools() {
       return "Closing.";
     },
   };
+}
+
+const KINDS = ["hire", "customers", "investors", "manufacturer", "partner", "other"];
+
+/** Agent tool args → OverlayAction set_need (criteria arrive as a comma-separated string). */
+export function needAction({ text, kind, role, criteria } = {}) {
+  const list = Array.isArray(criteria) ? criteria : String(criteria ?? "").split(",");
+  const action = { type: "set_need", text: String(text ?? "").trim() };
+  if (KINDS.includes(kind)) action.kind = kind;
+  if (role) action.role = String(role).trim();
+  const clean = list.map((c) => String(c).trim()).filter(Boolean);
+  if (clean.length) action.criteria = clean;
+  return action;
 }
 
 // ---------- voice bars follow the live volume ----------
