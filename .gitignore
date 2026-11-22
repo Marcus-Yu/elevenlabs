@@ -1,0 +1,11 @@
+.DS_Store
+node_modules/
+
+# Secrets: dotenv files are never committed. Example files stay tracked.
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# TraceRoot CLI setup output can hold a project key.
+.traceroot/

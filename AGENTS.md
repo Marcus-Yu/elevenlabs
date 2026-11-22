@@ -21,3 +21,19 @@
 9. **Secrets** live in `app/.env.server` and are never committed. Keep `.env.server.example` current.
 10. **Test what you claim.** Unit-test rules and pure logic with Vitest. State in the PR what was run and what could not be verified.
 11. Keep files small and single-purpose. No new dependency without a one-line justification in the PR.
+
+## Dev commands
+
+Run from `app/`. Needs Node ≥ 24.22.1, the Wasp CLI (`npm i -g @wasp.sh/wasp-cli@latest`) and local Postgres 17 (no Docker, so not `wasp start db`).
+
+```bash
+brew services start postgresql@17 && createdb atlas_dev   # once per machine
+cp .env.server.example .env.server                        # once per worktree; set DATABASE_URL
+wasp install                                              # once per fresh worktree
+wasp db migrate-dev                                       # apply migrations (add --name <change> after a schema edit)
+wasp start                                                # client http://localhost:3000, server :3001
+npm test                                                  # Vitest unit tests (src/**/*.test.ts)
+wasp compile                                              # validate the spec; don't run tsc directly
+```
+
+Each feature declares its routes, operations, apis and jobs in `app/src/features/<name>/<name>.wasp.ts`, which `main.wasp.ts` already imports.
