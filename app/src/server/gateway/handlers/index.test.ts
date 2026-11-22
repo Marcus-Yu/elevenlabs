@@ -14,7 +14,7 @@ import { createStubHandlers } from "./stubs";
 const REPLAY_ENV = { ADAPTER_MODE: "replay" } as NodeJS.ProcessEnv;
 const unusedMemory = new Proxy({}, { get: () => () => Promise.reject(new Error("memory not used in this test")) }) as MemoryItemDelegate;
 
-const deps: HandlerDeps = { memoryItems: unusedMemory, matchDatabase: {} as HandlerDeps["matchDatabase"] };
+const deps: HandlerDeps = { memoryItems: unusedMemory, matchDatabase: {} as HandlerDeps["matchDatabase"], executeThreadTool: async () => { throw new Error("No model tools expected"); } };
 
 function replayGateway() {
   const store = new MemoryGatewayStore();
@@ -28,10 +28,10 @@ function replayGateway() {
 }
 
 describe("createHandlerMap", () => {
-  it("registers the real discovery, memory, watcher, and voice handlers", () => {
+  it("registers the real discovery, memory, watcher, voice, and thread handlers", () => {
     const stubs = createStubHandlers();
     const map = createHandlerMap(REPLAY_ENV, deps);
-    for (const type of ["company.search", "jobs.search", "contact.search", "contact.reveal_email", "web.read", "memory.read", "memory.write", "memory.delete", "match.submit", "voice.scribe_token", "voice.speak"] as const) {
+    for (const type of ["company.search", "jobs.search", "contact.search", "contact.reveal_email", "web.read", "memory.read", "memory.write", "memory.delete", "match.submit", "voice.scribe_token", "voice.speak", "thread.chat", "thread.propose_goal", "calibration.profiles", "calibration.criteria"] as const) {
       expect(map[type], type).not.toBe(stubs[type]);
       expect(map[type]).toBeDefined();
     }
