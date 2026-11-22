@@ -9,3 +9,6 @@ node_modules/
 # Don't ignore example dotenv files.
 !.env.example
 !.env.*.example
+
+# Local watcher-API harness output (scripts/watch-harness.ts)
+.harness/

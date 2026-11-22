@@ -1,6 +1,7 @@
 import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
 import { z } from "zod";
 import type { ActionRequest, ActionType, GatewayResult } from "../../shared/contracts";
+import { candidateQueryFor, HireCriteria } from "../matches/candidates";
 
 // Watcher API core (docs/IMPLEMENTATION_PLAN.md §7 and WP10 step 1), framework-free so it can be
 // unit-tested. The Wasp `api` routes for GET /api/watch/:goalId/brief, POST .../tool and
@@ -46,7 +47,9 @@ export interface WatchedGoal {
   status: string;
   statement: string;
   watcherTokenHash: string | null;
-  /** Goal.icp. WP5 owns its shape; the watcher reads `companySearch` or `searches`. */
+  /** Goal.kind; `hire` goals get a research brief instead of company searches. */
+  kind?: string;
+  /** Goal.icp. WP5 owns its shape; the watcher reads `companySearch`, `searches` or (hire) `hireCriteria`. */
   icp: unknown;
 }
 
@@ -130,7 +133,32 @@ const SearchShape = z
   .passthrough();
 
 /** What the box needs and nothing more: no profile facts, no contacts, no credentials. */
+/**
+ * Hire goals (scope change 2026-11-22): the approved criteria only, as one people search per title,
+ * so each search is one research agent on the box. Nothing from the user's profile (no salary
+ * ceiling, no private facts) is in it: provider_minimum.
+ */
+export function buildResearchBrief(goal: WatchedGoal) {
+  const icp = (goal.icp ?? {}) as { hireCriteria?: unknown };
+  const parsed = HireCriteria.safeParse(icp.hireCriteria);
+  if (!parsed.success) return null;
+  const criteria = parsed.data;
+  return {
+    goalId: goal.id,
+    statement: goal.statement,
+    research: {
+      kind: "hire" as const,
+      role: criteria.role,
+      searches: criteria.titles.map((title) => ({ mode: "criteria" as const, ...candidateQueryFor({ ...criteria, titles: [title] }) })),
+    },
+  };
+}
+
 export function buildBrief(goal: WatchedGoal, matchedDomains: string[]) {
+  if (goal.kind === "hire") {
+    const research = buildResearchBrief(goal);
+    if (research) return research;
+  }
   const icp = (goal.icp ?? {}) as { companySearch?: unknown; searches?: unknown[] };
   const candidates = Array.isArray(icp.searches) ? icp.searches : icp.companySearch ? [icp.companySearch] : [];
   const searches = candidates.map((s) => SearchShape.safeParse(s)).filter((r) => r.success).map((r) => r.data);

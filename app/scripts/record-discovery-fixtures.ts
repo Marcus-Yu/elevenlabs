@@ -11,6 +11,7 @@ import path from "node:path";
 import { createDiscoveryHandlersFromEnv } from "../src/server/gateway/handlers/discovery";
 import {
   DEMO_CANDIDATE_SEARCH,
+  DEMO_RESEARCH_AGENT_SEARCHES,
   DEMO_CUSTOMER_SEARCH,
   DEMO_JOB_SEARCH,
   DEMO_MANUFACTURER_SEARCH,
@@ -39,6 +40,11 @@ for (const company of customers.data.companies.slice(0, 3)) {
 
 const candidates = await handlers["contact.search"].run(DEMO_CANDIDATE_SEARCH, ctx);
 if ("candidates" in candidates.data) console.log(`hire candidates: ${candidates.data.candidates.length} (${candidates.data.provider})`);
+
+for (const search of DEMO_RESEARCH_AGENT_SEARCHES) {
+  const agent = await handlers["contact.search"].run(search, ctx);
+  if ("candidates" in agent.data) console.log(`research agent "${search.titles[0]}": ${agent.data.candidates.length}`);
+}
 
 const jobs = await handlers["jobs.search"].run(DEMO_JOB_SEARCH, ctx);
 console.log(`jobs: ${jobs.data.jobs.length}`);
