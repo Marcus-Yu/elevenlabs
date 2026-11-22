@@ -26,6 +26,7 @@ function getGateway(): Gateway {
           createHandlerMap(process.env, {
             memoryItems: prisma.memoryItem,
             matchDatabase: prisma,
+            threadGoals: prisma.goal,
             executeThreadTool: (request) => getGateway().execute(request),
             prisma,
           }),

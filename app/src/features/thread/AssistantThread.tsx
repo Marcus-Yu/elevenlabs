@@ -10,6 +10,8 @@ import { CalibrationCriteriaReview } from './CalibrationCriteriaReview';
 import type { CalibrationCriteria } from './calibration-contracts';
 import { goalProposal } from './goal-proposal';
 import { ThreadApprovalCard } from './ThreadApprovalCard';
+import { MemoryProposalCard } from './MemoryProposalCard';
+import { memoryConfirmation } from './memory-proposal';
 
 function ToolResult({ name, result, onReviewHiringGoal }: {
   name: string;
@@ -19,8 +21,45 @@ function ToolResult({ name, result, onReviewHiringGoal }: {
   const [review, setReview] = useState<{ criteria: CalibrationCriteria; reactions: CalibrationReaction[] } | null>(null);
   if (!result || typeof result !== 'object') return <p>Working on {name}…</p>;
   const display = result as { kind?: string; approvalId?: string; ruleId?: string; data?: { profiles?: CalibrationProfile[]; source?: string } };
+  if (display.kind === 'memory_proposal') {
+    const { action, memory } = result as { action?: unknown; memory?: unknown };
+    const parsed = memoryConfirmation.safeParse({ action, memory });
+    if (parsed.success) return <MemoryProposalCard proposal={parsed.data} />;
+    return <p>Memory proposal unavailable.</p>;
+  }
   if (display.kind === 'pending_approval' && display.approvalId) return <ThreadApprovalCard approvalId={display.approvalId} />;
   if (display.kind === 'denied') return <p>Action denied by policy. Rule {display.ruleId}.</p>;
+  if (display.kind === 'unavailable' || (display as { stub?: boolean }).stub) return <p>{name}: result unavailable.</p>;
+  if (display.kind === 'allowed' && name === 'list_hiring_goals') {
+    const goals = (display.data as unknown as { goals?: { goalId: string; role: string; researched: boolean }[] } | undefined)?.goals ?? [];
+    return <section className="rounded border p-3"><h3 className="font-semibold">Hiring goals</h3>
+      {goals.length ? <ul>{goals.map((goal) => <li key={goal.goalId}>{goal.role} · {goal.researched ? 'Shortlist researched' : 'No shortlist yet'}</li>)}</ul> : <p>No active hiring goals.</p>}
+    </section>;
+  }
+  if (display.kind === 'allowed' && (name === 'list_matches' || name === 'explain_match')) {
+    type Match = { matchId: string; score: number; meetsMustHaves: boolean; method: string; reasons: { category: string; points: number; source?: { provider: string; fetchedAt: string } }[] };
+    const data = display.data as unknown as { matches?: Match[]; match?: Match | null } | undefined;
+    const matches = data?.matches ?? (data?.match ? [data.match] : []);
+    return <section className="rounded border p-3"><h3 className="font-semibold">{name === 'list_matches' ? 'Hiring shortlist' : 'Match explanation'}</h3>
+      <p>Candidate identities are withheld. Scores use the saved rule-based ranking.</p>
+      {matches.length === 0 ? <p>No matching researched shortlist entries.</p> : <ol>{matches.map((match, i) => <li key={match.matchId}>
+        <strong>Candidate {i + 1}</strong>: {match.score}/100 · {match.meetsMustHaves ? 'Meets required criteria' : 'Does not meet all required criteria'}
+        <ul>{match.reasons.map((reason, n) => <li key={n}>{reason.category}: {reason.points > 0 ? '+' : ''}{reason.points} points{reason.source && <> · {reason.source.provider}, retrieved {reason.source.fetchedAt}</>}</li>)}</ul>
+      </li>)}</ol>}
+    </section>;
+  }
+  if (display.kind === 'allowed' && name === 'forget') {
+    const deleted = (display.data as unknown as { deleted?: boolean } | undefined)?.deleted;
+    return <p>{deleted ? 'Memory deleted.' : 'No matching memory was deleted.'}</p>;
+  }
+  if (display.kind === 'allowed' && (name === 'remember' || name === 'recall_memory')) {
+    const data = display.data as unknown;
+    const items = Array.isArray(data) ? data : data ? [data] : [];
+    return <section className="rounded border p-3"><h3 className="font-semibold">{name === 'remember' ? 'Saved memory' : 'Saved memories'}</h3>
+      {items.length === 0 ? <p>No matching memories.</p> : <ul>{items.map((item: { id: string; kind: string; text: string; source: string }) =>
+        <li key={item.id}><strong>{item.kind}:</strong> {item.text} <span>({item.source})</span></li>)}</ul>}
+    </section>;
+  }
   if (name === 'propose_goal' && display.kind === 'allowed') {
     const parsed = goalProposal.safeParse(display.data);
     if (parsed.success) return <section className="rounded border p-3">
