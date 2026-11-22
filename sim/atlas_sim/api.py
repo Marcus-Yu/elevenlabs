@@ -10,6 +10,7 @@ from typing import Any
 from edsl import Model
 from fastapi import FastAPI, HTTPException
 
+from .calibration_routes import calibration_router
 from .contracts import ScoreRequest, ScoreResponse
 from .edsl_engine import score_with_edsl
 from .scoring import aggregate
@@ -30,6 +31,7 @@ def configured_model() -> Any:
 
 def create_app(model_factory: Callable[[], Any] = configured_model) -> FastAPI:
     app = FastAPI(title="Atlas Simulation")
+    app.include_router(calibration_router(model_factory))
 
     @app.get("/health")
     def health() -> dict[str, str]:

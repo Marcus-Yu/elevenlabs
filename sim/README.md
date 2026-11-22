@@ -74,3 +74,60 @@ that can serve inference. The Maritime benchmark agent booted and installed
 the dependencies, but its model endpoint returned `402 budget_exhausted`
 before any inference. If measured p50 exceeds 2.5 seconds, implement the
 single-call direct engine for the live tier and keep EDSL for measured scoring.
+
+## Hiring preference calibration
+
+The current demo uses these endpoints to refine a hiring need. The optional
+Room still uses `POST /score`. The 20-trial Room latency spike is no longer
+a calibration acceptance check.
+
+### Generate a calibration panel
+
+`POST /calibrate/profiles` accepts `{"need":"We need a robotics engineer"}`.
+EDSL generates 6–8 varied archetypes. The service assigns each one a unique
+ID, a generic label, and `synthetic: true`. Treat these profiles as
+examples for preference elicitation. They are not sourced hiring leads.
+
+Illustrative response with synthetic sample data:
+
+```json
+{
+  "profiles": [
+    {"id":"p1","label":"Candidate archetype 1","yearsExperience":2,"skills":["ROS 2","Python"],"workStyle":"Pairs on prototypes","synthetic":true},
+    {"id":"p2","label":"Candidate archetype 2","yearsExperience":6,"skills":["ROS 2","Controls"],"workStyle":"Owns field integration","synthetic":true},
+    {"id":"p3","label":"Candidate archetype 3","yearsExperience":4,"skills":["ROS 2","C++"],"workStyle":"Focuses on test automation","synthetic":true},
+    {"id":"p4","label":"Candidate archetype 4","yearsExperience":9,"skills":["Simulation","Planning"],"workStyle":"Leads design reviews","synthetic":true},
+    {"id":"p5","label":"Candidate archetype 5","yearsExperience":7,"skills":["Embedded systems","Controls"],"workStyle":"Troubleshoots on hardware","synthetic":true},
+    {"id":"p6","label":"Candidate archetype 6","yearsExperience":3,"skills":["Perception","Python"],"workStyle":"Runs structured experiments","synthetic":true}
+  ]
+}
+```
+
+### Draft criteria
+
+`POST /calibrate/criteria` accepts that same `profiles` array plus
+`reactions`. Give each reaction its own ID and include at most one reaction
+per profile. An example reaction list:
+
+```json
+[
+  {"id":"r1","profileId":"p2","decision":"pick","reason":"We need at least 5 years"},
+  {"id":"r2","profileId":"p3","decision":"pick","reason":"Must have ROS 2"},
+  {"id":"r3","profileId":"p4","decision":"reject","reason":"Strong simulation, but I prefer hands-on work"}
+]
+```
+
+```json
+{
+  "minimumExperience":{"years":5,"reactionIds":["r1"]},
+  "mustHaveSkills":[{"skill":"ROS 2","reactionIds":["r2"]}],
+  "tradeOffs":[{"text":"Strong simulation, but I prefer hands-on work","reactionIds":["r3"]}]
+}
+```
+
+Criteria use explicit requirements supported by the picked profile and
+stated trade-offs. Ambiguous or conflicting reactions can yield
+`minimumExperience: null` and empty arrays. A reviewer can edit the
+draft before WP5 uses it. The criteria route needs no model credential.
+The profiles route needs a working EDSL provider, and was exercised
+offline using EDSL's canned model.
