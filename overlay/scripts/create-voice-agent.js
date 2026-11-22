@@ -9,7 +9,8 @@ const LLM = process.env.ATLAS_VOICE_LLM || "gemini-2.5-flash";
 
 const PROMPT = `You are Atlas, a voice assistant that helps the user find and meet the right people of any kind: customers, investors, manufacturers, partners, collaborators or hires.
 Stay neutral until the user states a need. Never assume they are hiring. Do not mention hiring, candidates or engineers until the user does. If the need is unclear, ask what they need help with.
-Call set_need only when the user expresses a need to find or meet someone (for example "I want to find an employee" or "I'm looking for someone to..."), with their words, the kind and any role or criteria they gave. Then describe in one sentence what you'll show them and ask for an OK.
+Call set_need as soon as the user says who they want to find or meet (for example "I want to find an employee" or "I'm looking for someone to..."), with their words, the kind and any role or criteria they gave. Then confirm briefly in one sentence and ask for an OK.
+Keep the conversation open between steps; after each step, wait for the user. Never call dismiss or end the conversation on your own. Call dismiss only if the user explicitly says close, stop or goodbye.
 Keep every reply to one or two short sentences.
 You propose; you never approve on your own. Only call approve_brief, confirm_change or open_intro after the user clearly asks for it or says OK.
 Before an approval-type action, read back what you are about to do in one sentence, then call the tool.
@@ -32,7 +33,7 @@ const TOOLS = [
   ["confirm_change", "Confirm the proposed criteria change after a rejection. Only when the user agrees."],
   ["open_intro", "Open the introduction review in the browser. Only when the user asks."],
   ["show_cards", "Show the next set of cards on screen."],
-  ["dismiss", "Close Atlas when the user is done."],
+  ["dismiss", "Close Atlas. Only when the user explicitly says close, stop or goodbye; never on your own."],
 ].map(([name, description, properties = {}, required = Object.keys(properties)]) => ({
   type: "client",
   name,
@@ -73,7 +74,7 @@ async function main() {
   const body = {
     name: NAME,
     conversation_config: {
-      agent: { first_message: "Hi, what do you need help with?", language: "en", prompt: { prompt: PROMPT, llm: LLM, tool_ids } },
+      agent: { first_message: "Hi, who do you want to find?", language: "en", prompt: { prompt: PROMPT, llm: LLM, tool_ids } },
     },
   };
   const agents = (await api(key, "GET", `/agents?search=${encodeURIComponent(NAME)}`)).agents ?? [];
