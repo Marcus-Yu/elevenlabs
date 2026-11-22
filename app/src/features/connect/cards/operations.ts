@@ -1,5 +1,7 @@
+import { createHash } from "node:crypto";
 import type { SuperJSONValue } from "wasp/core/serialization";
 import { HttpError, prisma } from "wasp/server";
+import type { ShareCard } from "wasp/entities";
 import type { GetMatchDemo, RunMatchStep } from "wasp/server/operations";
 import { gateway } from "../../../server/gateway";
 import { IDENTITY_FIELDS, introDraft, matchRationale, SYNTHETIC_B_FACTS, SYNTHETIC_B_SUMMARY } from "./matchDemo";
@@ -10,13 +12,26 @@ import { IDENTITY_FIELDS, introDraft, matchRationale, SYNTHETIC_B_FACTS, SYNTHET
 const B_MARKER = "Synthetic second user";
 const PURPOSE = "match:robotics-engineer";
 
-async function syntheticB(): Promise<string> {
-  const existing = await prisma.profile.findFirst({ where: { summary: SYNTHETIC_B_SUMMARY } });
-  if (existing) return existing.userId;
-  const user = await prisma.user.create({
-    data: { profiles: { create: { sourceKind: "oneliner", summary: SYNTHETIC_B_SUMMARY, facts: { create: SYNTHETIC_B_FACTS } } } },
-  });
-  return user.id;
+function syntheticUserId(ownerId: string): string {
+  // Authenticated user IDs are UUIDs. The prefix reserves a separate namespace for demo accounts.
+  return `match-demo-b-${createHash("sha256").update(ownerId).digest("hex")}`;
+}
+
+async function ensureSyntheticUser(id: string) {
+  const user = { where: { id }, select: { id: true } } as const;
+  if (await prisma.user.findUnique(user)) return;
+  try {
+    await prisma.user.create({
+      data: {
+        id,
+        profiles: { create: { sourceKind: "oneliner", summary: SYNTHETIC_B_SUMMARY, facts: { create: SYNTHETIC_B_FACTS } } },
+      },
+    });
+  } catch (error) {
+    // Another request may have created this same synthetic user while we were checking.
+    const duplicate = typeof error === "object" && error && "code" in error && error.code === "P2002";
+    if (!duplicate || !await prisma.user.findUnique(user)) throw error;
+  }
 }
 
 async function facts(userId: string) {
@@ -50,12 +65,28 @@ async function draftFields(userId: string, side: "A" | "B") {
 }
 
 async function cardFor(userId: string) {
-  return prisma.shareCard.findFirst({ where: { userId, purpose: PURPOSE }, orderBy: { createdAt: "desc" } });
+  return prisma.shareCard.findFirst({
+    where: { userId, purpose: PURPOSE, status: "ACTIVE", expiresAt: { gt: new Date() } },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+type PublishedCard = {
+  published: Record<string, string>;
+  stripped: string[];
+  ruleId: string;
+  logReason: string | null;
+};
+
+function publishedCard(fields: ShareCard["fields"]): PublishedCard {
+  // Old rows still include the raw draft. Send only the public projection.
+  const { published, stripped, ruleId, logReason } = fields as PublishedCard;
+  return { published, stripped, ruleId, logReason };
 }
 
 /** Records the opt-in the clicking user (or the simulated synthetic B) just gave. */
 async function ensureConsent(userId: string, kind: "matching" | "identity_reveal") {
-  const active = await prisma.consent.findFirst({ where: { userId, kind, revokedAt: null } });
+  const active = await prisma.consent.findFirst({ where: { userId, kind, scope: PURPOSE, revokedAt: null } });
   if (!active) await prisma.consent.create({ data: { userId, kind, scope: PURPOSE } });
 }
 
@@ -63,27 +94,27 @@ async function publish(userId: string, side: "A" | "B") {
   await ensureConsent(userId, "matching");
   const draft = await draftFields(userId, side);
   const card = await prisma.shareCard.create({
-    data: { userId, purpose: PURPOSE, fields: draft.fields, expiresAt: new Date(Date.now() + 7 * 864e5) },
+    data: { userId, purpose: PURPOSE, fields: {}, expiresAt: new Date(Date.now() + 7 * 864e5) },
   });
   const result = await gateway.execute({
     actionType: "card.publish", userId, actor: { kind: "user", id: userId }, origin: "ui", tainted: false,
     payload: { cardId: card.id, ...draft },
   });
   const log = await prisma.actionLog.findUnique({ where: { id: result.logId } });
-  if (result.decision.outcome !== "allow") {
+  // The gateway stripped the private field; keep only what its log says survived.
+  const stripped = Object.keys(draft.fields).filter((k) => log?.reason?.includes(`"${k}"`));
+  if (result.decision.outcome !== "allow" || !log || (result.decision.ruleId === "card_fields" && stripped.length === 0)) {
     await prisma.shareCard.delete({ where: { id: card.id } });
     throw new HttpError(409, `card.publish ${result.decision.outcome}: ${log?.reason ?? ""}`);
   }
-  // The gateway stripped the private field; keep only what its log says survived.
-  const stripped = Object.keys(draft.fields).filter((k) => log?.reason?.includes(`"${k}"`));
   const published = Object.fromEntries(Object.entries(draft.fields).filter(([k]) => !stripped.includes(k)));
-  await prisma.shareCard.update({
-    where: { id: card.id },
-    data: { status: "ACTIVE", fields: { published, draft: draft.fields, stripped, ruleId: result.decision.ruleId, logReason: log?.reason ?? null } },
+  await prisma.shareCard.updateMany({
+    where: { id: card.id, status: "DRAFT" },
+    data: { status: "ACTIVE", fields: { published, stripped, ruleId: result.decision.ruleId, logReason: log.reason } },
   });
 }
 
-function identityOf(userId: string, list: { key: string; value: string }[], side: "A" | "B"): Record<string, string> {
+function identityOf(list: { key: string; value: string }[], side: "A" | "B"): Record<string, string> {
   const v = (k: string) => list.find((f) => f.key === k)?.value;
   if (side === "A") return { name: "demo (hiring manager)", company: v("company_name") ?? "", email: "demo@example.invalid" };
   return { name: v("name") ?? "", company: "Independent", email: v("email") ?? "" };
@@ -98,7 +129,8 @@ async function reveal(userId: string, matchId: string, fields: string[]) {
     payload: { cardMatchId: matchId, fields: chosen },
   });
   if (result.decision.outcome !== "needs_approval") throw new HttpError(409, `card.reveal expected needs_approval, got ${result.decision.outcome}`);
-  await gateway.decideApproval({ approvalId: result.decision.approvalId, userId, decision: "approve", via: "web" });
+  const approval = await gateway.decideApproval({ approvalId: result.decision.approvalId, userId, decision: "approve", via: "web" });
+  if (approval.decision.outcome !== "allow") throw new HttpError(409, "Identity reveal approval failed");
 }
 
 async function revealApproval(userId: string, matchId: string) {
@@ -106,23 +138,30 @@ async function revealApproval(userId: string, matchId: string) {
   return rows.find((r) => (r.payload as { cardMatchId?: string })?.cardMatchId === matchId) ?? null;
 }
 
-const done = (a: { status: string } | null) => a?.status === "APPROVED" || a?.status === "EXECUTED";
+const done = (a: { status: string } | null) => a?.status === "EXECUTED";
 
 type Step = "publishA" | "publishB" | "match" | "acceptA" | "acceptB" | "revealA" | "revealB" | "reset";
 
 export const runMatchStep: RunMatchStep<{ step: Step; fields?: string[] }, { ok: true }> = async ({ step, fields }, context) => {
   if (!context.user) throw new HttpError(401);
   const a = context.user.id;
-  const b = await syntheticB();
+  const b = syntheticUserId(a);
   const [cardA, cardB] = [await cardFor(a), await cardFor(b)];
   const match = cardA && cardB ? await prisma.cardMatch.findFirst({ where: { cardAId: cardA.id, cardBId: cardB.id } }) : null;
   switch (step) {
-    case "publishA": await publish(a, "A"); break;
-    case "publishB": await publish(b, "B"); break;
+    case "publishA": if (!cardA) await publish(a, "A"); break;
+    case "publishB": {
+      if (!cardA) throw new HttpError(400, "Publish A's card first");
+      if (!cardB) {
+        await ensureSyntheticUser(b);
+        await publish(b, "B");
+      }
+      break;
+    }
     case "match": {
       if (!cardA || !cardB) throw new HttpError(400, "Publish both cards first");
-      const pa = (cardA.fields as { published: Record<string, string> }).published;
-      const pb = (cardB.fields as { published: Record<string, string> }).published;
+      const pa = publishedCard(cardA.fields).published;
+      const pb = publishedCard(cardB.fields).published;
       await prisma.cardMatch.upsert({
         where: { cardAId_cardBId: { cardAId: cardA.id, cardBId: cardB.id } },
         create: { cardAId: cardA.id, cardBId: cardB.id, rationale: matchRationale(pa, pb) },
@@ -131,16 +170,20 @@ export const runMatchStep: RunMatchStep<{ step: Step; fields?: string[] }, { ok:
       break;
     }
     case "acceptA": if (match) await prisma.cardMatch.update({ where: { id: match.id }, data: { aAccepted: true } }); break;
-    case "acceptB": if (match) await prisma.cardMatch.update({ where: { id: match.id }, data: { bAccepted: true } }); break;
+    case "acceptB": if (match?.aAccepted) await prisma.cardMatch.update({ where: { id: match.id }, data: { bAccepted: true } }); break;
     case "revealA": case "revealB": {
       if (!match?.aAccepted || !match.bAccepted) throw new HttpError(400, "Both sides must accept first");
-      await reveal(step === "revealA" ? a : b, match.id, fields ?? []);
+      const userId = step === "revealA" ? a : b;
+      if (!done(await revealApproval(userId, match.id))) await reveal(userId, match.id, fields ?? []);
       const [ra, rb] = [await revealApproval(a, match.id), await revealApproval(b, match.id)];
       if (done(ra) && done(rb)) await prisma.cardMatch.update({ where: { id: match.id }, data: { revealedAt: new Date() } });
       break;
     }
     case "reset":
-      await prisma.shareCard.deleteMany({ where: { userId: { in: [a, b] }, purpose: PURPOSE } });
+      await prisma.shareCard.updateMany({
+        where: { userId: { in: [a, b] }, purpose: PURPOSE, status: { in: ["ACTIVE", "DRAFT"] } },
+        data: { status: "REVOKED" },
+      });
       break;
   }
   return { ok: true };
@@ -149,7 +192,7 @@ export const runMatchStep: RunMatchStep<{ step: Step; fields?: string[] }, { ok:
 export const getMatchDemo: GetMatchDemo<void, SuperJSONValue> = async (_args, context) => {
   if (!context.user) throw new HttpError(401);
   const a = context.user.id;
-  const b = await syntheticB();
+  const b = syntheticUserId(a);
   const [cardA, cardB] = [await cardFor(a), await cardFor(b)];
   const match = cardA && cardB ? await prisma.cardMatch.findFirst({ where: { cardAId: cardA.id, cardBId: cardB.id } }) : null;
   const [ra, rb] = match ? [await revealApproval(a, match.id), await revealApproval(b, match.id)] : [null, null];
@@ -157,12 +200,13 @@ export const getMatchDemo: GetMatchDemo<void, SuperJSONValue> = async (_args, co
     const chosen = done(appr) && appr ? ((appr.payload as { fields?: string[] }).fields ?? []) : [];
     return Object.fromEntries(Object.entries(id).filter(([k]) => chosen.includes(k)));
   };
-  const revealedA = match?.revealedAt ? pick(identityOf(a, await facts(a), "A"), ra) : null;
-  const revealedB = match?.revealedAt ? pick(identityOf(b, await facts(b), "B"), rb) : null;
+  const revealed = match?.revealedAt && match.aAccepted && match.bAccepted && done(ra) && done(rb);
+  const revealedA = revealed ? pick(identityOf(await facts(a), "A"), ra) : null;
+  const revealedB = revealed ? pick(identityOf(await facts(b), "B"), rb) : null;
   return {
     draftA: cardA ? null : (await draftFields(a, "A")).fields,
-    cardA: cardA?.fields ?? null,
-    cardB: cardB?.fields ?? null,
+    cardA: cardA ? publishedCard(cardA.fields) : null,
+    cardB: cardB ? publishedCard(cardB.fields) : null,
     match: match && { id: match.id, rationale: match.rationale, aAccepted: match.aAccepted, bAccepted: match.bAccepted, revealedAt: match.revealedAt },
     revealA: ra && { status: ra.status, fields: (ra.payload as { fields?: string[] }).fields },
     revealB: rb && { status: rb.status, fields: (rb.payload as { fields?: string[] }).fields },
