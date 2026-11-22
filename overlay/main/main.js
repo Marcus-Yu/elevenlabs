@@ -1,10 +1,15 @@
 // Atlas overlay main process: one transparent, always-on-top window over the
 // primary display, a global hotkey, the 5-state machine and the data provider.
 const path = require("node:path");
-const { app, BrowserWindow, globalShortcut, ipcMain, screen } = require("electron");
+const { app, BrowserWindow, globalShortcut, ipcMain, screen, session, systemPreferences } = require("electron");
 const mock = require("./providers/mock");
-const { next: nextState, ignoresMouse } = require("./state");
+const { next: nextState, voice: voiceState, ignoresMouse } = require("./state");
 const { openIntroWindow } = require("./introWindow");
+const { loadEnvFile, voiceConfig, mintSignedUrl } = require("./voice-config");
+
+loadEnvFile(process.env); // overlay/.env (gitignored) fills ELEVENLABS_* if unset
+const voice = voiceConfig(process.env);
+if (!voice) console.warn("[atlas] voice disabled: set ELEVENLABS_API_KEY and ELEVENLABS_AGENT_ID (env or overlay/.env)");
 
 const HOTKEY = process.env.ATLAS_HOTKEY || "Alt+Space";
 const LEAVE_MS = 1000; // design: leaving holds 1000 ms, then hidden
@@ -123,14 +128,27 @@ if (!app.requestSingleInstanceLock()) {
     return snap;
   });
   ipcMain.on("atlas:nav", (_e, move) => send(move === "advance" ? "advance" : "dismiss"));
+  // Voice: the renderer gets a one-conversation signed URL, never the API key.
+  ipcMain.handle("atlas:voice-url", () => (voice ? mintSignedUrl(voice) : null));
+  ipcMain.on("atlas:voice-state", (_e, mode) => {
+    const target = voiceState(state, mode);
+    if (target !== state) go(target);
+  });
 
-  app.whenReady().then(() => {
+  app.whenReady().then(async () => {
+    if (voice) {
+      session.defaultSession.setPermissionRequestHandler((_wc, permission, done) => done(permission === "media"));
+      if (process.platform === "darwin") {
+        const granted = await systemPreferences.askForMediaAccess("microphone").catch(() => false);
+        if (!granted) console.warn("[atlas] microphone access denied; voice will not hear you (System Settings → Privacy → Microphone)");
+      }
+    }
     createWindow();
     if (process.platform === "darwin" && app.dock) app.dock.hide();
     if (!globalShortcut.register(HOTKEY, () => send("toggle"))) {
       console.warn(`[atlas] could not register hotkey ${HOTKEY}; set ATLAS_HOTKEY to another accelerator`);
     } else {
-      console.log(`[atlas] ready · press ${HOTKEY} to summon · data: ${provider === mockProvider ? "mock" : "live"}`);
+      console.log(`[atlas] ready · press ${HOTKEY} to summon · data: ${provider === mockProvider ? "mock" : "live"} · voice: ${voice ? "on" : "off"}`);
     }
   });
 

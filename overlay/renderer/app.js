@@ -2,6 +2,7 @@
 // route through it); this file reflects it in the DOM and mounts the cards.
 import * as cards from "./cards.js";
 import { h } from "./dom.js";
+import { initVoice, onOverlayState } from "./voice.js";
 
 const root = document.getElementById("atl");
 const colL = document.getElementById("col-l");
@@ -68,8 +69,10 @@ async function act(action) {
     refreshAll();
     // The live provider runs research on the next snapshot after approval.
     if (action.type === "approve_brief" && state === "speaking") load("speaking");
+    return next;
   } catch (err) {
     console.error("[atlas] act failed", err);
+    return { error: err.message };
   }
 }
 
@@ -91,7 +94,11 @@ function setState(next) {
   }
 }
 
-window.atlas.onState(setState);
+initVoice({ act, root });
+window.atlas.onState((next) => {
+  setState(next);
+  onOverlayState(next);
+});
 document.getElementById("ball").addEventListener("click", () => window.atlas.nav("advance"));
 document.getElementById("scrim").addEventListener("click", () => window.atlas.nav("dismiss"));
 window.addEventListener("keydown", (e) => {
