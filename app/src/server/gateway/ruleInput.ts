@@ -1,5 +1,7 @@
 import type { ActionRequest } from "../../shared/contracts";
 import type { CardPublishPayload, DraftCreatePayload, OutreachSendPayload } from "./payloads";
+import { PROVIDER_BOUND } from "./rules/actionGroups";
+import { collectStrings } from "./rules/factMatch";
 import type { RuleInput, GatewayEnv } from "./rules/types";
 import type { GatewayStore } from "./store";
 
@@ -32,10 +34,12 @@ export async function buildRuleInput(
     facts: [],
     usedFactIds: [],
     outgoingText: [],
+    providerText: PROVIDER_BOUND.has(actionType) || request.origin === "watcher" ? collectStrings(request.payload) : [],
     recipient: null,
     recipientOptedOut: false,
     draft: null,
     match: null,
+    revealMatch: null,
     sendsToday: 0,
     priorApprovedSend: false,
     env,
@@ -57,11 +61,15 @@ export async function buildRuleInput(
       goalId ? store.countAllowedSends(goalId, startOfUtcDay(now)) : Promise.resolve(0),
       store.hasApprovedSendTo(userId, recipient),
     ]);
+  } else if (actionType === "contact.reveal_email") {
+    const { matchId, companyDomain } = request.payload as { matchId?: string; companyDomain: string };
+    const match = matchId ? await store.getMatch(matchId) : goalId ? await store.findMatchByDomain(goalId, companyDomain) : null;
+    input.revealMatch = match && match.goalId === goalId ? match : null;
   } else if (actionType === "card.publish") {
     input.outgoingText = Object.values((request.payload as CardPublishPayload).fields);
   }
 
-  if (input.outgoingText.length > 0 || input.usedFactIds.length > 0) {
+  if (input.outgoingText.length > 0 || input.usedFactIds.length > 0 || input.providerText.length > 0) {
     input.facts = await store.getUserFacts(userId);
   }
   return input;
