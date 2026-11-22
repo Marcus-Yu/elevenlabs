@@ -37,7 +37,13 @@ export function createPrismaStore(prisma: PrismaClient): GatewayStore {
       });
     },
     async getMatch(matchId) {
-      return prisma.match.findUnique({ where: { id: matchId }, select: { id: true, goalId: true } });
+      return prisma.match.findUnique({ where: { id: matchId }, select: { id: true, goalId: true, status: true } });
+    },
+    async findMatchByDomain(goalId, domain) {
+      return prisma.match.findFirst({
+        where: { goalId, company: { domain: domain.trim().toLowerCase() } },
+        select: { id: true, goalId: true, status: true },
+      });
     },
     async getDraft(draftId) {
       const draft = await prisma.draft.findUnique({
