@@ -87,6 +87,11 @@ export function createMaritimeAdapter(options: MaritimeAdapterOptions) {
       });
     },
 
+    /** Rebuilds an existing box from a new ZIP upload; /data is kept. */
+    async redeploy(agentId: string, uploadS3Key: string): Promise<{ id?: string; status?: string }> {
+      return call("POST", "/api/deploy", { agentId, source: "zip", uploadS3Key });
+    },
+
     async findWatcher(goalId: string): Promise<MaritimeAgent | undefined> {
       const agents = await call<MaritimeAgent[]>("GET", "/api/agents");
       return agents.find((a) => a.externalId === watcherExternalId(goalId));

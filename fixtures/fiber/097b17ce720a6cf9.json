@@ -1,0 +1,1427 @@
+{
+  "version": 1,
+  "provider": "fiber",
+  "hash": "097b17ce720a6cf9",
+  "recordedAt": "2026-11-22T18:28:41.799Z",
+  "request": {
+    "method": "POST",
+    "url": "https://api.fiber.ai/v1/people-search",
+    "body": {
+      "apiKey": "[REDACTED]",
+      "pageSize": 15,
+      "searchParams": {
+        "jobTitleV2": {
+          "anyOf": [
+            {
+              "type": "term",
+              "term": "robotics engineer"
+            }
+          ]
+        },
+        "keywords": {
+          "containsAny": [
+            "ROS",
+            "C++"
+          ]
+        },
+        "yearsOfExperience": {
+          "lowerBound": 2
+        },
+        "country3LetterCode": {
+          "anyOf": [
+            "USA"
+          ]
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "body": {
+      "output": {
+        "data": [
+          {
+            "name": "Jerin Peter",
+            "first_name": "Jerin",
+            "last_name": "Peter",
+            "url": "https://www.linkedin.com/in/jerinpeter",
+            "primary_slug": "jerinpeter",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Robotics Engineer",
+                "company_name": "OpenMind AGI",
+                "start_date": "2025-09-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Teaching Assistant : EE020B, EE005",
+                "start_date": "2024-10-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Project Engineer",
+                "start_date": "2023-07-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Research Intern",
+                "start_date": "2023-07-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Software Engineer Intern",
+                "start_date": "2022-08-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Student Fellow",
+                "start_date": "2021-08-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Research Intern",
+                "start_date": "2020-02-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Intern",
+                "start_date": "2020-01-01T00:00:00.000Z",
+                "seniority": "Internship"
+              }
+            ],
+            "skills": [
+              "Coordinated",
+              "Robot Control",
+              "Robot",
+              "Calibration",
+              "LiDAR",
+              "Network Configuration",
+              "Docker Products",
+              "Real-time Control",
+              "Git",
+              "Digital Electronics",
+              "Analog Circuits",
+              "Analog Circuit Design",
+              "Analog Integrated Circuit Design",
+              "Arduino",
+              "Linear Algebra",
+              "MATLAB",
+              "ROS2",
+              "Academic Research",
+              "Embedded Systems",
+              "System Control",
+              "PID",
+              "Robot Operating System (ROS)",
+              "Embedded C++",
+              "C++",
+              "Linux",
+              "Python (Programming Language)",
+              "C (Programming Language)",
+              "Engineering",
+              "Computer-Aided Design (CAD)",
+              "3D printing",
+              "Microcontrollers",
+              "Robotics",
+              "Raspberry Pi",
+              "Autonomous Vehicles",
+              "Drone Piloting",
+              "::ROS",
+              "FOSS",
+              "Electronics and communication"
+            ]
+          },
+          {
+            "name": "Bharath Reddy Bora",
+            "first_name": "Bharath",
+            "last_name": "Reddy Bora",
+            "url": "https://linkedin.com/in/bharath-reddy-bora-820172154",
+            "primary_slug": "bharath-reddy-bora-820172154",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Embedded Robotics Engineer",
+                "company_name": "Treeswift",
+                "start_date": "2025-10-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "R&D Robotics Engineer",
+                "start_date": "2025-01-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Systems Automation Engineer",
+                "start_date": "2024-01-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Research Engineer",
+                "start_date": "2022-09-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Embedded Robotics Research Engineer",
+                "start_date": "2021-12-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Engineer - (Sanitary Robots Project)",
+                "start_date": "2020-08-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Embedded Engineer",
+                "start_date": "2019-05-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              }
+            ],
+            "skills": []
+          },
+          {
+            "name": "Milan Shah",
+            "first_name": "Milan",
+            "last_name": "Shah",
+            "url": "https://www.linkedin.com/in/milan-r-shah",
+            "primary_slug": "milan-r-shah",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Robotics Software Engineer II",
+                "company_name": "Piaggio Fast Forward",
+                "start_date": "2025-01-01T00:00:00.000Z",
+                "seniority": "Associate"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Software Engineer",
+                "start_date": "2021-01-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Computer Vision Intern",
+                "start_date": "2020-07-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Software Intern",
+                "start_date": "2019-07-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Graduate Student Research Assistant",
+                "start_date": "2019-02-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Application Development Associate/Analyst",
+                "start_date": "2017-11-01T00:00:00.000Z",
+                "seniority": "Associate"
+              },
+              {
+                "is_current": false,
+                "title": "Application Development Associate",
+                "start_date": "2017-02-01T00:00:00.000Z",
+                "seniority": "Associate"
+              },
+              {
+                "is_current": false,
+                "title": "Automation Intern",
+                "start_date": "2015-06-01T00:00:00.000Z",
+                "seniority": "Internship"
+              }
+            ],
+            "skills": [
+              "Multi-Object Tracking",
+              "State Estimation",
+              "Mobile Robotics",
+              "Robotics",
+              "C++",
+              "Robot Operating System (ROS)",
+              "Computer Vision",
+              "Object-Oriented Programming (OOP)",
+              "Machine Learning",
+              "Microcontrollers",
+              "Artificial Intelligence (AI)",
+              "Automation",
+              "Programming",
+              "Project Management",
+              "Electronics",
+              "Research",
+              "Data Analysis",
+              "Deep Learning",
+              "Localization",
+              "Software Architecture",
+              "Python",
+              "Matlab",
+              "C",
+              "Point Cloud Library (PCL)",
+              "Linux",
+              "Git",
+              "Programmable Logic Controller (PLC)",
+              "Arduino",
+              "Embedded Systems",
+              "TensorFlow",
+              "Teamwork",
+              "Leadership",
+              "Perception",
+              "SLAM",
+              "Sensor Fusion",
+              "Gazebo",
+              "Raspberry Pi",
+              "Microprocessors",
+              "Machine Vision",
+              "Autonomous Vehicles",
+              "Algorithm Design",
+              "NumPy",
+              "OpenCV"
+            ]
+          },
+          {
+            "name": "Suraj Shankar Sapkal",
+            "first_name": "Suraj",
+            "last_name": "Sapkal",
+            "url": "https://www.linkedin.com/in/suraj-sapkal",
+            "primary_slug": "suraj-sapkal",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Senior Software Engineer - Surgical Robotics",
+                "company_name": "Medtronic",
+                "start_date": "2024-09-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Senior Software Engineer",
+                "start_date": "2024-07-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Autonomy Engineer",
+                "start_date": "2022-04-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Software Engineer - Mobile Robotics",
+                "start_date": "2020-11-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Autonomy Software Engineer/ Intern",
+                "start_date": "2019-09-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Software Intern",
+                "start_date": "2019-06-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Teaching Assistant",
+                "start_date": "2019-05-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Senior System Engineer",
+                "start_date": "2017-04-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Systems Engineer",
+                "start_date": "2016-01-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Systems Engineer Trainee",
+                "start_date": "2015-07-01T00:00:00.000Z",
+                "seniority": "Internship"
+              }
+            ],
+            "skills": [
+              "Computer Vision",
+              "C++",
+              "Machine Learning",
+              "Linux",
+              "Robot Operating System (ROS)",
+              "OpenCV",
+              "Point Cloud Library (PCL)",
+              "Python (Programming Language)",
+              "Deep Learning",
+              "Software Development",
+              "Matlab",
+              "CATIA",
+              "SolidWorks",
+              "Microsoft Office"
+            ]
+          },
+          {
+            "name": "Steve T.",
+            "first_name": "Steve",
+            "last_name": "T.",
+            "url": "https://www.linkedin.com/in/stevetran21",
+            "primary_slug": "stevetran21",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Senior Robotics Engineer",
+                "company_name": "Axiom Space",
+                "start_date": "2023-02-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Engineer Intern",
+                "start_date": "2022-06-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Engineer Intern",
+                "start_date": "2021-06-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Field Engineer",
+                "start_date": "2018-06-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Sales Specialist",
+                "start_date": "2013-04-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              }
+            ],
+            "skills": [
+              "ROS2",
+              "Trick",
+              "CoppeliaSim",
+              "Window Subsystem Linux",
+              "Ubuntu",
+              "Gazebo",
+              "Robot Operating System (ROS)",
+              "Kinematics",
+              "Dynamics",
+              "Python (Programming Language)",
+              "C++",
+              "C (Programming Language)",
+              "MATLAB",
+              "Lua",
+              "Simulink",
+              "NVIDIA cuDNN",
+              "Nvidia",
+              "CUDA",
+              "Machine Learning",
+              "Artificial Intelligence (AI)"
+            ]
+          },
+          {
+            "name": "Ashwin Varghese Kuruttukulam",
+            "first_name": "Ashwin",
+            "last_name": "Kuruttukulam",
+            "url": "https://www.linkedin.com/in/ashwinvk94",
+            "primary_slug": "ashwinvk94",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Staff Robotics Software Engineer",
+                "company_name": "NVIDIA",
+                "start_date": "2025-03-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Senior Robotics Software Engineer",
+                "start_date": "2022-04-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Lead Software Engineer",
+                "start_date": "2019-03-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Drone Expert Advisor",
+                "start_date": "2018-10-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Research Assistant",
+                "start_date": "2019-08-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Graduate Student",
+                "start_date": "2018-09-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Grader",
+                "start_date": "2019-01-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Associate Researcher",
+                "start_date": "2017-08-01T00:00:00.000Z",
+                "seniority": "Associate"
+              },
+              {
+                "is_current": false,
+                "title": "Research Assistant",
+                "start_date": "2017-08-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Project Engineer",
+                "start_date": "2016-08-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              }
+            ],
+            "skills": [
+              "Robotics",
+              "Software Development",
+              "Leadership",
+              "Research",
+              "Project Management",
+              "C++",
+              "C",
+              "Matlab",
+              "Microsoft Word",
+              "Public Speaking",
+              "Management",
+              "Teamwork",
+              "Programming",
+              "Java",
+              "Team Management",
+              "Microsoft Office",
+              "UAV",
+              "Robot Operating System (ROS)",
+              "Python (Programming Language)",
+              "Computer Vision"
+            ]
+          },
+          {
+            "name": "Karthick Subramanian",
+            "first_name": "Karthick",
+            "last_name": "Subramanian",
+            "url": "https://linkedin.com/in/karthick-subra",
+            "primary_slug": "karthick-subra",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Robotics Engineer",
+                "company_name": "CleanBotix",
+                "start_date": "2025-08-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Software Developer",
+                "start_date": "2024-08-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Research Aide",
+                "start_date": "2024-01-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Software Engineer Intern",
+                "start_date": "2023-06-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Teaching Aide",
+                "start_date": "2022-08-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Junior Analyst",
+                "start_date": "2021-11-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              }
+            ],
+            "skills": []
+          },
+          {
+            "name": "Naveen Kumar",
+            "first_name": "Naveen",
+            "last_name": "Kumar",
+            "url": "https://www.linkedin.com/in/naveenkumarkewalramani",
+            "primary_slug": "naveenkumarkewalramani",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Robotics Engineer",
+                "company_name": "Confidential Organization",
+                "start_date": "2024-09-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Mechatronics and Robotics Engineer",
+                "start_date": "2023-08-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Graduate Student Researcher",
+                "start_date": "2022-09-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Engineer/Mechanical Design Engieer (MS Thesis)",
+                "start_date": "2022-06-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Electronic Board Designer",
+                "start_date": "2023-01-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Electronic Board Design Engineer",
+                "start_date": "2022-11-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics intern",
+                "start_date": "2022-06-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Research Assistant",
+                "start_date": "2020-10-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Junior Project Engineer",
+                "start_date": "2020-08-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Intern",
+                "start_date": "2019-10-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Trainee",
+                "start_date": "2017-06-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Trainee",
+                "start_date": "2017-05-01T00:00:00.000Z",
+                "seniority": "Internship"
+              }
+            ],
+            "skills": [
+              "Reinforcement Learning",
+              "MOVEit",
+              "PyTorch",
+              "TensorFlow",
+              "FreeCAD",
+              "KiCAD",
+              "Altium Designer",
+              "Autodesk EAGLE",
+              "Modeling and Simulation",
+              "Automation",
+              "p5.js",
+              "OpenCV",
+              "Path Planning",
+              "State Estimation",
+              "Visual SLAM",
+              "Git",
+              "Raspberry Pi",
+              "Communication",
+              "SOLIDWORKS",
+              "SLAM",
+              "Python (Programming Language)",
+              "Robot Operating System (ROS)",
+              "Python",
+              "MATLAB",
+              "Robotics",
+              "Research",
+              "Engineering",
+              "CAD",
+              "Mechanical Engineering",
+              "Microsoft Office",
+              "Microsoft Word",
+              "C",
+              "AutoCAD",
+              "PowerPoint",
+              "C++",
+              "IBM Cognos",
+              "LaTeX",
+              "Mendeley",
+              "Arduino",
+              "Public Speaking",
+              "English",
+              "Internet of Things",
+              "EndNote",
+              "Zotero",
+              "Web of Science",
+              "RStudio",
+              "optimistic",
+              "virtual lab",
+              "inquistive",
+              "Respberry pi",
+              "Vim",
+              "Google Sites",
+              "Eagle PCB",
+              "Soldering",
+              "Altium",
+              "GitHub"
+            ]
+          },
+          {
+            "name": "Jason Koubi",
+            "first_name": "Jason",
+            "last_name": "Koubi",
+            "url": "linkedin.com/in/jason-koubi-761345213",
+            "primary_slug": "jason-koubi-761345213",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Robotics Support Engineer",
+                "company_name": "Hello Robot Inc",
+                "start_date": "2025-11-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Software Engineer",
+                "start_date": "2025-05-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Educator",
+                "start_date": "2023-03-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Software Engineer",
+                "start_date": "2023-01-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Mechanical Project Engineer",
+                "start_date": "2021-01-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              }
+            ],
+            "skills": [
+              "Documentation",
+              "Mechanical Engineering",
+              "Mechatronics",
+              "Embedded Software",
+              "FreeCAD",
+              "Computer Vision",
+              "OpenCV",
+              "YOLO",
+              "Point Cloud Library (PCL)",
+              "Image Processing",
+              "Point Cloud Processing",
+              "Teaching",
+              "Course Creation",
+              "Programming",
+              "Engineering",
+              "Robotics",
+              "DevOps",
+              "Algorithms",
+              "Software Development",
+              "Object-Oriented Programming (OOP)",
+              "Unit Testing",
+              "Python",
+              "Behavior Trees",
+              "Navigation",
+              "URDF",
+              "Rviz",
+              "Perception",
+              "Manipulation",
+              "MoveIt!",
+              "Docker",
+              "ROS",
+              "Autonomous Navigation",
+              "Gazebo",
+              "Simulink",
+              "MATLAB",
+              "ROS2",
+              "MOVEit",
+              "Jenkins",
+              "Arduino",
+              "GitHub",
+              "Git",
+              "Linux",
+              "C++",
+              "Python (Programming Language)",
+              "Robot Operating System (ROS)"
+            ]
+          },
+          {
+            "name": "VIDYAA KRISHNAN",
+            "first_name": "VIDYAA",
+            "last_name": "KRISHNAN",
+            "url": "https://www.linkedin.com/in/vidyaa-krishnan",
+            "primary_slug": "vidyaa-krishnan",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Robotics Software Engineer II",
+                "company_name": "GrayMatter Robotics",
+                "start_date": "2026-01-01T00:00:00.000Z",
+                "seniority": "Associate"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Software Engineer",
+                "start_date": "2024-06-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Graduate Teaching Assistant",
+                "start_date": "2023-01-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Graduate Student Researcher",
+                "start_date": "2022-08-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Intern",
+                "start_date": "2023-08-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Engineer Intern",
+                "start_date": "2023-05-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Grader",
+                "start_date": "2022-08-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "ADAS Feature Developer",
+                "start_date": "2020-07-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Treasurer",
+                "start_date": "2019-07-01T00:00:00.000Z",
+                "seniority": "Executive"
+              },
+              {
+                "is_current": false,
+                "title": "Treasurer",
+                "start_date": "2019-07-01T00:00:00.000Z",
+                "seniority": "Executive"
+              },
+              {
+                "is_current": false,
+                "title": "Workshop Coordinator",
+                "start_date": "2017-06-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Research Intern",
+                "start_date": "2019-05-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Member",
+                "start_date": "2017-06-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Project Intern",
+                "start_date": "2018-11-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Summer Research Intern",
+                "start_date": "2018-05-01T00:00:00.000Z",
+                "seniority": "Internship"
+              }
+            ],
+            "skills": [
+              "Advanced Driver-Assistance Systems (ADAS)",
+              "Mobile Robotics",
+              "Path Planning",
+              "Computer-Aided Design (CAD)",
+              "Research",
+              "Project Management",
+              "Robotics",
+              "Machine Learning",
+              "Programming",
+              "Computer Vision",
+              "Deep Learning",
+              "Python (Programming Language)",
+              "Artificial Intelligence (AI)",
+              "C (Programming Language)"
+            ]
+          },
+          {
+            "name": "Varun Walimbe",
+            "first_name": "Varun",
+            "last_name": "Walimbe",
+            "url": "linkedin.com/in/varun-walimbe-992929183",
+            "primary_slug": "varun-walimbe-992929183",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Robotics Engineer",
+                "company_name": "EPC Power Corp.",
+                "start_date": "2025-05-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Integration Engineer (Vision & AI)",
+                "start_date": "2024-11-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Field Engineer",
+                "start_date": "2024-07-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Engineer",
+                "start_date": "2023-06-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Graduate Teaching Assistant",
+                "start_date": "2023-03-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Innovation Studio Building Manager",
+                "start_date": "2022-09-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Computer Vision Engineer",
+                "start_date": "2022-06-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Innovation Studio Building Manager",
+                "start_date": "2022-03-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Computer Vision Intern",
+                "start_date": "2021-04-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Engineering Intern",
+                "start_date": "2020-08-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Electronics Engineering Intern",
+                "start_date": "2019-06-01T00:00:00.000Z",
+                "seniority": "Internship"
+              }
+            ],
+            "skills": [
+              "PyTorch",
+              "Conveyor Systems",
+              "Collaborative Robotics",
+              "Robotics",
+              "KRL",
+              "ROS 2",
+              "Linux",
+              "Problem Solving",
+              "Troubleshooting",
+              "Camera Calibration",
+              "Industrial Sensors",
+              "Vibration Analysis",
+              "Robot Programming",
+              "Cross-team Collaboration",
+              "Field Service Engineering",
+              "Kuka",
+              "Epson",
+              "Fanuc Robots",
+              "Denso",
+              "Doosan",
+              "Communication",
+              "Embedded Software",
+              "Embedded Systems",
+              "Deep Learning",
+              "Computer Vision",
+              "Keras",
+              "3D Printing",
+              "Help Desk Support",
+              "Autodesk Fusion 360",
+              "Point Cloud Library (PCL)",
+              "SQL",
+              "TensorFlow",
+              "MATLAB",
+              "C++",
+              "Python (Programming Language)",
+              "Robot Operating System (ROS)",
+              "OpenCV"
+            ]
+          },
+          {
+            "name": "Vishwajeet Karmarkar",
+            "first_name": "Vishwajeet",
+            "last_name": "Karmarkar",
+            "url": "https://www.linkedin.com/in/vishkar",
+            "primary_slug": "vishkar",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Staff Software Engineer, Robotics",
+                "company_name": "Bright Machines",
+                "start_date": "2026-03-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Senior Software Engineer, Robotics",
+                "start_date": "2025-03-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Software Engineer, Robotics",
+                "start_date": "2023-04-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Software Engineer",
+                "start_date": "2022-04-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Software Engineer",
+                "start_date": "2021-01-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Volunteer : Section Leader, Code in Place",
+                "start_date": "2021-04-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Researcher - Assistive Robotics Lab",
+                "start_date": "2020-02-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Software Engineer",
+                "start_date": "2019-02-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Innovation Engineer",
+                "start_date": "2017-01-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Co Founder",
+                "start_date": "2015-11-01T00:00:00.000Z",
+                "seniority": "Executive"
+              }
+            ],
+            "skills": [
+              "Robot Operating System (ROS)",
+              "C++",
+              "Matlab",
+              "Engineering",
+              "Finite Element Analysis",
+              "CAD",
+              "Manufacturing",
+              "Product Development",
+              "Computer-Aided Design (CAD)",
+              "Deep Learning",
+              "Microsoft Excel",
+              "PowerPoint",
+              "Catia",
+              "AutoCAD",
+              "Solidworks",
+              "PTC Creo",
+              "Microsoft Word",
+              "ANSYS",
+              "C",
+              "Microsoft PowerPoint",
+              "Management",
+              "Leadership",
+              "Mechanical Engineering",
+              "Carbon Fiber",
+              "Polymer Composites",
+              "Convolutional Neural Networks (CNN)",
+              "SLAM",
+              "Python (Programming Language)"
+            ]
+          },
+          {
+            "name": "Sai Madhavan Surabathula",
+            "first_name": "Sai",
+            "last_name": "Surabathula",
+            "url": "https://www.linkedin.com/in/sai-madhavan-surabathula-0202199",
+            "primary_slug": "sai-madhavan-surabathula-0202199",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Robotics Engineer",
+                "company_name": "Flexiv Robotics",
+                "start_date": "2025-11-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Founding Engineer - Robotic Systems and Control",
+                "start_date": "2025-04-01T00:00:00.000Z",
+                "seniority": "Executive"
+              },
+              {
+                "is_current": false,
+                "title": "Project Engineer - Mechatronics",
+                "start_date": "2024-03-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Graduate Research Assistant",
+                "start_date": "2023-03-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Graduate Teaching Assistant 530.641 - Statistical Learning for Engineers",
+                "start_date": "2023-08-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Graduate Teaching Assistant 530.420 - Robot Sensors and Actuators",
+                "start_date": "2023-08-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Henderson Hopkins Math Tutor",
+                "start_date": "2023-02-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Assistant Manager - Vehicle Integration",
+                "start_date": "2021-03-01T00:00:00.000Z",
+                "seniority": "Associate"
+              },
+              {
+                "is_current": false,
+                "title": "Project Assistant",
+                "start_date": "2020-11-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Team Lead",
+                "start_date": "2019-08-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Product Manager - Intern",
+                "start_date": "2020-03-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Technical Representative",
+                "start_date": "2018-09-01T00:00:00.000Z",
+                "seniority": "Associate"
+              },
+              {
+                "is_current": false,
+                "title": "Research Intern - Material Science",
+                "start_date": "2017-08-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Convenor",
+                "start_date": "2018-02-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              }
+            ],
+            "skills": [
+              "Robot Dynamics",
+              "Design of Experiments (DOE)",
+              "Numerical Optimization",
+              "Contact Estimation",
+              "Automotive",
+              "Data Acquisition",
+              "Algorithm Design",
+              "Onshape",
+              "Mqtt",
+              "Node-RED",
+              "Motion Control",
+              "Motion Planning",
+              "User Interface Design",
+              "Technology Integration",
+              "System Integration Testing",
+              "System Architecture",
+              "System Deployment",
+              "Robotics",
+              "Research and Development (R&D)",
+              "Mechatronics",
+              "Manufacturing Process Improvement",
+              "Process Optimization (Manufacturing)",
+              "Manual Testing",
+              "Heavy Engineering"
+            ]
+          },
+          {
+            "name": "Vasavi Kandula",
+            "first_name": "Vasavi",
+            "last_name": "Kandula",
+            "url": "https://www.linkedin.com/in/vasavikand",
+            "primary_slug": "vasavikand",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "AI Robotics Engineer",
+                "company_name": "Agility Robotics",
+                "start_date": "2025-05-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Engineer Intern",
+                "start_date": "2024-06-01T00:00:00.000Z",
+                "seniority": "Internship"
+              },
+              {
+                "is_current": false,
+                "title": "Machine Learning Engineer",
+                "start_date": "2022-07-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              }
+            ],
+            "skills": [
+              "Data Modeling",
+              "Data Analysis",
+              "SQL Server Reporting Services (SSRS)",
+              "Data Governance",
+              "Microsoft Power BI",
+              "SQL Server Integration Services (SSIS)",
+              "Databases",
+              "SQL",
+              "Microsoft Azure",
+              "Snowflake",
+              "Hadoop",
+              "PySpark",
+              "Python (Programming Language)",
+              "Java",
+              "C++",
+              "Tableau",
+              "MySQL",
+              "Communication",
+              "Analytical Skills"
+            ]
+          },
+          {
+            "name": "Ayush Ghosh",
+            "first_name": "Ayush",
+            "last_name": "Ghosh",
+            "url": "https://www.linkedin.com/in/a-ghosh",
+            "primary_slug": "a-ghosh",
+            "experiences": [
+              {
+                "is_current": true,
+                "title": "Robotics Systems Engineer",
+                "company_name": "NVIDIA",
+                "start_date": "2023-09-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": true,
+                "title": "Senior Robotics Systems Engineer",
+                "company_name": "NVIDIA",
+                "start_date": "2026-03-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Simulation Software Engineer",
+                "start_date": "2022-01-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Robotics Simulation Software Engineer",
+                "start_date": "2021-05-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Core Developer  - Path Planning",
+                "start_date": "2020-09-01T00:00:00.000Z",
+                "seniority": "Mid-Senior level"
+              },
+              {
+                "is_current": false,
+                "title": "Aerospace Engineer",
+                "start_date": "2020-09-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Mechatronics and Software Engineer ",
+                "start_date": "2020-01-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Software and Embedded Hacking",
+                "start_date": "2018-09-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Vehicle Autonomy Software Developer",
+                "start_date": "2019-09-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Underwater Robot Autonomy Developer",
+                "start_date": "2019-05-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              },
+              {
+                "is_current": false,
+                "title": "Software Designer - Mars Rover Design Team",
+                "start_date": "2018-09-01T00:00:00.000Z",
+                "seniority": "Entry level"
+              }
+            ],
+            "skills": [
+              "Robotics Simulation",
+              "Team Leadership",
+              "Robotics",
+              "Robot Operating System (ROS)",
+              "Machine Learning",
+              "Software Project Management",
+              "C++",
+              "Python (Programming Language)",
+              "Data Analysis",
+              "Unix Command Line (Bash)",
+              "Arduino",
+              "HTML5",
+              "Cascading Style Sheets (CSS)",
+              "JavaScript",
+              "PHP",
+              "SolidWorks",
+              "OpenCV",
+              "Rviz (Linux)",
+              "ARM Cortex-M",
+              "Dynamixel Actuators & Servos"
+            ]
+          }
+        ],
+        "estimatedCount": null,
+        "nextCursor": "gAAAAABrAzRZV3CzCILMtCcU9aHtzttqd5J_Fu5W7WOxXbG-Co9XH50Cd6suHLtW8jmAGWQVhOjaF4drEM7SqZ0fzX7_Hs0jmIePyYbnZ8YBZVqF0gpYKwnju76L4oOww97Y6nD93mbN101EGLsmt2hq81ikpw2M4dcs_U9n_T1keeRB5DcaOtjPMN-ZK-AGyzsygKa3V73IF02NicjBNUQ3xQXoXAACASQkYwGI67gMDrUIPWPdDdxbl-Zx07hIbpPdgtePeRVAo2ssE94Xpm_1xMr8_a61hxk08xhy9I6Y5eQAelMkwbwezkL7bxAyHV4SbxLZxahsyava5KhK4gytt6s0iKUvolPw6StCSM0NNy83YkLJ5SaExP_NpuBFTshRGDoqDvS3MpG25BpCYGjOyrqp7N43BIBiypXlFTTpDy3Z233lMTCn8w9oCfAgxL9RNIsmGxpvj7-3i8WYrwJXeNBR6JqZf5iKYBf4fGc_JjGJoDiUsfmRgV6NQzy1Ud3s4tNxEfbcmnwM57VQrz-K7CV7xOAvo16df4UcEN-oi7yuLBsavS0-CO7S15EBfqoKbhg-a08O4cr6m0wK5Cp5EzLwbetOg-evPeQE7QZgZTjjWy-UslQz1eDmCdRZMbxLrfxXSSUFPXj2X6jBKdswPOQlQqUnkDBqkoFDakrs3wFPzNaDazG5vL6LOqNH7DO0hubSPxwuHCiK8KOYztn89sUlVA-xXbGK-hq89iyBNNcgd0WDNzS3jtRGiHUfSxXIaepH25WJfYY1tqCzhgSRsIPpwvDR0dwOGGF8BhvYR2KCg1-iH4zcOIlm5QR51hyWevcamjnzzTp536k5CflduihZOxfSCMud5WA-yC3FvCzcRSCGbf9s4jmixvECJp-h1sB6JhndruF31QcSD4FT6ZEOYu6rJlN4zkSUQLWkzT5LpyKNyISwx0JV45z43zsozr6mEtBLm3K9sxigWo-KUCXD33mO1zMQI6TJpwQYBI9zlluEws8FgpS1ZMsP-pp0B-nYyuLLUl1JO10MkKxFAf8bVf7oEP2Mt5mj9PCHmwpy5f-L9VRmi2kl3SlTwqUT-tR9XepKMGgZhRQgTm4onDC9MoFiFxJJpsUujyrdQLuo4ERVNe-Q8vp7IP9paZ5I8Glep1LRTuVW2NK3TpnmboNt2Ue4n8jIZWc0cnIj7tHjFoXQSqUc1uFSwxwcoU6C-npNJ6kzalSGibMsP0nhXZXxIBJRC3b3iGDM3eg1bIVWF_zaMLC9jiasePpCBebPXQmsWL0anasV8KKVZDxGezZJkhalyzDkGwrGP26QK0Ji1Jc_JpJaveHLMvfp5vpSsHOh9gtcDvH3auzicwt-AhXFxTnkyGMUzSC-67KODTpiPtqYITX8RomUc5kPbDmFQpStLo84Qp89iKp1g1OTC3Rz7vm92LP01WesH85qyQivPxIE4EyD6IiIG7XDThm6rrhtesT28W_gvWgdXqcoKbfWAkWbmFD2TVDGXm2bKiPwJNmS_kRdjez0TWoBS8f8iLBmaRjBLgxfbxnm8nAJxQY5jYKvs3CI8wlhBqkxFLiGt4XP0gWyM7FIR-CH0RPot86C-3ILcxyS-LdE7lrdEhIwkwLtjRnIX0tXyXRUjguXpsOr1jORi4mIBrxEAyqoAlfNgZBkx-lglgXysHHLm-mZd-_J9ROrUWpazKgOUOt2CsNqWvEkBErYlhnYInOH0gKKERv295Y8mHg7lumobr7MFj9ktVyihb9p7KougDyjuGhivc8Aw3_PD6FJzCH9ddqab-SqiZc9r5xrGcOiPRfvjLyOjU7RZEOr8rp7-UWJYO6ArVyyYZZckjxPvKcZBdK7rVI3LB8e-sWtM4YioQbRmSh9MdNCbjHgSS272pT3BbnxdsrztGL6Yi5hbTxPkTB8qmhCvNnhWxqbErptm17JDhiQ7bEnnZyKOYPEfIKWNsGJXosDVdemSbkFXJPR07fNsUvKp8RPA5yMYKHaGHOuHrYASMUDSvwNdyPka0DX2bhrgjgyAJ0uXkZ2xJv5jdBrJ0ToRYM2eXhFkNd9sEagWqjngCLeD9o17mvEEm_FVOFSyTxD7eCprJ56lHS4CkbqSu_2ZN4zzPZGoozG2hY-PXzqZXbmvb_CBCFCIfxPyzLGslGKxoi25vh5N9AM7EHAMgYrV0pYaz1J3RwazCK2GoHxECcR13Kndy7ewBpUN4x5Cl654DL34Yc99KbSqpdbQqRyckFr2BIJoS_3Vj0IugaJJgB4DZg46ic9gyhSku0eAAcAj1bym7LalGv7B9332fZBQjAEuQR4om75jz-ouX4K_EW25fSLRXKkt4zO8dhmSnOstubE_tJvW4gc-THkJ793R8LhEAN3rgQxPzOUmxNKgvdCuojinrvDDZD743SisemDxyT05hJt8dyqJAl518ufw6Si2PLVdBeTd_Ghc8Uzg4Kn_8uzr1NUy2oghGXlIFA9kM0mT_kD7fEGOC0sLIpog7EBo5SQTgKyZrSXfQz2Vo9OLSkztFP_gB0mDd4fYu2x7rd4NZwGAmGyDWYGank5zGQct9rjF_lwknKqLzXqTj5aZJMP98MGK7L5lXDXv_XelR9mOs3zZSy4DCycop-72Z5zhyya38RgdC8A1Fit3K51FzWQRuB28jHlWLtDU8IWWS8C6pV3J_VvSNA5eaQ1xE7N8Z6Yp2BABEZ20KTbgBXQnz0oVGVFBxvD5Y-ylzaKwN8HbI9xqhXj_62Vqwx0CNqkju8JGQyg69MDwI5YUmN2nlRL28ss8Lo8h2UpUJiwRYAW0IhMBEJv0wX7iylwvlw1n6hxKtTXmYLoRv-umob8_HmruNOCeVLrYTfLPxt4LoP9HFTw5yYTZxHuOS20Z8vAJpyyt_UQhRhwWxl5xXots9-2mquJ7gVkGOuyIikN17lT2Y4FX9enUTZvyGP5ol8LuyCp1FNJfBT8W2BE0TBkKIQlVH0479mW9r4DmEuvwhtcQV_ka5FM0JXVEiTdBGIYDd0qdWU756rt2rkoQQiLd6YgL_OteEqgrV4sO7NzFyDIHtJFZXEZ42qMn1c5HI4rGlkJQHrnM7oiTWKUAL9AcHkSTkMwo-aY7AX2GcMDnMyFnOf3sfTC4yKk_3T-4Yq7kNegpczCnaS2UxMcAmbiFyXtzJ8iPkJrlesDJeKK-z6-_YRTf2xjkKwbMMPdn6AQjA3wCXUocnndizwepXVllhgv3ByMZitFf3MApuEDk21fnEuwy-w_V5JMGexNHepOHor9jZrMxfa5MIip_z0Ki6Tzmi03oGxU8Tar3JKuY4sVR5XlJj0VmaHUQWoMQJKliyAT-usKfRZGeH4Zdma8nuR0O1MCR-DZ1-zX2VVSEyHCiW7GJa6Ytb4rHTSp9WAQzBcLDVNm7WZQ9K014_DP7L-dxAlS33_d6ud_NvzMgw7BiMYHUnwQH89wwQMRo1gYk1TOCTgQurE1SRsgQ_To6DUpuRlrsz41e7CxgDTM_AU2PMPqbHfDlcMr7TFx19cw8ZTtxIR0bEqnE6Ajd6p2jYLvkMBgqqzbZlmz82Aq89AyuE60_myoYre2Obop9fCOEA49LC31xpsC0JR5qZvOtAn68XyXEUb8VemCFckYX_THpGbgPben9wEzh3BBCFckHbvp6a22kffQlO7N6POiA90RprS3UgmGc6xaVvR6JkKucH2muGRisKoSfayfq-WT6Ut2iTuYV6dJWtye2WOXtIKslj3KkYKFTAXsGv2H9E4w4MMfyNhSWc9HGTBArITFMQBZipXbkijjWtRsmumb0LKS8FZhmgXE6bHtBEwY_2ojULtQOxntK1gVTcnMlP3m0TyrL9bu9c1mbkL1dZPDqDs73i1MlW85f_-eZIbNAHnEkWLZR5CJ_oRb3XRsQRbj5x8H17e2jfyxZdsbtAn4nHJjxgKw8bD05cQ-toMggJThYTijGAA2TlLS7nUDyRUXTjLcltdNh9ikfjgXbM73LaMbwNFGmdFqBW50UTBibe5C1mxDJRTCyaXMPmkPRW4rP1OMnCyXe-gO4lMWpzGVowLv9Q0bqingSbEz09SrMJya2C3_Z3Hno3LW-zod9xpeBpup8caeY4VdPUd2JYWleqblY-TaxbTyG64YuLlxXRjnrtfjm1keIfMN0MQdjZjIH9byddR7NUfVRx8wBP9oinBHUw4x7HTMvKlZdzaQ-s-UxMQJbJtK0Dl1-n8tfRydrrWStuqrtYZ42Z2HveCC0cCEKE-icJ3unBds8j-kRrdXL3amIZ8Z97mlzp894FKd5bdZxO5KQlM0alwbqioZ9fuKGd7GayM3MX-w6K59iSDHthh4h4hrzzNetQgq325vXa_qEPJYyGXjf9_h-cMTxKF-tzNkPuuPizq5f52MRzp5Cvcbsz-wqJb6Ri9VAzL_i28PK4pYceOH2ZzPQgznmzCHmOTFVYo0gwHYYf-cDvZPPHjPYeghHm7fkMt6pa-XjaNM5y_c8CvIOHX-gDahFWzBKWoQdcB_d3605aRCWqIDlqTd7ytk9iC3ZAKp6bVfUTJaX3PmSECs2HBoWP2d6DSpYbkUK3F4yOcbTNsXbDq2RGHCyNnW8aNqnaYnjlbZeXI-SK-CcW3poj2GAmT7mWZDL7ek1U0usHUIys24MwA4ymY5cGRmjuFz7pH8aqXo2W7NsuucuuZU2fhXOsuEEVMg5gysbRzKzsJszXxjkDquhxm4lNJwU4VQqPrwpN2otpdwRNpBoGoLqasw94__tBrJ2CFD9nvIhgdD9xkzG2AwTdJX90gkiEQG4Yz4IkiELVj5AGbKJYE9bZUQlbrYuiS4ujsHs-sMM2oMEIFRsueJcPpD0Yz7VzSHl4xmPFu3p9NPmJVytWh7QWoRXRCgYu-ZbuGBUlJ2I4slQj_ZZOZ03xQkojTYkFPgqazhrIZPlekLo_sHjg6RNreDQaT9o2uoCPqwdZRipcBYtXRWTgTC3zqqQ5fsTU2sBpx7oOgZi4bgUkm0KOlTbD8YR9h16e15e9UmpFK9gPMurc_PAd5OHL6IjWsOkofgaL_zt7FVrMDhmxMLpuy__Ezniw7cT8FnC895si2PF8rkizeVuE9LNY0dFLsW5AgEJrALA1DDtmMhIlr0jNyIR-Btnk61rYTDF0HhBqXHs6n8w0APYiaO-8jyHygZ1AT46wp6SRUI1tEv9yKdvAvzikdrdjEiNeD61hWOJpcTman0FQm1R_SngBQk7WW4RXUF57mIoqceksR8tsbmcXTRg96B7xTcjVL1NN3RJM95z3DgausHbY0WJcxfIC6mgqR4J3R8nLG7suj4jBIj6i8HdIz0k0T_JLZKvo5x9eDhimP3zGM84xTAZ3E5H91e0jxfJxyVMjhoLlaxfmgXuYi5MVofXL3M75le_sA1MVt3uTqrnX_d6rNDQ-4W2gGOZybnVnz85bROZe8PT1So8zXan5rE1sYNtJBLhxTsIvxFUUhg7cgwv_qpXkAN-dXHUPp5CDRwQc3fTHXiAxTOQt8IByPayOJVLWk6J-TdzdcEousqwkXpX0uCucUtovghAMUsvgDdzQK9ywad4zX6JxF5Rn7_THW1YSgIEwn0HXrzTuWKIMELua3zVf8K2yJ12LM4hUn8EWLhi1CvC_P3zLsLXQJ5GWrcRnHMs6hJL22NEmHCE6gq7G071bBW-d7gCgVF1dstpw62SB3z02TxN8TANY5MSyifU7DNB4y4RKin9n9mr4c5gSTzE7628EwyXr0nTJHsgonPEjpD_uF45iEzMdFO8H0zzZZP0DmveweVNd6rCjLMl1ZSFQj5Lcm334E7expkgeoDg7L6nP1QAvznHPi501NhhYqRpmISxMLT7dK8ri4TuqE74ikVR_JIXR6vactbmVowGfJ5jpItfds7UjdVlRjVAHhBI0yEX5vX_yyU17Q3opaKpiBXVjlk8ev2qO-taI-oaBm2v6PtYdm9_Ro_jBFY625TE-DAOb24xw-TgtLcGg0cmyNEMVtMSVocV1CQTLuVPLYz5OPLphr4HmdELsaTXE6jGiOMy31usSuMTwCL_c2pEK7fnN0CbOsAKc06KHb1p6rEU2DIwaqnC-WOafXDg7f48MPjpJa1Ith9AjxMHv6NMDHOULUEr6OH6RQ-Srq2DzxvwYod9vH2s7yPNXzY4v8l6RQXo1P7dANG-R93dEySZ_Bmj7cdG9gKGcfKivSAzUvkgiwvukeAgwczj1iqz6y7np5yxjxsyzXXC4MULXPOdVFP3Nxc_yzPNLk1ZyOxg-aA-SAMtlwH42Esz_0SZ177qQX7S5KvxXzztz4zDlcHrSC-3GXIFSNWlTjqzv0lv7u2W_QVmUQcGr_BQwgVAAZEdqmx8uptkB7cgi3u8pJhDRYz7aYGMK0mMuOfG4ZNPEYjzu7lkS65ydIQehwITZ_haIfHTGoXvxL0t8-3HW5xPnu3iHIKecrexfEpT9BpwzY-lcdkViWt4YrcDTzgH5yvEZQluo2uY2QdCyGjLsDbs1rUFqG1FeTyzKBHGgihyi5HU-eUuDqRmxfungtEX4mRKw_KjcGlbMRVJjR1mrjYf1HDQHsc6OT9lWB19nJ7NNHfUsCs_Za2eNFkzU1bvK81vgueCIqyKzZ129TrzQZMNxWQDrWPgIaVI5--vx6cqmIMfgUIQO8sL3CbsvPG3ZaTYVVbFmYDm5wBGh_aDfKxuOfITa6dmbh947Cmc2Bnv34BbJUzO2gnPn4ZHjLZFiJSRmTG0yfn9yfX8phEpordM5Jpx8OA6yVpheD-AlsdiLG5LxwgkqqoCCgFr9Sg1he0xJqkhBtTkVf9ocKYfWBrtAVsAqdqF4N6TGhRxEFo7w9N3lvroYFRWWRshengyplwFjGwvqDKbZ3vH_63cej-hqQQzoWxKTEDTIrIAOHMawqJV5_vIYwi8hPbYJoFmsFcxv1dsEWIJ6Ichh5VRpUKsbWZ6Umd8IGuptmCawsMkzFgwtMbHoENSjb0uvcPheTwz8o_cc98182oNQnjS6wFkQMSCatxeBzZ71Dj9ArTS3vuKF76zbmiyxQzNSLfds2KdDvImjevA3MiK6sGgKhUqzSZBtmap4tjSGZEsZpxHdFIZc9WATA6qZuWa0FBL_yU2RTx_mdExLNO1QiJN1cxULbTbaRwTNSl2ooNYjrwMKPyOuHUsOZLSc-HjcuA3iZz6toFrD0J8bkpTDefNJV5TmD6Y3quP9LUS0Pom8s-afXwqFRxp_DWwYyePp_52GY5FQ7DZhTGWqS6BQ_8PsJzywgNeM05z8v9pfosxH2N3LqXxXqqyKFVEjTvoOSJeQPvi3TZ7aamFnB3t0X_8vMPiFI4i5Zh9PSCc3g8bkRWay-0GhF6OsEj8kbeFWZ6vxvlbZq9dSBHiNx0vKvu5ELwiQC1bBulMnSG2NDhdnFeJ0cxyxy0TsX5xFuYlBlLAkT7cBQVO5J7x1XErpfj6EE3ApR6VsrwDq7sjxOvNZBCwzFRzMmbAEPqgPCnKXd1gNrYHPHfbFNxnZcWsJDQeRtG-CFXdaYMH_mrzCYKW-KT4Z96OHPeQVynm3VcKAyxwHxXjAl33GyKqw9GQ2QdXOQkOK367I23AKK2XcYtb3Uy6AtIUR5Mad6RRa9r-jV5cdMOJ3RkONKdAOl5gAQk05yeGjTvg2bUAOfICHej2McFGYLGmQKj8nMqUUe8QGtQQ83L5JCEl493pzOnJ7zGfwleQMNOfsluq53LGbaDy_i5v3cjXjIG6eJ3sEEmRLf3nrZ9OJ5aRzLA-tFgM7Iv6UcvgLYpgdgnTMLvRHsqwWk_GGYjZ-ZmVknJm22mp2RdxzV0lMQKHnhktp3fHp0wL-W5t8UbX4J0khcp0A-TE8E31W9D69VwrjSC4tyybGPLxBRDO9PZkrX0zGyyoT8um9TDcmh7-t4Zo3GhtvFMmviT7UNyQm8yUFoTsH4bd02WeU_XCY8PLMJkcrhgHo4klV3lKAT0TeDXmHPH2Z1q-DPiymF_wpRkh7KFEDTDXEF-bDgh14a3WwHhcPJy51x_4F1lnfR3Vwvys_R7Cbaj_y7JZ10bXuj0-XD5e36T88oOG6NWw-MYyN7shcbM8W38Xci6k882pFVpCU4z97eTfaAsVhpLnch_cO4Y7dow3uGHPm0pI3-211z1ciZs0BINe7PqP8RG5yqmFhBZz-gqI6WGi4FA614VvW_fXGiDJiEVKbUE6bRympdyl7vBnTVZOm5Nre0F2vxowJJnQYXp3aj7fnPc65kR_opoYH0WJarJrkExomBf0jhxsjjOwYGHO1XfOIFApcGCsMgG-RPK6wY8PVCNfWNNPDFh8_BAX_t1jVcwPGDdJIix8ZyF3MIdn1AdT_hGGCKVgmBwIl5TFKCrgdtYNZnUxzIq5LZjbXDCHnl52tqxmDkzGmOCutMHq1bn9rKSnNgzua9_WiiMgfoNmXg1krQ9p4YSgQoXku2Rkfcy8w6uvX_augSG9Oi42LjgGZP6dSE_8knzo4kscF0btCoKD1pWbbqXtsSex32zuvI8laOUfdZ8w1HsYvrWAkswqaAcQI7P9wAwVdxpQ_yF39uhDyrc_b7TLmhQDJt4FKNNDANHwXfRTVqUVHQ4HKdMD5AiWxbfbb_AmcBDQgMT-F6bjETRR8UpWy7khaR2sr9xr0Z0rXajQ1zsM0x6d8D_D2hdvBp5UC1rTz-n_s_jlQ8jt5_UA_f3HB8ZRzXcurmcYpOxg3baBb57ahpz6xe7AgQj9oLMf_FVj7XpvmFkiARc1uAmUdEVBe8jFw3uPFJ1AhpivZ2PpeGt5joCgRY9ZA4NXxmYTEB66-MIToyYW8C3TGpb0bpuCHbWz8nTpXECh9iGV6y0kxkTRNVYRDQxeMX--A_64BsxbNJh0nofa4vgWfLFxO6pW5xf36T5k0tPXl46zoLCyqRoKLWTVJTpRptWtu-uv8QWGxCe8ule0lChZuvTxZmrZteIvWH7_E5wEQV0lRQmxiqp2LDmbUjz4498ZB3npGOpk8HkgO_6LwkoDXNkjgIeSi2NrZfIjxxcku8eIT9Ssc9wP5EwM40cDlNpTHg3kZXbameTzZirG8DqWJs2n1VlrYKO8P8pZIPOp31XLJP7RVNLEYcqkdtrMRLAiaXMZHO3QtunvEtiDfqRN5fPQd96gs3lPfZ0QC75X3KpEu03Up_YpV4uvuiIS7HaAQegnbyZd0P3BGjpKBanPF8J2P9EvTZSgDdU05Eqr4dkdxUVMxIvbNwjPh-13kVSE1U7eY0G1LZMWUgG-l5PnsPXJi8COO4zevgQuBASq9rGCykEmX2ovLgXKH3vRYR2jPgfLRNXsgBcPgyHjA26l11dzUEE-yhEiOTe_ikH8Vtv1CdlG9mvzBjLUC1l8eXiV5DpyA3S-ap_DBxHCAjRpHJiaiIjBZgQ9jZZNqULzPQPg4Y7JNIovI-qDneuEu7Q3u_DCfSxuy_VTvQyxR4fRQMugIRGUMXYFZk5cdhdZvEekNclpNGpjE_3K7z7mjhbG9kOJeoEGL09wCy8SxcpJCnq_VL_ixD8RbS6r9B2BObjhZkJehozkcyrRzYkv2dKpPtvSfMXw8za5ecPzNSY41PwSOV_KkiypDLa1VaAlw1fcl-kiITsaF1107Q8TV3O2crcAAy_DgXAMiK6r583PnUCr9ncgKg03OyiRJB0trIAqMMvLvu1mB9W-2pqT_FLEq9uYaB6sVZ2Mr6kKl5ve4E-9e4dctiXHj47i7ZbUhhVwR1Ju5m_778uPnVSr7xBPH8-xEz5vUEnWtihcUc_QHFWDF1kZd6qgc1WdxmO7JZXxYcYhc3jh2CvWAvZ8uw4plo4ZYI46ZYSvpA4rWv6rZBKly2YYg-HS2Wzf2tsRCbKynKIm7Hi6YyN6_PYfe0Yc08JUbE4P-sete8vJ87bSrxKJMan4g9wqSS_VAo2fwOIDRdtOOLN1YR7J-qKWtmxREnDU9JjsVZTf5V7fxS23HLN1LsDZfJGUwqbN45OzdoSw0bQx9LuqLDH83uwFn6UfEKI1AncfygmIM7nwWOMM0z6XaTqN9S6oPvbfx-ww4L2cEtv7f2Dwq5Jg4TdeXtYquRpkzEdvJKNe05GP8WFvu202QWo2ECVI7Pys6qnvwkM6nLSutspHu5aqHzWalc7m59PaFLC-ByIhkQGXzH0avo9UdeCiFS9n_xzYeYZoCC-R5hzmoGzTdjpC2ZhkZo96tlcVGQouem-hsK5SLia8oH4va_4wksU54XoEmFPdIqKDWLlgK2MtpxQSFY02eFqXo7VwZtqTdFTczTTXAswmOxgeG5iLVA0R0jLdq5WYCMc_zvfAlEEI9y09OMKBUwPKPt8k4_xkrTgIgz2DzQUV3fR6VAQFfAszCuU0zQYywaiExhPM6T1Twecdphbpelsfa8Sg77Jyj9ogBwY1dW7F1Fvj6c-SUsmDtGJk2_-Il0s9rPTYn8JhMFeHa4N1T1m4aB1c5_4kicMQrhVV6v9zjJYI9CZmRjEWDDZHrNiRcAZtmou74v1S6Fq0frR0r6ccgWVfuh-79G5Mdjt-UxP6FtU10q4LL9N2FG1LYXimypXkjiNvKYAO4Hibw_x2V46YEtHnvwvZMsvvWLbHfBqSfdDC60nV9YKYB5nmHSRlDl_Z0ncY0J0EFo5j6eFzFTql1haIyycvzVmM2o2x0L_I-6sVbW2wBtWgA9DkXoAA2dnKYdaCQJBP9N1_aNSuqZ2UQ9FnTaYc5mmAB35gZXk1jqaYRi1RgPWQreNCkeHxq-4TvpYakMDEpOL1ZhDunVtIwfn3XQUvPk9yYQHIvPJvH6Arbt2JoGqGVlk8XltR0mpskBSdAdjMjoX1dhKMwaXFVsxnkJL1wGO"
+      },
+      "chargeInfo": {
+        "method": "charged-now",
+        "creditsCharged": 0
+      },
+      "advice": [
+        "Your search returned 15 profiles. Use lite reveal to get verified emails at the lowest cost per contact on the market.",
+        "For emails + phone numbers, use standard reveal. For maximum coverage, try exhaustive reveal.",
+        "Add prospect exclusion lists to automatically skip people you've already contacted."
+      ]
+    }
+  },
+  "trimmed": "people fields reduced to name, LinkedIn URL and current roles (public repo)"
+}

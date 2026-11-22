@@ -5,13 +5,24 @@
 // Binds 0.0.0.0:$PORT. Never hardcode 8080: Maritime's forwarder uses it.
 
 import { createServer } from "node:http";
-import { createAtlasClient, loadConfig, loadState, missingConfig, runTick } from "./watcher.mjs";
+import { createAtlasClient, loadConfig, loadLatestResearch, loadState, missingConfig, runResearch, runTick } from "./watcher.mjs";
 
 const MAX_BODY = 64 * 1024;
 
 export function createWatcherServer({ config = loadConfig(), atlas, log = console.log } = {}) {
   const client = atlas ?? createAtlasClient(config);
   let running = null;
+
+  function startResearch() {
+    if (running) return false;
+    running = runResearch({ config, atlas: client, log })
+      .then((r) => log(`research done: ${r.shortlist.length} candidates from ${r.agents.length} agents, errors ${r.errors.length}`))
+      .catch((error) => log(`research crashed: ${error.message}`))
+      .finally(() => {
+        running = null;
+      });
+    return true;
+  }
 
   function startTick() {
     if (running) return false;
@@ -34,6 +45,7 @@ export function createWatcherServer({ config = loadConfig(), atlas, log = consol
       running: Boolean(running),
       seenCount: state.seenDomains.length,
       lastTick: last ?? null,
+      lastResearch: state.lastResearch ?? null,
     };
   }
 
@@ -55,8 +67,18 @@ export function createWatcherServer({ config = loadConfig(), atlas, log = consol
           const started = startTick();
           return json(res, 200, { response: started ? "Tick started." : "A tick is already running." });
         }
+        if (message === "research") {
+          const missing = missingConfig(config);
+          if (missing.length) return json(res, 200, { response: `Not configured: missing ${missing.join(", ")}.` });
+          const started = startResearch();
+          return json(res, 200, { response: started ? "Research started." : "A run is already in progress." });
+        }
+        if (message === "shortlist") {
+          const latest = await loadLatestResearch(config);
+          return json(res, 200, { response: JSON.stringify(latest ? { runId: latest.runId, finishedAt: latest.finishedAt, agents: latest.agents, shortlist: latest.shortlist } : null) });
+        }
         if (message === "status") return json(res, 200, { response: JSON.stringify(await status()) });
-        return json(res, 200, { response: 'Atlas watcher. Send "tick" to search for new matches or "status" for the last run.' });
+        return json(res, 200, { response: 'Atlas watcher. Send "research" to run the approved hiring brief once, "shortlist" for its result, "tick" for a company search, or "status".' });
       }
 
       return json(res, 404, { error: "not_found" });
@@ -66,7 +88,7 @@ export function createWatcherServer({ config = loadConfig(), atlas, log = consol
     }
   });
 
-  return { server, startTick, status, idle: () => running ?? Promise.resolve() };
+  return { server, startTick, startResearch, status, idle: () => running ?? Promise.resolve() };
 }
 
 function json(res, status, body) {

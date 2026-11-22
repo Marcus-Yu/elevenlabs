@@ -21,6 +21,7 @@ export function loadConfig(env = process.env) {
     maxNewPerTick: Number(env.WATCHER_MAX_NEW ?? 5),
     cron: env.WATCHER_CRON ?? "0 13 * * *",
     tz: env.WATCHER_TZ ?? "UTC",
+    runtime: env.WATCHER_RUNTIME === "local" ? "local" : "maritime",
   };
 }
 
@@ -183,4 +184,97 @@ export async function runTick({ config, atlas, now = () => new Date(), log = () 
       .catch((error) => log(`finish report failed: ${error.message}`));
   }
   return tick;
+}
+
+// ---------- one-shot delegated research (hire goals, scope change 2026-11-22) ----------
+
+/** Shortlists saved here survive restarts and sleep; Atlas also stores the shortlist on its WatcherRun row. */
+const RESEARCH_DIR = "research";
+export const MAX_SHORTLIST = 40;
+
+/**
+ * Runs the approved brief once. The brief carries criteria only (no profile facts). Each search is one
+ * research agent, and the agents run in parallel. Results are merged by LinkedIn URL, saved under /data,
+ * and returned to Atlas in the run's finish report. Ranking happens in Atlas (rankCandidates), not here.
+ */
+export async function runResearch({ config, atlas, now = () => new Date(), log = () => {} }) {
+  const state = await loadState(config);
+  const run = { startedAt: now().toISOString(), agents: [], found: 0, shortlist: [], errors: [] };
+  let runId;
+  try {
+    ({ runId } = await atlas.run({ phase: "start", runtime: config.runtime ?? "maritime" }));
+    const brief = await atlas.brief();
+    const searches = brief.research?.searches ?? [];
+    if (!searches.length) throw new Error("brief has no research searches (is this a hire goal with approved criteria?)");
+
+    const results = await Promise.all(
+      searches.map(async (search, i) => {
+        const agent = { id: `agent-${i + 1}`, titles: search.titles ?? [], found: 0 };
+        try {
+          const result = await atlas.tool("contact.search", search);
+          if (result.decision?.outcome !== "allow") throw new Error(`contact.search ${result.decision?.outcome}: ${result.decision?.reason ?? result.decision?.ruleId ?? ""}`);
+          const candidates = result.data?.candidates ?? [];
+          agent.found = candidates.length;
+          return { agent, candidates };
+        } catch (error) {
+          agent.error = error.message;
+          return { agent, candidates: [] };
+        }
+      }),
+    );
+
+    const merged = new Map();
+    for (const { agent, candidates } of results) {
+      run.agents.push(agent);
+      if (agent.error) run.errors.push(`${agent.id}: ${agent.error}`);
+      for (const c of candidates) {
+        run.found++;
+        const key = c.linkedinUrl ?? c.fullName;
+        // Never keep an email even if one slipped through: contact happens only through the opt-in intro.
+        const { email: _email, ...clean } = c;
+        if (key && !merged.has(key) && Array.isArray(c.sources) && c.sources.length) merged.set(key, { ...clean, foundBy: agent.id });
+      }
+    }
+    run.shortlist = [...merged.values()].slice(0, MAX_SHORTLIST);
+  } catch (error) {
+    run.errors.push(error.message);
+    log(`research failed: ${error.message}`);
+  }
+
+  run.finishedAt = now().toISOString();
+  run.runId = runId ?? null;
+  await saveResearch(config, run);
+  state.lastResearch = { runId: run.runId, startedAt: run.startedAt, finishedAt: run.finishedAt, agents: run.agents, shortlistCount: run.shortlist.length, errors: run.errors };
+  await saveState(config, state);
+
+  if (runId) {
+    await atlas
+      .run({
+        phase: "finish",
+        runId,
+        stats: { mode: "research", agents: run.agents, found: run.found, shortlistCount: run.shortlist.length, shortlist: run.shortlist, errors: run.errors },
+      })
+      .catch((error) => log(`finish report failed: ${error.message}`));
+  }
+  return run;
+}
+
+async function saveResearch(config, run) {
+  const dir = path.join(config.dataDir, RESEARCH_DIR);
+  await mkdir(dir, { recursive: true });
+  const name = `${run.runId ?? `local-${Date.parse(run.startedAt)}`}.json`;
+  const tmp = path.join(dir, `${name}.${process.pid}.tmp`);
+  await writeFile(tmp, JSON.stringify(run, null, 2));
+  await rename(tmp, path.join(dir, name));
+  await writeFile(path.join(dir, "latest.json.tmp"), JSON.stringify(run, null, 2));
+  await rename(path.join(dir, "latest.json.tmp"), path.join(dir, "latest.json"));
+}
+
+export async function loadLatestResearch(config) {
+  try {
+    return JSON.parse(await readFile(path.join(config.dataDir, RESEARCH_DIR, "latest.json"), "utf8"));
+  } catch (error) {
+    if (error.code === "ENOENT") return null;
+    throw error;
+  }
 }
