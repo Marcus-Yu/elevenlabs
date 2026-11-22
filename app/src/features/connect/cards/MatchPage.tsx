@@ -4,7 +4,7 @@ import { getMatchDemo, runMatchStep, useQuery } from "wasp/client/operations";
 // /match: two-user double opt-in demo. User B is synthetic; nothing is sent.
 
 type Fields = Record<string, string>;
-interface CardInfo { published: Fields; draft: Fields; stripped: string[]; ruleId: string; logReason: string | null }
+interface CardInfo { published: Fields; stripped: string[]; ruleId: string; logReason: string | null }
 interface Demo {
   draftA: Fields | null; cardA: CardInfo | null; cardB: CardInfo | null;
   match: { rationale: string; aAccepted: boolean; bAccepted: boolean; revealedAt: string | null } | null;
