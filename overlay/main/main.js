@@ -1,9 +1,10 @@
 // Atlas overlay main process: one transparent, always-on-top window over the
 // primary display, a global hotkey, the 5-state machine and the data provider.
 const path = require("node:path");
-const { app, BrowserWindow, globalShortcut, ipcMain, screen, shell } = require("electron");
+const { app, BrowserWindow, globalShortcut, ipcMain, screen } = require("electron");
 const mock = require("./providers/mock");
 const { next: nextState, ignoresMouse } = require("./state");
+const { openIntroWindow } = require("./introWindow");
 
 const HOTKEY = process.env.ATLAS_HOTKEY || "Alt+Space";
 const LEAVE_MS = 1000; // design: leaving holds 1000 ms, then hidden
@@ -104,18 +105,9 @@ function createWindow() {
   });
 }
 
-// Opens the intro review in the default browser and gets out of its way.
+// Opens the intro review in an in-app Atlas window and hides the overlay.
 function openIntro(url) {
-  let parsed;
-  try {
-    parsed = new URL(url);
-  } catch {
-    return console.warn("[atlas] ignoring invalid introUrl");
-  }
-  if (!["http:", "https:"].includes(parsed.protocol)) return console.warn("[atlas] ignoring non-http introUrl");
-  console.log(`[atlas] opening intro ${parsed.origin}${parsed.pathname}`);
-  shell.openExternal(parsed.href);
-  send("dismiss");
+  if (openIntroWindow(url)) send("dismiss");
 }
 
 // ---------- app lifecycle ----------
