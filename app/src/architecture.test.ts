@@ -30,10 +30,15 @@ function findAdapterImportViolations(files: SourceFile[]): string[] {
     for (const specifier of importSpecifiers(source)) {
       const target = specifier.startsWith(".") ? path.resolve(path.dirname(file), specifier) : specifier;
       const importsAdapter = specifier.startsWith(".") ? isInside(target, ADAPTERS) : ADAPTER_SPECIFIER.test(target);
-      if (importsAdapter) violations.push(`${path.relative(APP_ROOT, file)} imports "${specifier}"`);
+      if (importsAdapter) violations.push(`${toPosix(path.relative(APP_ROOT, file))} imports "${specifier}"`);
     }
   }
   return violations;
+}
+
+/** Report paths with "/" on every OS, so the expected messages don't depend on path.sep. */
+function toPosix(relativePath: string): string {
+  return relativePath.split(path.sep).join("/");
 }
 
 function importSpecifiers(source: string): string[] {

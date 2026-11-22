@@ -32,6 +32,34 @@ export interface FiberPeopleQuery {
   limit?: number;
 }
 
+/** Hiring research (scope change 2026-11-22): people matching criteria, not tied to one company. */
+export interface FiberCandidateQuery {
+  /** Title terms, any may match ("robotics engineer"). */
+  titles: string[];
+  /** Words that must appear somewhere in the profile, any of them (skills). */
+  skills?: string[];
+  minYearsExperience?: number;
+  countryCodes?: string[];
+  pageSize?: number;
+}
+
+/**
+ * A public profile found by research for a hire goal. Not a §7 ContactRecord: no work domain and
+ * never an email. People found this way are contacted only through a double-opt-in introduction
+ * (the opt_in_only rule).
+ */
+export interface CandidateRecord {
+  fullName: string;
+  title: string;
+  currentCompany?: string;
+  linkedinUrl?: string;
+  /** Years since the first non-internship role, as of fetchedAt. */
+  yearsExperience?: number;
+  seniority?: string;
+  skills: string[];
+  sources: SourceRef[];
+}
+
 export interface FiberJobQuery {
   titles: string[];
   countryCodes?: string[];
@@ -92,6 +120,7 @@ export interface FiberAdapter {
   searchCompanies(query: FiberCompanyQuery): Promise<{ companies: CompanyRecord[]; nextCursor?: string }>;
   /** Contacts without email. Email needs revealWorkEmail, which the gateway gates behind approval. */
   searchPeople(query: FiberPeopleQuery): Promise<ContactRecord[]>;
+  searchCandidates(query: FiberCandidateQuery): Promise<CandidateRecord[]>;
   searchJobs(query: FiberJobQuery): Promise<{ jobs: JobPostingRecord[]; nextCursor?: string }>;
   revealWorkEmail(contact: { fullName: string; companyDomain: string }): Promise<string | undefined>;
   getCredits(): Promise<FiberCredits>;
@@ -181,6 +210,18 @@ export function createFiberAdapter(options: FiberAdapterOptions): FiberAdapter {
       const emails = body.output?.emails ?? [];
       const best = emails.find((e) => e.validationStatus === "valid") ?? emails[0];
       return best?.emailAddress ?? undefined;
+    },
+
+    async searchCandidates(query) {
+      const searchParams: Record<string, unknown> = {
+        jobTitleV2: { anyOf: query.titles.map((term) => ({ type: "term", term })) },
+      };
+      if (query.skills?.length) searchParams.keywords = { containsAny: query.skills };
+      if (query.minYearsExperience !== undefined) searchParams.yearsOfExperience = { lowerBound: query.minYearsExperience };
+      if (query.countryCodes?.length) searchParams.country3LetterCode = { anyOf: query.countryCodes };
+      const body = await post<FiberListResponse<FiberPerson>>("/v1/people-search", { pageSize: query.pageSize ?? 15, searchParams });
+      const asOf = now();
+      return (body.output?.data ?? []).map((p) => toCandidateRecord(p, asOf)).filter((c): c is CandidateRecord => c !== null);
     },
 
     getCredits,
@@ -283,6 +324,47 @@ function toJobRecord(j: FiberJob, fetchedAt: string): JobPostingRecord {
   };
 }
 
+export function toCandidateRecord(p: FiberPerson, asOf: Date): CandidateRecord | null {
+  const fullName = p.name ?? [p.first_name, p.last_name].filter(Boolean).join(" ");
+  if (!fullName) return null;
+  const fetchedAt = asOf.toISOString();
+  const experiences = p.experiences ?? [];
+  const current = experiences.find((e) => e.is_current);
+  const title = current?.title ?? p.headline ?? "";
+  const linkedinUrl = p.url ?? (p.primary_slug ? `https://www.linkedin.com/in/${p.primary_slug}` : undefined);
+  const years = yearsSinceFirstRole(experiences, asOf);
+  const skills = (p.skills ?? []).filter((x): x is string => typeof x === "string" && x.length > 0);
+  const cite = (claim: string): SourceRef => ({ provider: PROVIDER, ...(linkedinUrl ? { url: linkedinUrl } : {}), fetchedAt, claim });
+
+  const sources = [cite(`role: ${title || "unknown"}${current?.company_name ? ` at ${current.company_name}` : ""}`)];
+  if (years !== undefined) sources.push(cite(`experience: about ${years} years since first non-internship role`));
+  if (current?.seniority) sources.push(cite(`seniority: ${current.seniority}`));
+  if (skills.length) sources.push(cite(`skills: ${skills.slice(0, 15).join(", ")}`));
+
+  return {
+    fullName,
+    title,
+    ...(current?.company_name ? { currentCompany: current.company_name } : {}),
+    ...(linkedinUrl ? { linkedinUrl } : {}),
+    ...(years !== undefined ? { yearsExperience: years } : {}),
+    ...(current?.seniority ? { seniority: current.seniority } : {}),
+    skills,
+    sources,
+  };
+}
+
+const NON_CAREER = /intern|teaching assistant|student|research assistant|volunteer/i;
+
+export function yearsSinceFirstRole(experiences: NonNullable<FiberPerson["experiences"]>, asOf: Date): number | undefined {
+  const starts = experiences
+    .filter((e) => e.start_date && !NON_CAREER.test(`${e.title ?? ""} ${e.seniority ?? ""}`))
+    .map((e) => Date.parse(e.start_date!))
+    .filter((t) => Number.isFinite(t));
+  if (!starts.length) return undefined;
+  const years = (asOf.getTime() - Math.min(...starts)) / (365.25 * 24 * 3600 * 1000);
+  return Math.max(0, Math.round(years * 10) / 10);
+}
+
 export function normalizeDomain(value: string): string {
   const trimmed = value.trim().toLowerCase();
   if (!trimmed) return "";
@@ -359,7 +441,15 @@ export interface FiberPerson {
   headline?: string | null;
   url?: string | null;
   primary_slug?: string;
-  experiences?: { is_current?: boolean | null; title?: string | null; company_name?: string | null }[] | null;
+  experiences?: {
+    is_current?: boolean | null;
+    title?: string | null;
+    company_name?: string | null;
+    start_date?: string | null;
+    end_date?: string | null;
+    seniority?: string | null;
+  }[] | null;
+  skills?: string[] | null;
 }
 
 interface FiberJob {

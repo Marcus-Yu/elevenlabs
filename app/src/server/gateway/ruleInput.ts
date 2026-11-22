@@ -1,6 +1,7 @@
 import type { ActionRequest } from "../../shared/contracts";
-import type { CardPublishPayload, DraftCreatePayload, OutreachSendPayload } from "./payloads";
+import type { CardPublishPayload, DraftCreatePayload, OutreachSendPayload, RevealEmailCore } from "./payloads";
 import { PROVIDER_BOUND } from "./rules/actionGroups";
+import { stripCardFields } from "./rules/cardFields";
 import { collectStrings } from "./rules/factMatch";
 import type { RuleInput, GatewayEnv } from "./rules/types";
 import type { GatewayStore } from "./store";
@@ -40,6 +41,8 @@ export async function buildRuleInput(
     draft: null,
     match: null,
     revealMatch: null,
+    researchedPerson: false,
+    strippedFields: [],
     sendsToday: 0,
     priorApprovedSend: false,
     env,
@@ -55,21 +58,30 @@ export async function buildRuleInput(
     const recipient = payload.to.trim().toLowerCase();
     input.outgoingText = [payload.subject, payload.body];
     input.recipient = recipient;
-    [input.draft, input.recipientOptedOut, input.sendsToday, input.priorApprovedSend] = await Promise.all([
+    [input.draft, input.recipientOptedOut, input.sendsToday, input.priorApprovedSend, input.researchedPerson] = await Promise.all([
       store.getDraft(payload.draftId),
       store.isOptedOut(recipient),
       goalId ? store.countAllowedSends(goalId, startOfUtcDay(now)) : Promise.resolve(0),
       store.hasApprovedSendTo(userId, recipient),
+      store.isResearchedCandidate(userId, { email: recipient }),
     ]);
   } else if (actionType === "contact.reveal_email") {
-    const { matchId, companyDomain } = request.payload as { matchId?: string; companyDomain: string };
-    const match = matchId ? await store.getMatch(matchId) : goalId ? await store.findMatchByDomain(goalId, companyDomain) : null;
+    const { matchId, companyDomain, fullName, linkedinUrl } = request.payload as RevealEmailCore;
+    const [match, researched] = await Promise.all([
+      matchId ? store.getMatch(matchId) : goalId ? store.findMatchByDomain(goalId, companyDomain) : Promise.resolve(null),
+      store.isResearchedCandidate(userId, { companyDomain, fullName, linkedinUrl }),
+    ]);
     input.revealMatch = match && match.goalId === goalId ? match : null;
+    input.researchedPerson = researched;
   } else if (actionType === "card.publish") {
-    input.outgoingText = Object.values((request.payload as CardPublishPayload).fields);
+    input.facts = await store.getUserFacts(userId);
+    const { payload, stripped } = stripCardFields(request.payload as CardPublishPayload, input.facts);
+    input.request = { ...request, payload };
+    input.strippedFields = stripped;
+    input.outgoingText = Object.values(payload.fields);
   }
 
-  if (input.outgoingText.length > 0 || input.usedFactIds.length > 0 || input.providerText.length > 0) {
+  if (actionType !== "card.publish" && (input.outgoingText.length > 0 || input.usedFactIds.length > 0 || input.providerText.length > 0)) {
     input.facts = await store.getUserFacts(userId);
   }
   return input;

@@ -1,4 +1,5 @@
 import type { ActionRequest } from "../../../shared/contracts";
+import type { StrippedField } from "./cardFields";
 import type { ConsentKind, DraftSnapshot, FactSnapshot, GoalSnapshot, MatchSnapshot, UserSnapshot } from "../store";
 
 export interface GatewayEnv {
@@ -37,6 +38,10 @@ export interface RuleInput {
   match: MatchSnapshot | null;
   /** contact.reveal_email: the goal's match for the payload's company. */
   revealMatch: MatchSnapshot | null;
+  /** card.publish: fields the gateway removed before the rules ran. `request.payload` is already stripped. */
+  strippedFields: StrippedField[];
+  /** outreach.send / contact.reveal_email: the target was found by research for a hire goal. */
+  researchedPerson: boolean;
   sendsToday: number;
   priorApprovedSend: boolean;
   env: GatewayEnv;

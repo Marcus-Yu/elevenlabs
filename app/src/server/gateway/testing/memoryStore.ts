@@ -10,6 +10,7 @@ import type {
   LogEntry,
   MatchSnapshot,
   NewApproval,
+  PersonRef,
   SourceRefSnapshot,
   UserSnapshot,
 } from "../store";
@@ -24,6 +25,8 @@ export class MemoryGatewayStore implements GatewayStore {
   drafts = new Map<string, Omit<DraftSnapshot, "refs">>();
   sourceRefs = new Map<string, SourceRefSnapshot>();
   optOuts = new Set<string>();
+  /** Contacts on matches, for isResearchedCandidate. */
+  contacts: { matchId: string; fullName: string; email?: string; linkedinUrl?: string }[] = [];
   approvals = new Map<string, ApprovalRecord>();
   logs: (LogEntry & { id: string; ts: Date })[] = [];
   private seq = 0;
@@ -58,6 +61,17 @@ export class MemoryGatewayStore implements GatewayStore {
   async isOptedOut(email: string) {
     const lower = email.toLowerCase();
     return this.optOuts.has(lower) || this.optOuts.has(lower.split("@")[1] ?? "");
+  }
+  async isResearchedCandidate(userId: string, person: PersonRef) {
+    const lower = (value?: string) => value?.trim().toLowerCase();
+    return this.contacts.some((contact) => {
+      const match = this.matches.get(contact.matchId);
+      const goal = match && this.goals.get(match.goalId);
+      if (!goal || goal.userId !== userId || goal.kind !== "hire") return false;
+      if (person.email && lower(contact.email) === lower(person.email)) return true;
+      if (person.linkedinUrl && lower(contact.linkedinUrl) === lower(person.linkedinUrl)) return true;
+      return Boolean(person.fullName && person.companyDomain && lower(contact.fullName) === lower(person.fullName) && match.domain === lower(person.companyDomain));
+    });
   }
   async countAllowedSends(goalId: string, since: Date) {
     return this.logs.filter((l) => l.goalId === goalId && l.actionType === "outreach.send" && l.decision === "ALLOW" && l.ts >= since).length;

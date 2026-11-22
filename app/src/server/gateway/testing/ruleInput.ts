@@ -43,6 +43,8 @@ export function ruleInput(
     draft: null,
     match: null,
     revealMatch: null,
+    researchedPerson: false,
+    strippedFields: [],
     sendsToday: 0,
     priorApprovedSend: true,
     env: { outreachMode: "sandbox", redirectTo: "sandbox@atlas.example", adapterMode: "replay" },

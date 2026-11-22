@@ -113,8 +113,10 @@ export async function decideAndRun(
   approvalId?: string,
 ): Promise<GatewayResult> {
   const now = deps.now?.() ?? new Date();
-  const subject = subjectOf(request);
   const input = await buildRuleInput(deps.store, request, phase, deps.env, now);
+  // From here on use input.request: buildRuleInput may have stripped card fields from the payload.
+  request = input.request;
+  const subject = subjectOf(request);
 
   const hit = evaluateRules(input);
   if (hit?.rule.kind === "deny") {
@@ -144,6 +146,7 @@ export async function decideAndRun(
     origin: request.origin,
     ...(approvalId ? { approvalId } : {}),
     ...(allow.rewrite ? { recipientRewrite: allow.rewrite } : {}),
+    ...(input.strippedFields.length > 0 ? { strippedFields: input.strippedFields } : {}),
   };
   const logged = { ...subject, payload: allow.payload };
   const factIdsSent = input.usedFactIds;

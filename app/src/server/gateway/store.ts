@@ -49,6 +49,13 @@ export interface SourceRefSnapshot {
   provider: "fiber" | "ploid" | "web";
 }
 
+export interface PersonRef {
+  email?: string;
+  linkedinUrl?: string;
+  fullName?: string;
+  companyDomain?: string;
+}
+
 export interface DraftSnapshot {
   id: string;
   matchId: string;
@@ -113,6 +120,11 @@ export interface GatewayStore {
   getDraft(draftId: string): Promise<DraftSnapshot | null>;
   /** True when the lower-cased address or its domain is in OptOut. */
   isOptedOut(email: string): Promise<boolean>;
+  /**
+   * True when the person is a Contact on one of the user's `hire` goal matches, i.e. found by
+   * research. Matches by email, LinkedIn URL, or full name plus company domain (all case-insensitive).
+   */
+  isResearchedCandidate(userId: string, person: PersonRef): Promise<boolean>;
   /** Allowed outreach.send log rows for the goal since `since`. */
   countAllowedSends(goalId: string, since: Date): Promise<number>;
   /** True when the user has an approved or executed outreach.send to this recipient. */

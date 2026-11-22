@@ -73,6 +73,23 @@ export function createPrismaStore(prisma: PrismaClient): GatewayStore {
       });
       return hit !== null;
     },
+    async isResearchedCandidate(userId, person) {
+      const or: Prisma.ContactWhereInput[] = [];
+      if (person.email) or.push({ email: { equals: person.email.trim(), mode: "insensitive" } });
+      if (person.linkedinUrl) or.push({ linkedinUrl: { equals: person.linkedinUrl.trim(), mode: "insensitive" } });
+      if (person.fullName && person.companyDomain) {
+        or.push({
+          fullName: { equals: person.fullName.trim(), mode: "insensitive" },
+          match: { company: { domain: person.companyDomain.trim().toLowerCase() } },
+        });
+      }
+      if (or.length === 0) return false;
+      const hit = await prisma.contact.findFirst({
+        where: { match: { goal: { userId, kind: "hire" } }, OR: or },
+        select: { id: true },
+      });
+      return hit !== null;
+    },
     async countAllowedSends(goalId, since) {
       return prisma.actionLog.count({ where: { goalId, actionType: "outreach.send", decision: "ALLOW", ts: { gte: since } } });
     },

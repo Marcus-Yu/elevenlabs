@@ -114,6 +114,24 @@ const scenarios: { ruleId: string; outcome: string; run: () => Promise<GatewayRe
     },
   },
   { ruleId: "paid_reveal", outcome: "needs_approval", run: () => createWorld().gateway.execute(request("contact.reveal_email", { fullName: "Sam", companyDomain: "customer.example" })) },
+  {
+    ruleId: "opt_in_only",
+    outcome: "deny",
+    run: () => {
+      const world = createWorld({ autonomy: "ACT" });
+      world.store.goals.get(GOAL)!.kind = "hire";
+      return world.gateway.execute(request("outreach.send", sendPayload()));
+    },
+  },
+  {
+    ruleId: "card_fields",
+    outcome: "allow",
+    run: () => {
+      const world = createWorld();
+      world.store.consents.set(USER, ["matching"]);
+      return world.gateway.execute(request("card.publish", { cardId: "card_1", fields: { need: "Gripper housings", budget: "$180,000" }, fieldFacts: { budget: ["fact_budget"] } }));
+    },
+  },
   { ruleId: "provider_minimum", outcome: "deny", run: () => createWorld().gateway.execute(request("company.search", { keywords: ["contract manufacturer under $180k"] })) },
   {
     ruleId: "selected_prospect",
@@ -318,6 +336,68 @@ describe("WP1 acceptance", () => {
     expect(written).toEqual([{ kind: "preference", text: "Avoid 3PLs under 50 staff", source: "rejection of match_1", by: { kind: "user", id: USER } }]);
     const ownWrite = await world.gateway.execute(request("memory.write", { kind: "preference", text: "Prefer Midwest", source: "user" }, { actor: { kind: "user", id: USER } }));
     expect(ownWrite.decision.outcome).toBe("allow");
+  });
+
+  it("strips user A's salary ceiling from a published card, logs it and passes only the rest on", async () => {
+    let published: unknown;
+    let stripped: unknown;
+    const cardPublish = defineHandler({
+      payload: z.object({ cardId: z.string(), fields: z.record(z.string(), z.string()), fieldFacts: z.record(z.string(), z.array(z.string())).default({}) }),
+      run: async (payload, ctx) => {
+        published = payload;
+        stripped = ctx.strippedFields;
+        return { data: { cardId: payload.cardId } };
+      },
+    });
+    const world = createWorld({ handlers: { "card.publish": cardPublish } });
+    world.store.consents.set(USER, ["matching"]);
+    world.store.facts.get(USER)!.push(
+      { id: "fact_role", key: "open_role", value: "Robotics engineer", sensitivity: "public", allowedPurposes: ["matching"] },
+      { id: "fact_salary", key: "salary_ceiling", value: "$185,000", sensitivity: "private", allowedPurposes: [] },
+    );
+    const result = await world.gateway.execute(
+      request("card.publish", {
+        cardId: "card_1",
+        fields: { need: "Robotics engineer", compensation: "Up to $185,000" },
+        fieldFacts: { need: ["fact_role"], compensation: ["fact_salary"] },
+      }),
+    );
+    expect(result.decision).toEqual({ outcome: "allow", ruleId: "card_fields" });
+    expect(published).toEqual({ cardId: "card_1", fields: { need: "Robotics engineer" }, fieldFacts: { need: ["fact_role"] } });
+    expect(stripped).toEqual([{ field: "compensation", factKey: "salary_ceiling", why: "declared_fact_not_allowed" }]);
+    const log = world.store.logs.at(-1)!;
+    expect(log).toMatchObject({ decision: "ALLOW", ruleId: "card_fields", reason: expect.stringContaining('"compensation" (fact "salary_ceiling"') });
+    expect(log.inputSummary).not.toMatch(/185/);
+  });
+
+  it("denies a card whose every field was stripped", async () => {
+    const world = createWorld();
+    world.store.consents.set(USER, ["matching"]);
+    const result = await world.gateway.execute(request("card.publish", { cardId: "card_1", fields: { budget: "180k" } }));
+    expect(result.decision).toMatchObject({ outcome: "deny", ruleId: "card_fields" });
+  });
+
+  it("a hire goal can research people but never reveal or send; contact goes through card.reveal", async () => {
+    const world = createWorld({ autonomy: "ACT" });
+    world.store.goals.get(GOAL)!.kind = "hire";
+    world.store.consents.set(USER, ["identity_reveal"]);
+    expect((await world.gateway.execute(request("contact.search", { roles: ["Robotics engineer"] }))).decision.outcome).toBe("allow");
+    const reveal = await world.gateway.execute(request("contact.reveal_email", { fullName: "Sam", companyDomain: "customer.example" }));
+    expect(reveal.decision).toMatchObject({ outcome: "deny", ruleId: "opt_in_only" });
+    expect(world.store.approvals.size).toBe(0);
+    const intro = await world.gateway.execute(request("card.reveal", { cardMatchId: "cm_1", fields: ["full_name"] }));
+    expect(intro.decision).toMatchObject({ outcome: "needs_approval", ruleId: "introductions" });
+  });
+
+  it("a candidate found for a hire goal can't be emailed from another goal either", async () => {
+    const world = createWorld({ autonomy: "ACT" });
+    world.store.goals.set("goal_hire", { id: "goal_hire", userId: USER, status: "ACTIVE", kind: "hire", autonomy: "PREPARE", rules: {} });
+    world.store.matches.set("match_hire", { id: "match_hire", goalId: "goal_hire", status: "APPROVED", domain: "talent.example" });
+    world.store.contacts.push({ matchId: "match_hire", fullName: "Riley Candidate", email: RECIPIENT });
+    const result = await world.gateway.execute(request("outreach.send", sendPayload()));
+    expect(result.decision).toMatchObject({ outcome: "deny", ruleId: "opt_in_only" });
+    const byName = await world.gateway.execute(request("contact.reveal_email", { fullName: "riley candidate", companyDomain: "talent.example" }));
+    expect(byName.decision).toMatchObject({ outcome: "deny", ruleId: "opt_in_only" });
   });
 
   it("records the facts a draft sent and the adapter mode", async () => {
