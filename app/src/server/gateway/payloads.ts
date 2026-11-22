@@ -50,6 +50,8 @@ export const CardPublishPayload = z.object({
   cardId: id,
   /** The exact card text that becomes visible to the matcher. */
   fields: z.record(z.string(), z.string().max(2_000)),
+  /** ProfileFact ids each field was built from. Fields built from facts not allowed for matching are stripped. */
+  fieldFacts: z.record(z.string(), z.array(id).max(20)).default({}),
 });
 export type CardPublishPayload = z.infer<typeof CardPublishPayload>;
 
@@ -71,7 +73,13 @@ export const MemoryWritePayload = z.object({
 export const MemoryDeletePayload = z.object({ id });
 
 /** What the rules read from contact.reveal_email; the handler (WP2) owns the rest of the shape. */
-export const RevealEmailCore = z.looseObject({ companyDomain: z.string().min(1), matchId: id.optional() });
+export const RevealEmailCore = z.looseObject({
+  companyDomain: z.string().min(1),
+  fullName: z.string().optional(),
+  linkedinUrl: z.string().optional(),
+  matchId: id.optional(),
+});
+export type RevealEmailCore = z.infer<typeof RevealEmailCore>;
 /** What preference_confirm reads from memory.write; the handler (WP12) owns the rest of the shape. */
 export const MemoryWriteCore = z.looseObject({ kind: z.enum(["preference", "objection", "outcome", "fact"]) });
 
