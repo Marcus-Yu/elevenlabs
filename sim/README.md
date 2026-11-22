@@ -22,6 +22,12 @@ A local EDSL run orchestrates the survey here and sends model requests directly
 to that provider. Each run uses a fresh local cache with hosted inference and
 hosted caching disabled. Keep the service on localhost or a private app network.
 
+Install the provider SDK with `uv sync --locked --extra openai` or
+`uv sync --locked --extra anthropic`. Set `SIM_EDSL_SERVICE` to `openai`
+or `anthropic` to match. Maritime LLM implements the OpenAI API and
+injects `OPENAI_BASE_URL` and `OPENAI_API_KEY` into a configured agent.
+Run the simulation in that agent to use its prepaid inference credits.
+
 ## Scoring contract
 
 Send the sourced panel, indexed pitch segments, and a tier of `live` or
@@ -64,5 +70,7 @@ uv run python -m atlas_sim.benchmark
 This makes 20 live HTTP requests serially, each with eight synthetic
 personas and one sentence, and reports nearest-rank p50 and p95. The service
 currently uses EDSL for both tiers. Real p50 and p95 are pending a provider
-credential. If measured p50 exceeds 2.5 seconds, implement the single-call
-direct engine for the live tier and keep EDSL for measured scoring.
+that can serve inference. The Maritime benchmark agent booted and installed
+the dependencies, but its model endpoint returned `402 budget_exhausted`
+before any inference. If measured p50 exceeds 2.5 seconds, implement the
+single-call direct engine for the live tier and keep EDSL for measured scoring.

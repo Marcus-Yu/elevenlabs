@@ -10,6 +10,10 @@ dependencies = [
     "uvicorn>=0.30,<1",
 ]
 
+[project.optional-dependencies]
+anthropic = ["anthropic>=0.80,<0.81"]
+openai = ["openai[aiohttp]>=2.44,<3"]
+
 [dependency-groups]
 dev = [
     "httpx>=0.28,<1",
