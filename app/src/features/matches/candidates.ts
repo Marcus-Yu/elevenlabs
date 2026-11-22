@@ -160,22 +160,32 @@ const SENIOR = /\b(too senior|overqualified|too experienced|too expensive)\b/i;
 
 /** Proposes, never applies: the user confirms with preference_confirm before the rerun. */
 export function proposeCriteriaChange(criteria: HireCriteria, rejected: Candidate, reason: string): CriteriaChange | null {
-  const basedOn = { candidate: rejected.fullName, reason, source: rejected.sources.find((s) => s.claim.startsWith("experience:")) ?? rejected.sources[0] };
+  // Candidates are real people found by research: the card and anything sent to the client describe
+  // them by role, never by name (the name stays on the server's own rejection record).
+  const who = describeCandidate(rejected);
+  const basedOn = { candidate: who, reason, source: rejected.sources.find((s) => s.claim.startsWith("experience:")) ?? rejected.sources[0] };
 
   if (JUNIOR.test(reason) && rejected.yearsExperience !== undefined) {
     const to = Math.max(criteria.minYearsExperience ?? 0, Math.floor(rejected.yearsExperience) + 1);
     if (to === criteria.minYearsExperience) return null;
-    return { changes: [{ field: "minYearsExperience", from: criteria.minYearsExperience ?? null, to }], explanation: `You rejected ${rejected.fullName} (about ${rejected.yearsExperience} years) as too junior. Raise the minimum to ${to} years?`, basedOn };
+    return { changes: [{ field: "minYearsExperience", from: criteria.minYearsExperience ?? null, to }], explanation: `You rejected ${who} (about ${rejected.yearsExperience} years) as too junior. Raise the minimum to ${to} years?`, basedOn };
   }
   if (SENIOR.test(reason) && rejected.yearsExperience !== undefined) {
     const to = Math.max(criteria.minYearsExperience ?? 0, Math.ceil(rejected.yearsExperience) - 1);
-    return { changes: [{ field: "maxYearsExperience", from: criteria.maxYearsExperience ?? null, to }], explanation: `You rejected ${rejected.fullName} (about ${rejected.yearsExperience} years) as too senior. Cap experience at ${to} years?`, basedOn };
+    return { changes: [{ field: "maxYearsExperience", from: criteria.maxYearsExperience ?? null, to }], explanation: `You rejected ${who} (about ${rejected.yearsExperience} years) as too senior. Cap experience at ${to} years?`, basedOn };
   }
   const missingSkill = /\b(?:no|missing|lacks|without)\s+([a-z0-9+#][a-z0-9+# .-]{0,30})/i.exec(reason)?.[1]?.trim();
   if (missingSkill && !criteria.mustHaveSkills.some((s) => s.toLowerCase() === missingSkill.toLowerCase())) {
-    return { changes: [{ field: "mustHaveSkills", from: criteria.mustHaveSkills, to: [...criteria.mustHaveSkills, missingSkill] }], explanation: `You rejected ${rejected.fullName} for missing ${missingSkill}. Make ${missingSkill} a must-have?`, basedOn };
+    return { changes: [{ field: "mustHaveSkills", from: criteria.mustHaveSkills, to: [...criteria.mustHaveSkills, missingSkill] }], explanation: `You rejected ${who} for missing ${missingSkill}. Make ${missingSkill} a must-have?`, basedOn };
   }
   return null;
+}
+
+/** "a Robotics Software Engineer" / "an Embedded Robotics Engineer" / "a candidate". */
+export function describeCandidate(c: Pick<Candidate, "title">): string {
+  const title = c.title?.trim();
+  if (!title) return "a candidate";
+  return `${/^[aeiou]/i.test(title) ? "an" : "a"} ${title}`;
 }
 
 export function applyCriteriaChange(criteria: HireCriteria, change: CriteriaChange): HireCriteria {

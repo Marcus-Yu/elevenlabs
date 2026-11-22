@@ -65,10 +65,21 @@ describe("rankCandidates", () => {
 });
 
 describe("rejection → proposed criteria change", () => {
+  it("never names the rejected person, for any kind of change", () => {
+    const named = cand("Zelda Quartermaine", 14, ["ROS", "C++"], "Embedded Robotics Engineer");
+    for (const reason of ["too junior", "too senior", "no SLAM"]) {
+      const change = proposeCriteriaChange({ ...criteria, minYearsExperience: 20 }, named, reason) ?? proposeCriteriaChange(criteria, named, reason);
+      if (change) expect(JSON.stringify(change)).not.toMatch(/Zelda|Quartermaine/);
+    }
+    expect(proposeCriteriaChange(criteria, named, "too senior")!.explanation).toBe("You rejected an Embedded Robotics Engineer (about 14 years) as too senior. Cap experience at 13 years?");
+  });
+
   it("proposes a higher minimum for 'too junior' and never applies it by itself", () => {
     const change = proposeCriteriaChange(criteria, cand("Bo", 3.4, ["ROS", "C++"]), "Too junior for a founding role");
-    expect(change).toMatchObject({ changes: [{ field: "minYearsExperience", from: 2, to: 4 }], basedOn: { candidate: "Bo", reason: "Too junior for a founding role" } });
-    expect(change!.explanation).toBe("You rejected Bo (about 3.4 years) as too junior. Raise the minimum to 4 years?");
+    expect(change).toMatchObject({ changes: [{ field: "minYearsExperience", from: 2, to: 4 }], basedOn: { candidate: "a Robotics Engineer", reason: "Too junior for a founding role" } });
+    expect(change!.explanation).toBe("You rejected a Robotics Engineer (about 3.4 years) as too junior. Raise the minimum to 4 years?");
+    // Real people are never named on the card or in anything sent to the client.
+    expect(JSON.stringify(change)).not.toContain("Bo");
     expect(criteria.minYearsExperience).toBe(2);
     expect(applyCriteriaChange(criteria, change!).minYearsExperience).toBe(4);
   });
