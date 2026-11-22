@@ -53,7 +53,14 @@ async function cardFor(userId: string) {
   return prisma.shareCard.findFirst({ where: { userId, purpose: PURPOSE }, orderBy: { createdAt: "desc" } });
 }
 
+/** Records the opt-in the clicking user (or the simulated synthetic B) just gave. */
+async function ensureConsent(userId: string, kind: "matching" | "identity_reveal") {
+  const active = await prisma.consent.findFirst({ where: { userId, kind, revokedAt: null } });
+  if (!active) await prisma.consent.create({ data: { userId, kind, scope: PURPOSE } });
+}
+
 async function publish(userId: string, side: "A" | "B") {
+  await ensureConsent(userId, "matching");
   const draft = await draftFields(userId, side);
   const card = await prisma.shareCard.create({
     data: { userId, purpose: PURPOSE, fields: draft.fields, expiresAt: new Date(Date.now() + 7 * 864e5) },
@@ -85,6 +92,7 @@ function identityOf(userId: string, list: { key: string; value: string }[], side
 async function reveal(userId: string, matchId: string, fields: string[]) {
   const chosen = fields.filter((f) => (IDENTITY_FIELDS as readonly string[]).includes(f));
   if (chosen.length === 0) throw new HttpError(400, "Pick at least one field");
+  await ensureConsent(userId, "identity_reveal");
   const result = await gateway.execute({
     actionType: "card.reveal", userId, actor: { kind: "user", id: userId }, origin: "ui", tainted: false,
     payload: { cardMatchId: matchId, fields: chosen },

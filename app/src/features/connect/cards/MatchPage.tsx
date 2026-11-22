@@ -43,7 +43,7 @@ export function MatchPage() {
         {d.draftA && (<>
           <p>Draft (before the gateway):</p>
           <ul>{Object.entries(d.draftA).map(([k, v]) => <li key={k}><b>{k}</b>: {v}</li>)}</ul>
-          <button onClick={() => run("publishA")}>Approve and publish via card.publish</button>
+          <button onClick={() => run("publishA")}>Opt in to anonymous matching, approve and publish (card.publish)</button>
         </>)}
         {d.cardA && <CardView card={d.cardA} />}
       </section>

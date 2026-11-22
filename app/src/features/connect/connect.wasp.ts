@@ -9,5 +9,5 @@ export const connectSpec: Spec = [
   route("ConnectRoute", "/connect", page(ConnectPage, { authRequired: true })),
   route("MatchRoute", "/match", page(MatchPage, { authRequired: true })),
   query(getMatchDemo, { entities: ["ShareCard", "CardMatch", "Approval"] }),
-  action(runMatchStep, { entities: ["ShareCard", "CardMatch", "Approval", "ActionLog"] }),
+  action(runMatchStep, { entities: ["ShareCard", "CardMatch", "Approval", "ActionLog", "Consent"] }),
 ];
