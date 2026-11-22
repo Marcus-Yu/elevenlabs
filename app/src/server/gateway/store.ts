@@ -106,6 +106,8 @@ export interface LogEntry {
   inputSummary: string | null;
   factIdsSent: string[];
   adapterMode: AdapterMode | null;
+  /** TraceRoot trace id, set by the WP7 log stamp when tracing is on. */
+  traceId?: string | null;
 }
 
 export interface GatewayStore {

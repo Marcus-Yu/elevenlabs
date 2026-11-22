@@ -4,6 +4,10 @@ import { gatewayEnvFrom } from "./env";
 import { createHandlerMap } from "./handlers/index";
 import { createPrismaStore } from "./prismaStore";
 import { createRegistry } from "./registry";
+import { executionBackendFrom } from "../execution/backend";
+import { withLogStamp } from "../execution/logStamp";
+import { traceGateway } from "../tracing/traceGateway";
+import { initTracing } from "../tracing/traceroot";
 
 // Server entry point. Call sites import from here:
 //   import { gateway } from "../server/gateway";   (adjust the relative path)
@@ -12,11 +16,24 @@ import { createRegistry } from "./registry";
 let instance: Gateway | null = null;
 
 function getGateway(): Gateway {
-  instance ??= createGateway({
-    store: createPrismaStore(prisma),
-    registry: createRegistry(createHandlerMap(process.env, { memoryItems: prisma.memoryItem, matchDatabase: prisma, executeThreadTool: (request) => getGateway().execute(request) })),
-    env: gatewayEnvFrom(process.env),
-  });
+  if (!instance) {
+    initTracing(process.env);
+    // WP7: a span per call, and every ActionLog row gets the trace id and the backend stamp.
+    instance = traceGateway(
+      createGateway({
+        store: withLogStamp(createPrismaStore(prisma), executionBackendFrom(process.env)),
+        registry: createRegistry(
+          createHandlerMap(process.env, {
+            memoryItems: prisma.memoryItem,
+            matchDatabase: prisma,
+            executeThreadTool: (request) => getGateway().execute(request),
+            prisma,
+          }),
+        ),
+        env: gatewayEnvFrom(process.env),
+      }),
+    );
+  }
   return instance;
 }
 

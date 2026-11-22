@@ -1,3 +1,4 @@
+import type { PrismaClient } from "@prisma/client";
 import type { MemoryItemDelegate } from "../../../features/memory/memoryStore";
 import type { Gateway } from "../engine";
 import type { HandlerMap } from "../types";
@@ -5,6 +6,7 @@ import { createCalibrationHandlers } from "./calibration";
 import { createDiscoveryHandlersFromEnv } from "./discovery";
 import { createMatchSubmission, type MatchSubmissionDatabase } from "./matchSubmission";
 import { createMemoryHandlers, createMemoryStoreFromEnv } from "./memory";
+import { createOutreachHandlersFromEnv } from "./outreach.prisma";
 import { createStubHandlers } from "./stubs";
 import { createGoalProposalHandler, createThreadChatHandler } from "./threadChat";
 import { createVoiceHandlers } from "./voice";
@@ -14,6 +16,8 @@ export interface HandlerDeps {
   memoryItems: MemoryItemDelegate;
   matchDatabase: MatchSubmissionDatabase;
   executeThreadTool: Gateway["execute"];
+  /** WP7: outreach.send reads the goal autonomy level. Omitted in unit tests. */
+  prisma?: PrismaClient;
 }
 
 /**
@@ -27,7 +31,8 @@ export interface HandlerDeps {
  * - Voice (WP9): voice.scribe_token, voice.speak (ElevenLabs live only).
  * - Memory (WP12): memory.read, memory.write, memory.delete (Postgres, mirrored to Rowboat when configured).
  * - Watcher submissions (WP10): match.submit persists sourced matches for the goal.
- * - Everything else (draft.create, outreach.send, call.place, meeting.listen,
+ * - Outreach (WP7): outreach.send, EXECUTION_BACKEND=local (default, stamped) or alter.
+ * - Everything else (draft.create, call.place, meeting.listen,
  *   card.publish, card.reveal) stays on the labelled stubs until its owner registers a real handler.
  */
 export function createHandlerMap(env: NodeJS.ProcessEnv, deps: HandlerDeps): HandlerMap {
@@ -40,5 +45,7 @@ export function createHandlerMap(env: NodeJS.ProcessEnv, deps: HandlerDeps): Han
     ...createDiscoveryHandlersFromEnv(env),
     ...createMemoryHandlers(createMemoryStoreFromEnv(deps.memoryItems, env)),
     "match.submit": createMatchSubmission(deps.matchDatabase),
+    // WP7: real outreach.send (EXECUTION_BACKEND=local|alter). Needs Prisma for goal autonomy.
+    ...(deps.prisma ? createOutreachHandlersFromEnv(deps.prisma, env) : {}),
   };
 }
