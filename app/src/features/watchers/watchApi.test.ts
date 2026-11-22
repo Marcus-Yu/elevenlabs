@@ -101,7 +101,10 @@ describe("watcher API", () => {
   });
 
   it("builds a brief from a searches array and ignores malformed entries", () => {
-    const brief = buildBrief({ ...goal, icp: { searches: [{ keywords: ["a"] }, "garbage", { keywords: ["b"] }] } }, []);
+    const brief = buildBrief({
+      ...goal,
+      icp: { searches: [{ keywords: ["a"], internalNote: "keep private" }, "garbage", { keywords: ["b"] }] },
+    }, []);
     expect(brief.searches).toEqual([{ keywords: ["a"] }, { keywords: ["b"] }]);
   });
 });

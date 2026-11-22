@@ -1,15 +1,17 @@
 import type { HandlerMap } from "../types";
+import { createDiscoveryHandlersFromEnv } from "./discovery";
+import { matchSubmission } from "./matchSubmission";
 import { createStubHandlers } from "./stubs";
 
-/**
- * The handler registration list. Owners register real handlers by adding their map after the
- * stubs; a later entry replaces the stub for that action type. Only this folder may import
- * src/server/adapters/ (AGENTS.md rule 2).
- *
- *   return { ...createStubHandlers(), ...createDiscoveryHandlersFromEnv(env) };
- */
-export function createHandlerMap(_env: NodeJS.ProcessEnv = process.env): HandlerMap {
+/** Real handlers replace the gateway's explicit offline stubs. */
+export function createHandlerMap(env: NodeJS.ProcessEnv = process.env): HandlerMap {
+  const discovery = createDiscoveryHandlersFromEnv(env);
   return {
     ...createStubHandlers(),
+    "company.search": discovery["company.search"],
+    "jobs.search": discovery["jobs.search"],
+    "contact.search": discovery["contact.search"],
+    "web.read": discovery["web.read"],
+    "match.submit": matchSubmission,
   };
 }
