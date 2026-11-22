@@ -6,6 +6,8 @@ Start WP3 after WP0 publishes the contracts. In wave 3, build WP8 with the ranke
 
 Use one Codevisor worktree and branch per package. Open a PR when the acceptance checks pass and record the checks you ran.
 
+Send and receive worker messages on the [pinned GitHub board](https://github.com/Marcus-Yu/elevenlabs/issues/1) using `person-3` as your address. [Agent handoff format](../docs/COORDINATION.md#agent-to-agent-handoffs)
+
 ## Handoffs
 
 - Publish a sample response for both score tiers and the latency results before wiring the Room. Use the same sourced panel for both measured pitch runs.

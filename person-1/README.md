@@ -6,6 +6,8 @@ Run WP0 alone in wave 0. In wave 1, publish the gateway stubs early so Person 4 
 
 Use one Codevisor worktree and branch per package. Open a PR when the acceptance checks pass and record the checks you ran.
 
+Send and receive worker messages on the [pinned GitHub board](https://github.com/Marcus-Yu/elevenlabs/issues/1) using `person-1` as your address. [Agent handoff format](../docs/COORDINATION.md#agent-to-agent-handoffs)
+
 ## Handoffs
 
 - After WP0, share the feature spec registration pattern, shared schemas, seed command and replay fixture format with everyone.

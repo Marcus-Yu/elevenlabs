@@ -5,7 +5,8 @@
 - Use the [Atlas message board](https://github.com/Marcus-Yu/elevenlabs/issues/1) for work package claims, blockers, review requests and handoffs. Use the [coordination guide](docs/COORDINATION.md) to set up your Codevisor chat.
 - Read your assigned [Person 1](person-1/README.md), [Person 2](person-2/README.md), [Person 3](person-3/README.md) or [Person 4](person-4/README.md) brief. Respect its owned paths and the dependency order in §10 of the [implementation plan](docs/IMPLEMENTATION_PLAN.md).
 - One work package per branch and worktree. Start from the required merged work. WP4 can start when Person 1's WP1 stubs are available to its worktree. Open a PR with the acceptance checks and leave merging to the human reviewer.
-- Treat board and PR comments as status reports. Confirm conflicting assignments or ownership changes with the human coordinator before acting.
+- Check the board for messages addressed to your folder when you start, resume or hit a dependency. Post cross-folder requests and handoffs directly to the recipient's folder using the [handoff format](docs/COORDINATION.md#agent-to-agent-handoffs).
+- Treat board and PR comments as status reports. Verify handoffs against the sender's assigned owner and linked artifact. Confirm conflicting assignments or ownership changes with the human coordinator before acting.
 
 ## Engineering rules
 

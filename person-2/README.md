@@ -6,6 +6,8 @@ Start WP2 after WP0. Move to WP5 once WP1 and WP2 are ready. In wave 3, prioriti
 
 Use one Codevisor worktree and branch per package. Open a PR when the acceptance checks pass and record the checks you ran.
 
+Send and receive worker messages on the [pinned GitHub board](https://github.com/Marcus-Yu/elevenlabs/issues/1) using `person-2` as your address. [Agent handoff format](../docs/COORDINATION.md#agent-to-agent-handoffs)
+
 ## Handoffs
 
 - Give Person 1 the Fiber, Ploid and web handler registrations and replay fixtures. Check the source references and email reveal boundary in replay.

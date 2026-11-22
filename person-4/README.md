@@ -6,6 +6,8 @@ Start WP4 in wave 1 as soon as WP1 stubs are ready. In wave 2, build WP6 against
 
 Use one Codevisor worktree and branch per package. Open a PR when the acceptance checks pass and record the checks you ran.
 
+Send and receive worker messages on the [pinned GitHub board](https://github.com/Marcus-Yu/elevenlabs/issues/1) using `person-4` as your address. [Agent handoff format](../docs/COORDINATION.md#agent-to-agent-handoffs)
+
 ## Handoffs
 
 - Reuse Person 1's approval and activity operations in all UI surfaces. Coordinate the goal settings components with Person 2 and the spoken briefing and approval handoff with Person 3.
