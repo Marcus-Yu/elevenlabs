@@ -83,6 +83,7 @@ async function act(action) {
       ui.confirmed = true;
     }
     snap = next;
+    if (next.demoData && card) ui.errors[card] = { msg: "Atlas didn't respond, showing demo data (demo data)", retry: () => act(action) };
     return next;
   } catch (err) {
     console.error("[atlas] act failed", err);

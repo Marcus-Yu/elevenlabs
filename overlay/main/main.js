@@ -57,7 +57,14 @@ const providerReady =
 // After startup, live errors are reported to the card that asked (no silent mock fallback mid-flow).
 async function call(method, arg) {
   await providerReady;
-  return withTimeout(Promise.resolve().then(() => provider[method](arg)));
+  try {
+    return await withTimeout(Promise.resolve().then(() => provider[method](arg)));
+  } catch (err) {
+    if (provider === mockProvider || method !== "act") throw err;
+    // A showable demo beats a dead button: advance with labelled demo data.
+    console.warn(`[atlas] live act failed, showing demo data: ${err.message}`);
+    return { ...(await mockProvider.act(arg)), error: err.message, demoData: true };
+  }
 }
 
 // ---------- window + state ----------

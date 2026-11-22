@@ -2,6 +2,7 @@
 // Each function returns the children of one card; the card element itself is
 // created once by app.js so its entry animation never replays on updates.
 import { h, icon } from "./dom.js";
+import { TITLES, statusWord, fitText, confirmLabel } from "./copy.js";
 
 // AGENTS.md rule 5: synthetic material and the data mode are always labelled.
 function tag(snap) {
@@ -36,11 +37,12 @@ export function brief(snap, ui) {
   const approved = b.status === "approved";
   return [
     head("Brief", snap, h("span", { class: "meta" }, `Goal · ${b.goalKind}`)),
-    h("h3", { class: "title" }, b.role),
+    h("h3", { class: "title" }, TITLES.brief),
+    h("span", { class: "role" }, b.role),
     h("ul", { class: "chips" }, b.criteria.map((c) => h("li", {}, c))),
     h("div", { class: "foot" },
       h("span", { class: "note" }, icon("lock"), b.privateNote),
-      approved ? h("span", { class: "ok" }, icon("check", 15, 2.4), "Approved") : h("span", { class: "pending" }, h("span", { class: "pend-dot pend" }), "Needs your OK")),
+      approved ? h("span", { class: "ok" }, icon("check", 15, 2.4), statusWord("approved")) : h("span", { class: "pending" }, h("span", { class: "pend-dot pend" }), statusWord("needs_ok"))),
     approved ? null : actionBtn(ui, { type: "approve_brief" }, "Approve brief"),
     errorLine(ui, "brief"),
   ];
@@ -59,7 +61,8 @@ export function research(snap, ui) {
   return [
     h("div", { class: "head" },
       h("span", { class: "label" }, "Research", tag(snap)),
-      h("span", { class: "pill" }, r.status === "done" ? "Done" : "Scanning")),
+      h("span", { class: "pill" }, statusWord(r.status === "done" ? "done" : "scanning"))),
+    h("h3", { class: "title" }, TITLES.research),
     ...sources,
     h("span", { class: "small" }, icon("link"), "Every claim links to its source"),
     needsSearch ? actionBtn(ui, { type: "run_research" }, "Find candidates") : null,
@@ -96,7 +99,7 @@ export function shortlist(snap, ui) {
           h("b", {}, `Candidate ${c.alias}`),
           h("span", {}, rejected ? "Rejected · too junior" : c.headline)),
         h("span", { class: "fit" },
-          h("span", { class: `badge${fullFit(c.fit) ? "" : " partial"}` }, c.fit),
+          h("span", { class: `badge${fullFit(c.fit) ? "" : " partial"}` }, fitText(c.fit)),
           `${c.sourceCount} sources`),
         canReject && !rejected
           ? h("button", { type: "button", class: "btn mini", disabled: Boolean(ui.busy), onclick: reject },
@@ -104,10 +107,14 @@ export function shortlist(snap, ui) {
           : null));
   });
   const confirm = ui.pendingConfirm
-    ? actionBtn(ui, { type: "confirm_change" }, ui.explanation ? `Confirm: ${ui.explanation}` : "Confirm change")
+    ? h("div", { class: "confirm" },
+        ui.explanation ? h("span", { class: "explain" }, ui.explanation) : null,
+        actionBtn(ui, { type: "confirm_change" }, confirmLabel(ui.explanation)))
     : null;
   return [
-    head("Shortlist", snap, h("span", { class: "meta" }, `${s.runLabel} · names hidden`)),
+    head("Shortlist", snap, h("span", { class: "meta" }, "Names hidden")),
+    h("h3", { class: "title" }, TITLES.shortlist),
+    h("span", { class: "run" }, s.runLabel),
     s.candidates.length ? h("ul", { class: "rows" }, rows) : h("span", { class: "small" }, "No candidates yet"),
     confirm,
     errorLine(ui, "shortlist"),
@@ -126,12 +133,14 @@ export function gateway(snap, ui) {
   const g = snap.gateway;
   const events = g.events.map((e) => {
     const [look, name, stroke] = EVENT_ICON[e.kind] || EVENT_ICON.pending;
-    return h("li", {}, h("span", { class: `ico ${look}` }, icon(name, 12, stroke)), e.text);
+    return h("li", {}, h("span", { class: `ico ${look}` }, icon(name, 12, stroke)),
+      h("span", {}, e.text, e.ruleId && e.ruleId !== "default" ? h("span", { class: "rule" }, ` (${e.ruleId})`) : null));
   });
   // Last step: review the intro once the shortlist has been refined (Run 2).
   const ready = ui.confirmed || rerun(snap);
   return [
     head([icon("shield"), "Gateway"], snap, h("span", { class: "meta" }, "Rules, not the model")),
+    h("h3", { class: "title" }, TITLES.gateway),
     h("ul", { class: "events" }, events),
     actionBtn(ui, { type: "open_intro" }, "Review intro", { enabled: ready }),
     errorLine(ui, "gateway"),

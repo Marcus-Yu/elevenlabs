@@ -70,7 +70,7 @@ test("approve → shortlist → reject → confirm → run 2, with no names in t
   assert.deepEqual(s2.shortlist.candidates.map((c) => c.alias), ["A", "B", "C"]);
   assert.equal(s2.shortlist.candidates[0].fit, "3/4");
   assert.equal(s2.research.status, "done");
-  assert.equal(s2.shortlist.runLabel, "Run 1 · fit@5 0.60");
+  assert.equal(s2.shortlist.runLabel, "Run 1: 3 of the top 5 meet all your criteria");
   const text = JSON.stringify(s2.shortlist);
   for (const n of NAMES) assert.ok(!text.includes(n), `shortlist leaks ${n}`);
   assert.ok(!text.includes("linkedin"), "shortlist leaks a profile URL");
@@ -82,7 +82,7 @@ test("approve → shortlist → reject → confirm → run 2, with no names in t
   assert.ok(s3.proposedChange.explanation.includes("Candidate A") && !s3.proposedChange.explanation.includes("Ada"));
 
   const s4 = await p.act({ type: "confirm_change" });
-  assert.equal(s4.shortlist.runLabel, "Run 2 · fit@5 0.60 → 1.00");
+  assert.equal(s4.shortlist.runLabel, "Run 2: 5 of 5 now match (was 3 of 5)");
   assert.ok(s4.brief.criteria.includes("4+ yrs"));
   assert.ok(srv.calls.filter((c) => c.path.startsWith("/operations/")).every((c) => c.auth === "Bearer tok"));
 
@@ -117,13 +117,13 @@ test("/match: stripped field names, opt-in progress and intro status, stub handl
   const stubRows = [{ actionType: "card.reveal", reason: "stub_handler: card.reveal" }];
   const published = { cardA: { stripped: ["budget"], logReason: 'stripped ["budget"] stub_handler', draft: { budget: "Budget ceiling $180k" } }, cardB: { stripped: ["salary"], logReason: "ok" } };
   const m1 = _map.mapMatch({ ...published, match: { aAccepted: true, bAccepted: false } }, []);
-  assert.deepEqual(m1.events.map((e) => e.text), ["Budget removed from your share card · recorded (stub)", "Salary removed from B's share card", "Contact details hidden · A accepted, waiting for B"]);
+  assert.deepEqual(m1.events.map((e) => e.text), ["Removed your budget ceiling before sharing the card (demo data)", "Removed B's salary before sharing the card", "Contact details stay hidden until both sides opt in (A accepted, waiting for B)"]);
   assert.equal(m1.introStatus, "none");
   assert.ok(!JSON.stringify(m1).includes("180k"), "never shows a stripped value");
 
   const m2 = _map.mapMatch({ ...published, match: { aAccepted: true, bAccepted: true }, revealA: { status: "EXECUTED" }, revealB: { status: "PENDING" } }, stubRows);
   assert.equal(m2.introStatus, "pending");
-  assert.equal(m2.events.at(-1).text, "Introduction waiting for both sides (A approved) · recorded (stub)");
+  assert.equal(m2.events.at(-1).text, "Waiting for both sides to approve the introduction (A approved) (demo data)");
 
   const m3 = _map.mapMatch({ ...published, match: { aAccepted: true, bAccepted: true, revealedAt: "2026-11-22T19:00:00Z" }, revealA: { status: "EXECUTED" }, revealB: { status: "EXECUTED" } }, stubRows);
   assert.equal(m3.introStatus, "approved");
