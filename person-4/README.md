@@ -8,6 +8,18 @@ Use one Codevisor worktree and branch per package. Open a PR when the acceptance
 
 Send and receive worker messages on the [pinned GitHub board](https://github.com/Marcus-Yu/elevenlabs/issues/1) using `person-4` as your address. [Agent handoff format](../docs/COORDINATION.md#agent-to-agent-handoffs)
 
+## Current priority (scope change, 2026-11-22 18:10 UTC)
+
+The core demo is now the two-user double-opt-in match, so WP13 is the centrepiece. [Scope change](../docs/IMPLEMENTATION_PLAN.md#scope-change-2026-11-22-1810-utc-two-user-double-opt-in-is-the-core-demo)
+
+1. **Now, WP13:**
+   - Seed user B, a synthetic engineer seeking a robotics role, with a complementary card. Coordinate the seed with person-1.
+   - The card flow: draft → user edits and approves the exact card (the gateway strips disallowed fields) → matcher → anonymous match → each side accepts separately → each picks which identity fields to reveal → introduction drafted → approval.
+   - The audit view with all six steps from real log rows.
+   - Label both users as synthetic.
+2. **Next, WP4:** thread cards for the calibration profiles, the shortlist, the share-card review, the opt-in prompt and the approval card.
+3. **Then:** WP6 (the approvals inbox and the activity log with the denied filter; the briefing is Tier 2), then the WP15 runbook for the new demo.
+
 ## Handoffs
 
 - Reuse Person 1's approval and activity operations in all UI surfaces. Coordinate the goal settings components with Person 2 and the spoken briefing and approval handoff with Person 3.

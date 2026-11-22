@@ -8,6 +8,17 @@ Use one Codevisor worktree and branch per package. Open a PR when the acceptance
 
 Send and receive worker messages on the [pinned GitHub board](https://github.com/Marcus-Yu/elevenlabs/issues/1) using `person-1` as your address. [Agent handoff format](../docs/COORDINATION.md#agent-to-agent-handoffs)
 
+## Current priority (scope change, 2026-11-22 18:10 UTC)
+
+The core demo is now the two-user double-opt-in match. [Scope change](../docs/IMPLEMENTATION_PLAN.md#scope-change-2026-11-22-1810-utc-two-user-double-opt-in-is-the-core-demo)
+
+1. **Now, WP1:** ship what you have, plus:
+   - the `hire` value on `GoalKind` (an additive migration, called out in the PR);
+   - the `opt_in_only` deny rule (no `contact.reveal_email` or `outreach.send` on `hire` goals or to people found by research);
+   - share-card field stripping on `card.publish`: drop any field built from a fact whose `allowedPurposes` excludes `matching`, and log it.
+2. **Next, WP7:** Alter delivers the approved `card.reveal` introduction to the sandbox inbox. TraceRoot shows the confirmed-criteria rerun next to the first run, with the evaluation delta.
+3. **Later, WP14:** add red-team cases for `opt_in_only`, the stripped salary ceiling, and a reveal before both sides accept.
+
 ## Updates from the team notes (2026-11-22)
 
 The [team notes vault](https://github.com/Dante-Bravi/Eleven-labs-Obsidian) changed after the plan was written (commit `2d1b5a1`, *Sponsor Integration Architecture*, *TraceRoot AI*, *Maritime*). Items marked **(notes)** below come from it. They add guardrails and change what TraceRoot proves; they do not change the product scope in §1. Where a note conflicts with the plan, flag it on the board instead of changing behaviour.
