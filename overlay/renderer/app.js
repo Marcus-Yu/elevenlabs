@@ -17,7 +17,7 @@ const mounted = {}; // card name → <article>, created once per summon
 // pending criteria change waiting for "Confirm change".
 const ui = { rejected: new Set(), pendingConfirm: false, explanation: null, confirmed: false, busy: null, errors: {}, act, refresh: () => refreshAll() };
 // Which card shows the result (and any error) of each action.
-const ACT_CARD = { set_need: "brief", approve_brief: "brief", run_research: "research", reject_candidate: "shortlist", confirm_change: "shortlist", open_intro: "gateway" };
+const ACT_CARD = { approve_send: "gateway", set_need: "brief", approve_brief: "brief", run_research: "research", reject_candidate: "shortlist", confirm_change: "shortlist", open_intro: "gateway" };
 
 /** Short, human error text for a card; never a stack trace. */
 function friendly(err) {
@@ -134,6 +134,10 @@ async function act(action) {
   if (card) delete ui.errors[card];
   ui.busy = action.type;
   refreshAll();
+  // Finale: poll progress so the checklist ticks as each real step completes.
+  const poll = action.type === "approve_send"
+    ? setInterval(() => window.atlas.snapshot().then((p) => { if (ui.busy === "approve_send") { snap = p; refreshAll(); } }).catch(() => {}), 500)
+    : null;
   try {
     const next = await window.atlas.act(action);
     if (action.type === "reject_candidate") {
@@ -155,9 +159,22 @@ async function act(action) {
     if (card) ui.errors[card] = { msg, retry: () => act(action) };
     return { error: msg };
   } finally {
+    if (poll) clearInterval(poll);
     ui.busy = null;
     refreshAll();
+    if (action.type === "approve_send" && snap?.gateway?.send?.status === "done") finish();
   }
+}
+
+// All steps done: show "All done ✓" for ~2.5 s, then the overlay finishes (cards slide back → hidden).
+function finish() {
+  if (ui.finishing) return;
+  ui.finishing = true;
+  refreshAll();
+  setTimeout(() => {
+    ui.finishing = false;
+    window.atlas.nav("dismiss");
+  }, 2500);
 }
 
 function clearCards() {

@@ -59,7 +59,7 @@
  * @property {string} updatedAt
  *
  * @typedef {{type:"approve_brief"} | {type:"run_research"} | {type:"reject_candidate", alias:string, reason:string}
- *   | {type:"confirm_change"} | {type:"open_intro"} | {type:"refresh"}
+ *   | {type:"confirm_change"} | {type:"open_intro"} | {type:"refresh"} | {type:"approve_send"}
  *   | {type:"set_need", text:string, kind?:"hire"|"customers"|"investors"|"manufacturer"|"partner"|"other", role?:string, criteria?:string[]}} OverlayAction
  * research, shortlist and gateway are null or empty until the brief is approved.
  *
@@ -129,4 +129,42 @@ function briefFromNeed(need, hireCriteriaChips = []) {
   };
 }
 
-module.exports = { SAMPLE_SNAPSHOT, NEED_LABELS, inferKind, briefFromNeed };
+/**
+ * Finale (approve_send): gateway.send = { status: "idle"|"running"|"done"|"failed", failedStep?, steps: SendStep[] }
+ * @typedef {{id:string, label:string, status:"pending"|"running"|"done"|"failed"}} SendStep
+ */
+const SEND_STEPS = [
+  { id: "publish", label: "Removed your budget ceiling before sharing" },
+  { id: "match", label: "Matched with an anonymous robotics engineer (synthetic)" },
+  { id: "acceptA", label: "You accepted the match" },
+  { id: "acceptB", label: "The engineer accepted (synthetic user)" },
+  { id: "reveal", label: "Both sides agreed to meet" },
+  { id: "send", label: "Introduction drafted for both of you (sandbox: nothing sent to a real person)" },
+];
+const newSend = () => ({ status: "idle", steps: SEND_STEPS.map((x) => ({ ...x, status: "pending" })) });
+
+/** Runs the finale steps in order, skipping ones already done (safe to retry). runStep(id) does the work. */
+async function runSend(send, runStep, onProgress = () => {}) {
+  send.status = "running";
+  delete send.failedStep;
+  for (const step of send.steps) {
+    if (step.status === "done") continue;
+    step.status = "running";
+    onProgress();
+    try {
+      await runStep(step.id);
+      step.status = "done";
+    } catch (err) {
+      step.status = "failed";
+      send.status = "failed";
+      send.failedStep = step.label;
+      onProgress();
+      return send;
+    }
+    onProgress();
+  }
+  send.status = "done";
+  return send;
+}
+
+module.exports = { SAMPLE_SNAPSHOT, NEED_LABELS, inferKind, briefFromNeed, SEND_STEPS, newSend, runSend };
