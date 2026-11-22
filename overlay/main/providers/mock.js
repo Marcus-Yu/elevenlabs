@@ -1,11 +1,12 @@
 // Mock provider: serves the labelled synthetic sample from the contract and walks
 // its statuses forward when the overlay acts. No network, no real people.
-const { SAMPLE_SNAPSHOT, briefFromNeed, newSend, runSend } = require("../../shared/contract");
+const { SAMPLE_SNAPSHOT, briefFromNeed, newSend, runSend, displayName, namedProposal } = require("../../shared/contract");
 
 const clone = (value) => JSON.parse(JSON.stringify(value));
 
 function createProvider(_env = {}) {
   const snap = clone(SAMPLE_SNAPSHOT);
+  snap.shortlist.candidates.forEach((c) => (c.displayName = displayName(c.alias)));
   // Layout checks: ATLAS_MOCK_LONG=1 stretches every text to stress wrapping and scrolling.
   if (_env.ATLAS_MOCK_LONG === "1") {
     const long = " and a much longer description that keeps going so the card has to wrap, clamp and scroll without overflowing";
@@ -94,7 +95,7 @@ function createProvider(_env = {}) {
       if (handler) handler(action);
       // Mirror the live provider: a reject proposes a criteria change to confirm.
       if (action.type === "reject_candidate" && action.alias) {
-        return { ...current(), proposedChange: { explanation: "Raise the minimum to 5 years?" } };
+        return { ...current(), proposedChange: { explanation: namedProposal("Raise the minimum to 5 years?", action.alias) } };
       }
       return current();
     },

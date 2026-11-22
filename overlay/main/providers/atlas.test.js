@@ -79,11 +79,11 @@ test("approve → shortlist → reject → confirm → run 2, with no names in t
   for (const n of NAMES) assert.ok(!text.includes(n), `shortlist leaks ${n}`);
   assert.ok(!text.includes("linkedin"), "shortlist leaks a profile URL");
   assert.ok(!text.includes("Orbit Labs"), "shortlist leaks the employer");
-  assert.equal(s2.shortlist.candidates[0].sources[0].claim, "Candidate A is Robotics Engineer at a company (current role)");
+  assert.equal(s2.shortlist.candidates[0].sources[0].claim, "Maya Chen is Robotics Engineer at a company (current role)");
 
   const s3 = await p.act({ type: "reject_candidate", alias: "A", reason: "too junior" });
   assert.equal(srv.calls.find((c) => c.path === "/operations/reject-match-with-reason").body.json.matchId, "g1:0");
-  assert.ok(s3.proposedChange.explanation.includes("Candidate A") && !s3.proposedChange.explanation.includes("Ada"));
+  assert.ok(s3.proposedChange.explanation.includes("Maya Chen") && !s3.proposedChange.explanation.includes("Ada"));
 
   const s4 = await p.act({ type: "confirm_change" });
   assert.equal(s4.shortlist.runLabel, "Run 2: 5 of 5 now match (was 3 of 5)");
@@ -121,7 +121,7 @@ test("/match: stripped field names, opt-in progress and intro status, stub handl
   const stubRows = [{ actionType: "card.reveal", reason: "stub_handler: card.reveal" }];
   const published = { cardA: { stripped: ["budget"], logReason: 'stripped ["budget"] stub_handler', draft: { budget: "Budget ceiling $180k" } }, cardB: { stripped: ["salary"], logReason: "ok" } };
   const m1 = _map.mapMatch({ ...published, match: { aAccepted: true, bAccepted: false } }, []);
-  assert.deepEqual(m1.events.map((e) => e.text), ["Removed your budget ceiling before sharing the card (demo data)", "Removed B's salary before sharing the card", "Contact details stay hidden until both sides opt in (A accepted, waiting for B)"]);
+  assert.deepEqual(m1.events.map((e) => e.text), ["Removed your budget ceiling before sharing the card (demo data)", "Removed the other side's salary before sharing the card", "Contact details stay hidden until both sides opt in (A accepted, waiting for B)"]);
   assert.equal(m1.introStatus, "none");
   assert.ok(!JSON.stringify(m1).includes("180k"), "never shows a stripped value");
 

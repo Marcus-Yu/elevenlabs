@@ -167,4 +167,18 @@ async function runSend(send, runStep, onProgress = () => {}) {
   return send;
 }
 
-module.exports = { SAMPLE_SNAPSHOT, NEED_LABELS, inferKind, briefFromNeed, SEND_STEPS, newSend, runSend };
+/**
+ * Fictional display names for the shortlist (AGENTS.md rule 5): the records behind them are real
+ * public profiles, so these are pseudonyms, always shown with an "alias" tag. Internal aliases
+ * (A/B/C) stay the ids for operations and tool arguments. Not "Sam Rivera" (the /match synthetic user).
+ */
+const DISPLAY_NAMES = { A: "Maya Chen", B: "Jordan Ellis", C: "Priya Raman" };
+const displayName = (alias) => DISPLAY_NAMES[alias] ?? `Candidate ${alias}`;
+
+/** "...Raise the minimum to 4 years?" → "Jordan Ellis looks too junior. Raise the minimum to 4 years?" */
+function namedProposal(explanation, alias) {
+  const m = /raise the minimum to \d+ years?\??/i.exec(explanation || "");
+  return m ? `${displayName(alias)} looks too junior. ${m[0].replace(/^r/, "R")}` : explanation;
+}
+
+module.exports = { DISPLAY_NAMES, displayName, namedProposal, SAMPLE_SNAPSHOT, NEED_LABELS, inferKind, briefFromNeed, SEND_STEPS, newSend, runSend };

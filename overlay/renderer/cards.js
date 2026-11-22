@@ -105,7 +105,7 @@ export function shortlist(snap, ui) {
       h("div", { class: `row${rejected ? " rejected" : ""}` },
         h("span", { class: "avatar" }, c.alias),
         h("span", { class: "who" },
-          h("b", {}, `Candidate ${c.alias}`),
+          h("b", {}, c.displayName || `Candidate ${c.alias}`, c.displayName ? h("span", { class: "rule" }, " alias") : null),
           h("span", {}, rejected ? "Rejected · too junior" : c.headline)),
         h("span", { class: "fit" },
           h("span", { class: `badge${fullFit(c.fit) ? "" : " partial"}` }, fitText(c.fit)),
@@ -121,7 +121,7 @@ export function shortlist(snap, ui) {
         actionBtn(ui, { type: "confirm_change" }, confirmLabel(ui.explanation)))
     : null;
   return [
-    head("Shortlist", snap, h("span", { class: "meta" }, "Names hidden")),
+    head("Shortlist", snap, h("span", { class: "meta" }, "Names are aliases until both sides opt in")),
     h("h3", { class: "title" }, TITLES.shortlist),
     h("span", { class: "run" }, s.runLabel),
     s.candidates.length ? h("ul", { class: "rows" }, rows) : h("span", { class: "small" }, "No candidates yet"),
