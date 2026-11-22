@@ -21,7 +21,7 @@ import {
 // Searches go through gateway.execute (contact.search in criteria mode). The rerun re-ranks the
 // recorded pool under the confirmed criteria, so it works in replay; it does not search again.
 
-export interface HireGoalRow {
+export type HireGoalRow = {
   id: string;
   userId: string;
   kind: string;
@@ -29,14 +29,14 @@ export interface HireGoalRow {
   icp: unknown;
 }
 
-export interface HireDeps {
+export type HireDeps = {
   execute(req: ActionRequest): Promise<GatewayResult>;
   createGoal(data: { userId: string; kind: "hire"; direction: "BUY"; statement: string; icp: HireState; autonomy: "PREPARE" }): Promise<{ id: string }>;
   findGoal(userId: string, goalId: string): Promise<HireGoalRow | null>;
   saveState(goalId: string, state: HireState): Promise<void>;
 }
 
-export interface HireRun {
+export type HireRun = {
   at: string;
   criteria: HireCriteria;
   topK: string[];
@@ -45,7 +45,7 @@ export interface HireRun {
   comparedTo?: { k: number; fitAtK: number; meanScore: number };
 }
 
-export interface HireState {
+export type HireState = {
   hireCriteria: HireCriteria;
   pool?: Candidate[];
   rejected?: { key: string; fullName: string; reason: string; at: string }[];

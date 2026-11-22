@@ -28,7 +28,7 @@ export const HireCriteria = z.object({
 export type HireCriteria = z.output<typeof HireCriteria>;
 
 /** Structural match for adapters/fiber.ts CandidateRecord (features must not import adapters). */
-export interface Candidate {
+export type Candidate = {
   fullName: string;
   title: string;
   currentCompany?: string;
@@ -39,13 +39,13 @@ export interface Candidate {
   sources: SourceRef[];
 }
 
-export interface CandidateReason {
+export type CandidateReason = {
   text: string;
   points: number;
   source?: SourceRef;
 }
 
-export interface RankedCandidate {
+export type RankedCandidate = {
   candidate: Candidate;
   score: number;
   rationale: string;
@@ -146,9 +146,9 @@ function scoreCandidate(c: Candidate, criteria: HireCriteria): RankedCandidate {
 
 // ---------- rejection → proposed criteria change → confirm → rerun ----------
 
-export interface CriteriaChange {
+export type CriteriaChange = {
   /** The fields that would change, with old and new values, for the confirm card. */
-  changes: { field: keyof HireCriteria; from: unknown; to: unknown }[];
+  changes: { field: keyof HireCriteria; from: HireCriteria[keyof HireCriteria] | null; to: HireCriteria[keyof HireCriteria] | null }[];
   explanation: string;
   /** The rejection that led to it, for the memory item and the audit log. */
   basedOn: { candidate: string; reason: string; source?: SourceRef };
