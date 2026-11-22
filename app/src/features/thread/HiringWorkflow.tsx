@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import type { CriteriaChange, HireCriteriaInput } from '../matches/candidates';
 import type { HireRun, HireShortlistEntry } from '../matches/hireFlow';
 import type { SourceRef } from '../../shared/contracts';
-import { candidateLabel, hideCandidateIdentity, sourceSummary } from './candidate-display';
+import { candidateDisplayName, hideCandidateIdentity, proposalSentence, sourceSummary } from './candidate-display';
 import { CalibrationCard, type CalibrationProfile, type CalibrationReaction } from './CalibrationCard';
 import { CalibrationCriteriaReview } from './CalibrationCriteriaReview';
 import { ThreadApprovalCard } from './ThreadApprovalCard';
@@ -45,6 +45,7 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
   const [comparison, setComparison] = useState<HireRun | null>(null);
   const [comparisonError, setComparisonError] = useState(false);
   const [proposal, setProposal] = useState<CriteriaChange | null>(null);
+  const [rejectedId, setRejectedId] = useState('');
   const [reasons, setReasons] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -58,7 +59,9 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
   }
   const known = [...knownEntries.current.values()];
   const safe = (text: string) => hideCandidateIdentity(text, known);
-  const labelFor = (id: string) => candidateLabel([...knownEntries.current.keys()].indexOf(id));
+  // Internal alias A/B/C stays the position in knownEntries; the screen shows its fictional name.
+  const nameFor = (id: string) => candidateDisplayName([...knownEntries.current.keys()].indexOf(id));
+  const aliasTag = <small style={{ color: '#888', fontWeight: 'normal', marginLeft: 4 }}>alias</small>;
   const appliedDraft = useRef<typeof reviewedDraft>(undefined);
   useEffect(() => {
     if (!reviewedDraft || appliedDraft.current === reviewedDraft || goalId || busy) return;
@@ -162,7 +165,7 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
   async function reject(entry: HireShortlistEntry) {
     const reason = reasons[entry.matchId]?.trim();
     if (!reason || reason.length < 2) return;
-    await execute(async () => { const result = await transport.reject({ matchId: entry.matchId, reason }); setProposal(result.proposedChange); setEntries((old) => old?.filter((item) => item.matchId !== entry.matchId) ?? null); });
+    await execute(async () => { const result = await transport.reject({ matchId: entry.matchId, reason }); setRejectedId(entry.matchId); setProposal(result.proposedChange); setEntries((old) => old?.filter((item) => item.matchId !== entry.matchId) ?? null); });
   }
   async function confirm() {
     if (!goalId || !proposal) return;
@@ -197,7 +200,7 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
     {approvalId && <ThreadApprovalCard approvalId={approvalId} />}
     {busy && <p role="status">Working…</p>}{error && <p role="alert">{error}</p>}
     {proposal && <section aria-label="Confirm proposed preference" className="rounded border p-3 space-y-2"><h3 className="font-semibold">Confirm proposed preference</h3>
-      <p>Review the proposed criteria change based on your rejection.</p><p>Based on rejection: “{safe(proposal.basedOn.reason)}”</p>
+      <p><b>{proposalSentence(nameFor(rejectedId), proposal.changes[0])}</b> {aliasTag}</p><p>Based on rejection: “{safe(proposal.basedOn.reason)}”</p>
       {proposal.basedOn.source && <p><Evidence source={proposal.basedOn.source} /></p>}
       <ul>{proposal.changes.map((change, i) => <li key={i}>{change.field}: {safe(JSON.stringify(change.from))} → {safe(JSON.stringify(change.to))}</li>)}</ul>
       <button type="button" disabled={busy} onClick={() => void confirm()}>Confirm and rerank (better run)</button>{' '}
@@ -207,9 +210,10 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
     {comparisonError && <p>Reranking completed, but its comparison could not be loaded.</p>}
     {entries && <section><h3 className="font-semibold">Candidates</h3>
       {shortlistReplay && <p>Replay of recorded Fiber results from public sources.</p>}
+      <p style={{ color: '#888' }}>Names are aliases until both sides opt in.</p>
       {entries.length === 0 && <p>No candidates returned.</p>}
       <ol className="space-y-4">{entries.map((entry) => <li key={entry.matchId} className="rounded border p-3 space-y-2">
-        <h4 className="font-semibold">{labelFor(entry.matchId)} · {safe(entry.candidate.title || 'Title unavailable')} · {entry.candidate.yearsExperience === undefined ? 'Experience unavailable' : `${entry.candidate.yearsExperience} years of experience`}</h4>
+        <h4 className="font-semibold">{nameFor(entry.matchId)}{aliasTag} · {safe(entry.candidate.title || 'Title unavailable')} · {entry.candidate.yearsExperience === undefined ? 'Experience unavailable' : `${entry.candidate.yearsExperience} years of experience`}</h4>
         <p>Rule-based score: {entry.score}/100 · {safe(entry.rationale)}</p>
         <ul className="list-disc pl-5">{entry.reasons.map((reason, i) => <li key={i}>{safe(reason.text)} ({reason.points >= 0 ? '+' : ''}{reason.points}) {reason.source && <Evidence source={reason.source} />}</li>)}</ul>
         <details><summary>Profile sources</summary><ul>{entry.candidate.sources.map((source, i) => <li key={i}><Evidence source={source} /></li>)}</ul></details>
