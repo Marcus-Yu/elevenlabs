@@ -44,6 +44,8 @@ async function call(method, arg) {
       return await withTimeout(Promise.resolve().then(() => provider[method](arg)));
     } catch (err) {
       console.warn(`[atlas] live ${method} failed, using mock: ${err.message}`);
+      // Cards still get the labelled mock; error lets voice say "Denied" instead of claiming success.
+      if (method === "act") return { ...(await mockProvider.act(arg)), error: err.message };
     }
   }
   return mockProvider[method](arg);
