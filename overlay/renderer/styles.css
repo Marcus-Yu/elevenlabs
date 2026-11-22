@@ -57,6 +57,8 @@
 .bar:nth-child(3){animation-delay:.3s}
 .bar:nth-child(4){animation-delay:.05s}
 .bar:nth-child(5){animation-delay:.22s}
+/* live voice: bars follow the real mic / agent volume (renderer/voice.js) */
+.voice-live .bar{animation:none;transition:transform 80ms linear}
 
 /* cards */
 .card-l{animation:inL .7s cubic-bezier(.2,.8,.2,1) both}

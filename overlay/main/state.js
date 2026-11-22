@@ -20,7 +20,14 @@ function next(state, event) {
   }
 }
 
+/**
+ * Voice sets the visible state directly (user speaking → listening, agent working →
+ * thinking, agent talking → speaking). It never summons or hides the overlay.
+ * @param {string} state @param {string} mode
+ */
+const voice = (state, mode) => (VISIBLE.includes(state) && VISIBLE.includes(mode) ? mode : state);
+
 /** Mouse passes through to the desktop only while nothing is on screen. */
 const ignoresMouse = (state) => state === "hidden";
 
-module.exports = { next, ignoresMouse };
+module.exports = { next, voice, ignoresMouse };

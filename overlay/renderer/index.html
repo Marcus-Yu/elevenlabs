@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: data:; worker-src 'self' blob: data:; media-src 'self' blob: data:; connect-src 'self' https://api.elevenlabs.io wss://api.elevenlabs.io; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:">
 <title>Atlas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,6 +27,7 @@
     <div class="col col-r" id="col-r"></div>
   </div>
 </div>
+<script src="../node_modules/@elevenlabs/client/dist/lib.iife.js"></script>
 <script type="module" src="app.js"></script>
 </body>
 </html>

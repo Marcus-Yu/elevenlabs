@@ -32,3 +32,14 @@ test("clicks pass through only while hidden", () => {
   assert.equal(ignoresMouse("hidden"), true);
   for (const s of ["listening", "thinking", "speaking", "leaving"]) assert.equal(ignoresMouse(s), false);
 });
+
+test("voice moves between visible states only", () => {
+  const { voice } = require("./state");
+  assert.equal(voice("listening", "speaking"), "speaking");
+  assert.equal(voice("speaking", "listening"), "listening");
+  assert.equal(voice("thinking", "thinking"), "thinking");
+  assert.equal(voice("hidden", "speaking"), "hidden");
+  assert.equal(voice("leaving", "listening"), "leaving");
+  assert.equal(voice("listening", "hidden"), "listening");
+  assert.equal(voice("listening", "bogus"), "listening");
+});
