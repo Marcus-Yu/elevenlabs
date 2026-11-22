@@ -1,0 +1,291 @@
+{
+  "version": 1,
+  "provider": "fiber",
+  "hash": "2cd50478733d1111",
+  "recordedAt": "2026-11-22T17:38:43.301Z",
+  "request": {
+    "method": "POST",
+    "url": "https://api.fiber.ai/v1/job-search",
+    "body": {
+      "apiKey": "[REDACTED]",
+      "pageSize": 5,
+      "searchParams": {
+        "title": [
+          "robotics engineer"
+        ],
+        "isActive": "true",
+        "countryOrRegionCode": [
+          "USA"
+        ]
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "body": {
+      "output": {
+        "data": [
+          {
+            "job_id": "4440573562",
+            "title": "Software Engineer, Robotics Data Foundation (Cloud)",
+            "company_name": "Anduril Industries",
+            "company_logo_url": "https://media.licdn.com/dms/image/v2/C560BAQE_NOVau3lvmw/company-logo_100_100/company-logo_100_100/0/1630637180845/andurilindustries_logo?e=2147483647&v=beta&t=n7gX8Q3dd8jUyRLIPFZhJjkadp00i1LOpesQqIPNtxQ",
+            "posted_at": "2026-08-26T00:00:00.000Z",
+            "job_url": "https://www.linkedin.com/jobs/view/software-engineer-robotics-data-foundation-cloud-at-anduril-industries-4440573562?trk=public_jobs_topcard-title",
+            "applicant_range": {
+              "gte": 26,
+              "lte": 26
+            },
+            "description": "Anduril Industries is a defense technology company with a mission to transform U.S. and allied military capabilities with advanced technology. By bringing the expertise, technology, and business model of the 21st century’s most innovative companies to the defense industry, Anduril is changing how military systems are designed, built and sold. Anduril’s family of systems is powered by Lattice OS, an AI-powered operating system that turns thousands of data streams into a realtime, 3D command and control center. As the world enters an era of strategic competition, Anduril is committed to bringing cutting-edge autonomy, AI, computer vision, sensor fusion, and networking technology to the military in months, not years.About The TeamThe Robotics Data Foundation (RDF) team builds Anduril's vehicle telemetry backbone, from onboard systems to cloud. This includes onboard data recording and backhaul, ingestion into our cloud data platform, normalizing data across flight controllers and vehicle management systems, mission systems, and sensor payloads, and making it available to a range of downstream 1st and 3rd-party analysis tools. Our vehicle telemetry platform powers software and hardware development, T&E workflows, production incident response, and contractual customer reporting today, and underpins new product development, fleet-wide analysis, simulation, and machine learning workflows. Anduril sits on the world's largest defense robotics data asset, and the RDF team is working to operationalize that across the board.About The JobAs an engineer on the Robotics Data Foundation team, you will design and build the Anduril-wide cloud systems that host our ingestion pipelines, storage systems, and tooling that carry vehicle telemetry from onboard systems to the cloud and make it discoverable, searchable, and analyzable across the fleet. You'll normalize data across flight controllers, vehicle management systems, mission systems, and sensor payloads, and expose it to downstream 1st- and 3rd-party analysis tools, and build infrastructure that supports large-scale batch ingestion of recorded telemetry, as well as low-latency streaming.Build reliable and performant cloud data systems: Our software ingests high volumes of telemetry across Anduril, so the systems we ship must be high-availability and stable when processing high-scale vehicle telemetry.Design extensible telemetry and data architectures: Robotics teams have diverse data sources that are often unique to a platform or sensor. Our architecture must enable easy integration of bespoke data sources into our standardized ingestion framework.Enable data-driven engineering in real-time: We own the software that delivers live telemetry streams and recorded data to cloud destinations and analysis tools so engineers, operators, and test teams across locations can understand their systems in real-time.Build and develop cloud-native systems that are also edge-compatible: While we are responsible for delivering an excellent cloud data platform experience for all teams across Anduril, we also deliver a subset of capabilities to edge nodes to facilitate telemetry capture in offline / air-gapped settings. You will also be responsible for fielding data systems to classified environments.Eagerly engage with our customers: We partner closely with business line engineering teams to understand their specific data requirements and iteratively deliver solutions that meet their particular needs and constraints.Required QualificationsExperience with modern lakehouse architectures (Iceberg, Delta Lake), ETL systems (Flyte, Dagster, Airflow, Argo Workflows), and distributed data processing engines (Spark, Trino, etc.).Experience developing and operating high-throughput streaming data pipelines (leveraging systems like Spark Streaming, Flink, Kafka).Strong proficiency in Python, Java, Rust, and/or Go (the team predominantly uses Python & Rust for core backend services and pipelines).Experience building and operating cloud systems, including common containerization and deployability technologies (Docker, Kubernetes, GitOps systems like FluxCD / ArgoCD).U.S. Person status is required as this position needs to access export controlled data. Eligibility to obtain/maintain a US Top Secret clearance is also desirable.US Salary Range$166,000—$220,000 USDBenefitsThe salary range for this role is an estimate based on a wide range of compensation factors, inclusive of base salary only. Actual salary offer may vary based on (but not limited to) work experience, education and/or training, critical skills, and/or business considerations. Highly competitive equity grants are included in the majority of full time offers; and are considered part of Anduril's total compensation package. Additionally, Anduril offers top-tier benefits for full-time employees, including:At Anduril, we invest in our people. Our comprehensive, competitive benefits package (available at little to no cost to employees) ensures you’re supported in health, recovery, and whatever comes next. For more information, Explore Our Benefits.Protecting Yourself from Recruitment ScamsAnduril is committed to maintaining the integrity of our Talent acquisition process and the security of our candidates. We've observed a rise in sophisticated phishing and fraudulent schemes where individuals impersonate Anduril representatives, luring job seekers with false interviews or job offers. These scammers often attempt to extract payment or sensitive personal information.To Ensure Your Safety And Help You Navigate Your Job Search With Confidence, Please Keep The Following Critical Points In Mind No Financial Requests: Anduril will never solicit payment or demand personal financial details (such as banking information, credit card numbers, or social security numbers) at any stage of our hiring process. Our legitimate recruitment is entirely free for candidates. Please always verify communications:Direct from Anduril: If you receive an email from one of our recruiters, it will only come from an @anduril.com address.Via Agency Partner: If contacted by a recruiting agency for an Anduril role, their email will clearly identify their agency. If you suspect any suspicious activity, please verify the agency's authenticity by reaching out to contact@anduril.com. Exercise Caution with Unsolicited Outreach: If you receive any communication that appears suspicious, contains grammatical errors, or makes unusual requests, do not engage. Always confirm the sender's email domain is @anduril.com before providing any personal information or clicking on links. What to Do If You Suspect Fraud: Should you encounter any questionable or fraudulent outreach claiming to be from Anduril, please report it immediately to contact@anduril.com. Your proactive caution is invaluable in protecting your personal information and upholding the security and trustworthiness of our recruitment efforts. Data PrivacyTo view Anduril's candidate data privacy policy, please visit https://anduril.com/applicant-privacy-notice/.By submitting your application, you consent to Anduril Industries using a third-party service provider to conduct pre-employment risk, integrity, and due diligence screening and assessing potential risks as part of your application process. This third-party service provider provides risk-intelligence services that may include analysis of sanctions and watchlists, adverse media, public-record information, and other lawful open-source or commercial data sources. This third-party service provider does not act as a consumer reporting agency. Use of this provider helps to ensure compliance with applicable laws and protect technology, intellectual property, and organizational security.",
+            "seniority_level": "Not Applicable",
+            "employment_type": "Contract",
+            "job_function": [
+              "Engineering",
+              "Information Technology"
+            ],
+            "job_function_v2": null,
+            "job_specialty": null,
+            "raw_industries": "Defense and Space Manufacturing",
+            "standard_industries": [
+              "Aerospace & Military"
+            ],
+            "compensation_range": null,
+            "annual_salary_usd": null,
+            "years_of_experience": null,
+            "standardized_location": {
+              "street_address": null,
+              "neighborhood": null,
+              "city": "Seattle",
+              "state_name": "Washington",
+              "state_code": "WA",
+              "county": "King County",
+              "postal_code": null,
+              "country_code": "USA",
+              "country_name": "United States",
+              "coordinates": {
+                "lat": 47.60322952,
+                "lon": -122.33027649
+              },
+              "timezone": "America/Los_Angeles",
+              "full_address": "Seattle, WA",
+              "formatted_address": "Seattle, WA"
+            },
+            "job_location_type": "On-site",
+            "modality": "On-site",
+            "status": "active"
+          },
+          {
+            "job_id": "4461817523",
+            "title": "Staff Specialist Field Engineer, Robotics",
+            "company_name": "CoreWeave",
+            "company_logo_url": "https://media.licdn.com/dms/image/v2/D560BAQFUx2kll_oE3g/company-logo_100_100/B56Z3aEfQQH4AQ-/0/1777480103293/coreweave_logo?e=2147483647&v=beta&t=kUNvpvKsMdMFvScdymt1oceTQkouqC-5sSTK4vfhVVw",
+            "posted_at": "2026-09-06T00:00:00.000Z",
+            "job_url": "https://www.linkedin.com/jobs/view/staff-specialist-field-engineer-robotics-at-coreweave-4461817523?trk=public_jobs_topcard-title",
+            "applicant_range": {
+              "gte": 0,
+              "lte": 25
+            },
+            "description": "CoreWeave is The Essential Cloud for AI™. Built for pioneers by pioneers, CoreWeave delivers a platform of technology, tools, and teams that enables innovators to build and scale AI with confidence. Trusted by leading AI labs, startups, and global enterprises, CoreWeave combines superior infrastructure performance with deep technical expertise to accelerate breakthroughs and turn compute into capability. Founded in 2017, CoreWeave became a publicly traded company (Nasdaq: CRWV) in March 2025. Learn more at www.coreweave.com.What You’ll DoThe Physical AI Field Engineering team at CoreWeave deploys AI solutions within enterprise engineering organisations, helping customers realise measurable value from machine learning applications. As we build our presence in Robotics, we are seeking a Staff Specialist Field Engineer to establish and lead this vertical. You will define how the team engages with robotics customers, set the technical standard for the practice, and lead complex customer engagements from initial scoping through to embedded deployment and expansion.This role requires genuine depth on both sides of the engagement: you must be credible to the control engineers, roboticists, and ML researchers in the room, and capable of building and validating ML solutions independently using our product stack. You will work across CoreWeave’s AI platform (including Monolith, Marimo, and W&B Models) to design and deploy solutions and build customer-facing applications tailored to specific robotics use cases.A core part of this role is building and iterating on customer-facing applications using the CoreWeave product stack tailored to specific engineering use cases. These applications are the product the customer uses; you are not just deploying tools but building at the product edge. You will gather and synthesise signals from real customer deployments, identifying where customer needs are consistent enough across accounts to inform development of standalone capabilities. You will contribute to the wider Field Engineering team’s Physical AI knowledge framework and provide critical signals of what customers need in the field and what ultimately gets built in the product.Who You Are8+ years experience in robotics systems development, robot learning, or AI/ML for physical autonomous systems, with experience in manipulation, locomotion, or mobile robotics.Deep understanding of physical system dynamics, kinematics, and the engineering constraints that govern real-world robot behaviour.Hands-on ML capability: able to build, validate, and deploy ML solutions independently in Python using modern ML frameworks.Proficient in working directly in JupyterHub, VS Code, Marimo, and W&B Models to build and deploy customer-facing applications.Working knowledge of ML approaches relevant to robotics: imitation learning, reinforcement learning, sim-to-real transfer, anomaly detection for physical systems, or trajectory prediction.Able to validate ML solutions on physical grounds and identify when a model output violates the constraints of the real system it represents.Proven experience leading complex technical customer engagements, managing multi-stakeholder environments, and maintaining executive relationships.Familiarity with robot simulation environments (Isaac Sim, MuJoCo, Gazebo, or similar) and their role in training and validating robot learning pipelines.Able to translate field observations into structured product signals that are actionable for an engineering team.Bachelor’s or Master’s degree in Robotics, Mechanical Engineering, Electrical Engineering, Computer Science, Physics, or a related technical discipline.PreferredExperience deploying robot learning systems on real hardware, including managing the sim-to-real gap in production settings.Familiarity with foundation models for robotics and their application to generalised manipulation or locomotion tasks.Experience working with compute-intensive training workloads and an understanding of the infrastructure requirements they create.Experience identifying and progressing expansion opportunities within strategic customer accounts.Track record of contributing to internal knowledge frameworks, technical publications, or industry forums in the robotics space.Familiarity with ROS/ROS2 and associated tooling.Wondering if you’re a good fit?We believe in investing in our people, and value candidates who can bring their own diversified experiences to our teams — even if you aren’t a 100% skill or experience match. Here are a few qualities we’ve found compatible with our team. If some of this describes you, we’d love to talk.You understand why the same neural network that works in simulation can fail on hardware, and you find solving that problem an interesting challenge.You want to build AI solutions that run on real robots in real environments, not in controlled demonstrations.You are equally comfortable discussing learning algorithm design with an ML researcher and actuator dynamics with a mechanical engineer.You want to bring your robotics domain expertise into a team that already knows how to land and expand AI solutions with engineering customers, and you see being the domain authority that opens a new vertical as a genuinely compelling opportunity.The base salary range for this role is $177,000 to $237,000. The starting salary will be determined based on job-related knowledge, skills, experience, and market location. We strive for both market alignment and internal equity when determining compensation. In addition to base salary, our total rewards package includes a discretionary bonus, equity awards, and a comprehensive benefits program (all based on eligibility).What We OfferThe range we’ve posted represents the typical compensation range for this role. To determine actual compensation, we review the market rate for each candidate which can include a variety of factors. These include qualifications, experience, interview performance, and location.In addition to a competitive salary, we offer a variety of benefits to support your needs. The benefits below reflect our US-based offerings for full-time employees; for roles in other locations, benefits vary and are shared during the hiring process. These include:Medical, dental, and vision insurance - 100% paid for by CoreWeaveCompany-paid Life Insurance Voluntary supplemental life insurance Short and long-term disability insurance Flexible Spending AccountHealth Savings AccountTuition Reimbursement Ability to Participate in Employee Stock Purchase Program (ESPP)Mental Wellness Benefits through Spring Health Family-Forming support provided by CarrotPaid Parental Leave Flexible, full-service childcare support with Kinside401(k) with a generous employer matchFlexible PTOCatered lunch each day in our office and data center locationsA casual work environmentA work culture focused on innovative disruptionCalifornia ApplicantsCalifornia Consumer Privacy Act Equal Opportunity & AccommodationsCoreWeave is an equal opportunity employer, committed to fostering an inclusive and supportive workplace. All qualified applicants and candidates will receive consideration for employment without regard to race, color, religion, sex, disability, age, sexual orientation, gender identity, national origin, veteran status, or genetic information.As part of this commitment and consistent with the Americans with Disabilities Act (ADA), CoreWeave will ensure that qualified applicants and candidates with disabilities are provided reasonable accommodations for the hiring process, unless such accommodation would cause an undue hardship. If reasonable accommodation is needed, please contact: careers@coreweave.com.Export Control ComplianceThis position requires access to export controlled information. To conform to U.S. Government export regulations applicable to that information, applicant must either be (A) a U.S. person, defined as a (i) U.S. citizen or national, (ii) U.S. lawful permanent resident (green card holder), (iii) refugee under 8 U.S.C.1157, or (iv) asylee under 8 U.S.C.1158, (B) eligible to access the export controlled information without a required export authorization, or (C) eligible and reasonably likely to obtain the required export authorization from the applicable U.S. government agency. CoreWeave may, for legitimate business reasons, decline to pursue any export licensing process.",
+            "seniority_level": "Not Applicable",
+            "employment_type": "Full-time",
+            "job_function": [
+              "Engineering",
+              "Information Technology"
+            ],
+            "job_function_v2": null,
+            "job_specialty": null,
+            "raw_industries": "Technology, Information and Internet",
+            "standard_industries": [
+              "Information Technology"
+            ],
+            "compensation_range": null,
+            "annual_salary_usd": null,
+            "years_of_experience": {
+              "gte": 8,
+              "lte": null
+            },
+            "standardized_location": {
+              "street_address": null,
+              "neighborhood": null,
+              "city": "San Francisco",
+              "state_name": "California",
+              "state_code": "CA",
+              "county": "San Francisco County",
+              "postal_code": null,
+              "country_code": "USA",
+              "country_name": "United States",
+              "coordinates": {
+                "lat": 37.78007889,
+                "lon": -122.42015839
+              },
+              "timezone": "America/Los_Angeles",
+              "full_address": "San Francisco, CA",
+              "formatted_address": "San Francisco, CA"
+            },
+            "job_location_type": "On-site",
+            "modality": "On-site",
+            "status": "active"
+          },
+          {
+            "job_id": "4482535155",
+            "title": "Manufacturing Robotics Engineer Sr",
+            "company_name": "Lockheed Martin",
+            "company_logo_url": "https://media.licdn.com/dms/image/v2/D4E0BAQEKk4rOImIauA/company-logo_100_100/B4EaFgSdRJK0AI-/0/1792616813872/lockheed_martin_logo?e=2147483647&v=beta&t=7irN29Sn96LpONJNamyeJxJQqwQXl1QOE1JY5SG3_ig",
+            "posted_at": "2026-10-28T00:00:00.000Z",
+            "job_url": "https://www.linkedin.com/jobs/view/manufacturing-robotics-engineer-sr-at-lockheed-martin-4482535155?trk=public_jobs_topcard-title",
+            "applicant_range": {
+              "gte": 0,
+              "lte": 25
+            },
+            "description": "Standard What You Will Be DoingAs the Manufacturing Controls/Robotics Engineer you will be responsible for concept, design, and documentation of automated manufacturing equipment that supports site processes and meets production‑rate goals.Your Responsibilities Will Include, But Are Not Limited ToTroubleshoot and resolve existing electrical controls equipment such as PLCs, AC & DC motors, servo drives, and variable frequency drives.Improve existing controls equipment to enhance safety, productivity, and efficiency.Develop electrical automation designs from hardware specifications into complete construction packages for fabrication, assembly, checkout, and startup.Create design and documentation in accordance with company and industry standards using Dassault DraftSight or equivalent CAD tools.Collaborate with mechanical engineering, quality, safety, IT, and other disciplines to deliver best‑practice solutions.Basic QualificationsBachelors degree or equivalent experience/combined education.Working knowledge of electrical and logic drawings.Demonstrated ability to troubleshoot and resolve industrial automation equipment issues.Knowledgeable of machine electrical design.Knowledgeable of industrial electronics and electrical components.Desired SkillsProficient with MS Office suite.Communicates well with technical, management, and front line employees.Ability to meet deadlines and stay calm under pressure.Pay InformationFull-Time Salary Range: $76700.00 - $142500.00At Lockheed Martin, we know mission success starts with taking care of our people. Our Total Rewards program is designed to attract top talent, support your well-being, and help you grow—both professionally and personally.The salary range for this position is as listed on the requisition. Please note that the salary information listed is a general guideline only. Lockheed Martin considers factors such as (but not limited to) scope and responsibilities of the position, candidate's work experience, education/ training, key skills as well as market(work location) and business considerations when extending an offer.Benefits offered: Medical, Dental, Vision, Flexible work arrangements and schedules (e.g., 4x10), 401(k) match, Paid time off, Holidays, Parental Leave, EAP, Flexible Spending Accounts, Education Assistance, Life Insurance, Short-Term Disability, and Long-Term Disability.Annual short-term and/or long-term incentive compensation programs may be offered depending on the position. Payments under these annual programs are not guaranteed and can vary from year to year and are tied to a range of performance metrics.For (Washington state applicants only) Non-represented full-time employees: accrue at least 10 hours per month of Paid Time Off (PTO) to be used for incidental absences and other reasons; receive at least 90 hours for holidays. Represented full time employees accrue 6.67 hours of Vacation per month; accrue up to 52 hours of sick leave annually; receive at least 96 hours for holidays. PTO, Vacation, sick leave, and holiday hours are prorated based on start date during the calendar year.",
+            "seniority_level": "Not Applicable",
+            "employment_type": "Full-time",
+            "job_function": [
+              "Engineering",
+              "Information Technology"
+            ],
+            "job_function_v2": "Engineering",
+            "job_specialty": "Industrial & Manufacturing Engineering",
+            "raw_industries": "Defense and Space Manufacturing",
+            "standard_industries": [
+              "Aerospace & Military"
+            ],
+            "compensation_range": null,
+            "annual_salary_usd": null,
+            "years_of_experience": null,
+            "standardized_location": {
+              "street_address": null,
+              "neighborhood": null,
+              "city": "Camden",
+              "state_name": "Arkansas",
+              "state_code": "AR",
+              "county": "Ouachita County",
+              "postal_code": null,
+              "country_code": "USA",
+              "country_name": "United States",
+              "coordinates": {
+                "lat": 33.586838,
+                "lon": -92.83006
+              },
+              "timezone": "America/Chicago",
+              "full_address": "Camden, Arkansas, United States",
+              "formatted_address": "Camden"
+            },
+            "job_location_type": "On-site",
+            "modality": "On-site",
+            "status": "active"
+          },
+          {
+            "job_id": "4474740321",
+            "title": "Software Development Engineer, ROBOTICS, Early Career - 2027",
+            "company_name": "Amazon",
+            "company_logo_url": "https://media.licdn.com/dms/image/v2/D560BAQGDLy4STCnHbg/company-logo_100_100/B56ZnZxDipI0AQ-/0/1760295142304/amazon_logo?e=2147483647&v=beta&t=qIUP7OofXIuuuVACb5ToeWH9PHXrPYsS8jsTZ3Q0sUg",
+            "posted_at": "2026-10-02T10:00:38.000Z",
+            "job_url": "https://www.linkedin.com/jobs/view/software-development-engineer-robotics-early-career-2027-at-amazon-4474740321?trk=public_jobs_topcard-title",
+            "applicant_range": {
+              "gte": 173,
+              "lte": 173
+            },
+            "description": "DescriptionShape what comes next | Discover careers in TechAt Amazon, our tech isn't just a tool, it's your playground. Our engineers work on scalable systems, cloud services, and customer-facing products that operate at global scale. This is an environment where you learn by building. Whether you're creating cloud-native solutions, optimizing machine learning models, or building products that drive experiences for millions of customers around the globe, your work reaches the world, fast. You'll take ownership early, collaborate across teams and disciplines, and grow your skills as you tackle new problems. There's no single path forward here, with a chance to explore different directions and shape your journey as you go. This is where ambition meets opportunity and, where the impact of what you build helps define what comes next, for customers and for you.Do you want to solve real customer problems through innovative technology? Do you enjoy working on scalable services in a collaborative team environment? Do you want to see your code directly impact millions of customers worldwide?At Amazon, we hire the best minds in technology to innovate and build on behalf of our customers. Customer obsession is part of our company DNA, which has made us one of the world's most beloved brands.Our Software Development Engineers (SDEs) use modern technology to solve complex problems while seeing their work's impact first-hand. The challenges SDEs solve at Amazon are meaningful and influence millions of customers, sellers, and products globally. We seek individuals passionate about creating new products, features, and services while managing ambiguity in an environment where development cycles are measured in weeks, not years.At Amazon, we believe in ownership at every level. As an SDE-I, you'll own the entire lifecycle of your code - from design through deployment and ongoing operations. This ownership mindset, combined with our commitment to operational excellence, ensures we deliver the highest quality solutions for our customers.We're looking for curious minds who think big and want to define tomorrow's technology. At Amazon, you'll grow into the high-impact engineer you know you can be, supported by a culture of learning and mentorship. Every day brings exciting new challenges and opportunities for personal growth.Key job responsibilities Collaborate and communicate effectively with experienced cross-disciplinary Amazonians to design, build, and operate innovative products and services that delight our customers, while participating in technical discussions to drive solutions forward. Design and develop scalable solutions using cloud-native architectures and microservices in a large distributed computing environment. Participate in code reviews and contribute to technical documentation. Build and maintain resilient distributed systems that are scalable, fault-tolerant, and cost-effective. Leverage and contribute to the development of GenAI and AI-powered tools to enhance development productivity while staying current with emerging technologies. Write clean, maintainable code following best practices and design patterns. Work in an agile environment practicing CI/CD principles while participating in operational responsibilities including on-call duties. Demonstrate operational excellence through monitoring, troubleshooting, and resolving production issues. Design, develop and test software components that interact with fulfillment center technologies, such as robotics, material handling equipment, computer vision, and cloud services.About The TeamLearn more about Robotics at Amazon:https://amazon.jobs/en/teams/amazon-roboticshttps://www.aboutamazon.com/news/operations/amazon-robotics-robots-fulfillment-centerhttps://www.aboutamazon.com/news/operations/amazon-million-robots-ai-foundation-modelBasic Qualifications Are 18 years of age or older Bachelor's degree or equivalent Experience with at least one general-purpose programming language such as Java, Python, C++, C#, Go, Rust, or TypeScript Experience with data structure implementation, basic algorithm development, and/or object-oriented design principlesPreferred Qualifications Experience from previous technical internship(s) or demonstrated project experience Experience with Cloud platforms (preferably AWS), database systems (SQL and NoSQL), AI tools for development productivity, contributing to open-source projects, and/or version control systems Experience in optimization mathematics such as linear programming and nonlinear optimization Experience with distributed, multi-tiered systems, algorithms, and relational databases Experience that includes strong analytical skills, attention to detail, and effective communication abilities Experience within Robotics, Computer Vision, Machine Learning, Optimization, Manipulation, Perception, Motion Planning and Controls, Movement, Autonomous Navigation, Path Planning, or relatedAmazon is an equal opportunity employer and does not discriminate on the basis of protected veteran status, disability, or other legally protected status.Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit https://amazon.jobs/content/en/how-we-hire/accommodations for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner.The starting pay for this position is listed below. Starting Day 1 of employment, Amazon offers EAP, Mental Health Support, Medical Advice Line, 401(k) matching. Learn more about our benefits at https://hiring.amazon.com/why-amazon/benefits.Arlington, VA, USA - 128,700.00 USD AnnuallyAustin, TX, USA - 128,700.00 USD AnnuallyBellevue, WA, USA - 128,700.00 USD AnnuallyN.Reading, MA, USA - 128,700.00 USD AnnuallyNashville, TN, USA - 122,300.00 USD AnnuallyNorth Reading, MA, USA - 128,700.00 USD AnnuallySeattle, WA, USA - 128,700.00 USD AnnuallyWestboro, MA, USA - 128,700.00 USD AnnuallyWestborough, MA, USA - 128,700.00 USD AnnuallyCompany - Amazon.com Services LLCJob ID: A10567489",
+            "seniority_level": "Mid-Senior level",
+            "employment_type": "Full-time",
+            "job_function": null,
+            "job_function_v2": null,
+            "job_specialty": null,
+            "raw_industries": "Software Development",
+            "standard_industries": [
+              "Software"
+            ],
+            "compensation_range": null,
+            "annual_salary_usd": null,
+            "years_of_experience": {
+              "gte": 18,
+              "lte": null
+            },
+            "standardized_location": {
+              "street_address": null,
+              "neighborhood": null,
+              "city": "Bellevue",
+              "state_name": "Washington",
+              "state_code": "WA",
+              "county": "King County",
+              "postal_code": null,
+              "country_code": "USA",
+              "country_name": "United States",
+              "coordinates": {
+                "lat": 47.61370087,
+                "lon": -122.19093323
+              },
+              "timezone": "America/Los_Angeles",
+              "full_address": "Bellevue, WA",
+              "formatted_address": "Bellevue, WA"
+            },
+            "job_location_type": "On-site",
+            "modality": "On-site",
+            "status": "active"
+          },
+          {
+            "job_id": "4474796682",
+            "title": "Hardware Support Engineer, Robotics Technical Services",
+            "company_name": "Amazon",
+            "company_logo_url": "https://media.licdn.com/dms/image/v2/D560BAQGDLy4STCnHbg/company-logo_100_100/B56ZnZxDipI0AQ-/0/1760295142304/amazon_logo?e=2147483647&v=beta&t=qIUP7OofXIuuuVACb5ToeWH9PHXrPYsS8jsTZ3Q0sUg",
+            "posted_at": "2026-10-02T16:00:32.000Z",
+            "job_url": "https://www.linkedin.com/jobs/view/hardware-support-engineer-robotics-technical-services-at-amazon-4474796682?trk=public_jobs_topcard-title",
+            "applicant_range": {
+              "gte": 0,
+              "lte": 25
+            },
+            "description": "DescriptionAre you inspired by invention? Is problem solving through teamwork in your DNA? Do you like the idea of seeing how your work impacts the bigger picture? Answer yes to any of these and you'll fit right in here at Robotics Technical Services (RTS).We are a smart team of doers who work passionately to apply advances in robotics and software to solve real-world challenges that will transform our customers' experiences in ways we can't even imagine yet. The RTS Field Support team provides critical support to internal fulfillment and transportation network customers relying on advanced robotics technology.In this role, you serve as the vital link between on-site technicians and RTS engineering teams, ensuring maximum performance of advanced robotics systems. You will launch new systems, develop preventative maintenance procedures, ensure spare part availability, proactively monitor system performance, provide troubleshooting support, and drive continuous improvement initiatives across Amazon's fulfillment network. You will establish standard operating procedures, performance metrics, and feedback mechanisms that enable the RTS team to scale effectively. Working closely with technical support teams and regional support managers, you will build a cohesive organization responsible for the safety, reliability, and performance of emerging robotics technology. This role requires independent judgment and comfort working with ambiguity in a complex, fast-paced, high-throughput environment where multi-tasking is essential.Key job responsibilities Provide on-site support for new product implementations, upgrades, hardware audits, and troubleshooting for advanced robotics systems Partner with site-level RME teams to maximize advanced robotics system performance Identify, analyze, and resolve mechanical and system issues across the RTS product suite Design and implement electro-mechanical tools, fixtures, and diagnostic solutions to minimize troubleshooting and machine downtime Develop and implement proactive monitoring tools to measure safety, reliability, and performance of advanced robotics systems Create escalation processes, standard operating procedures, and preventative maintenance protocols for the RTS product suite Design and lead training sessions and develop training content for on-site RME teams Develop and implement spare parts management systems and processes Produce performance reports and provide \"voice of the customer\" feedback to development and support teams Up to 50% travel expectedA day in the lifeYour day begins by reviewing system performance reports for your region. Perhaps the metrics dashboard revealed unusual performance at a facility or spare parts dropped below threshold at a site. You analyze metrics to identify trends and risks, developing de-risking actions for leadership's weekly business review. You troubleshoot with RME technicians via video, walking them through diagnostic procedures. On-site, you conduct hardware audits for new deployments, gathering customer feedback. Afternoons include designing tools, optimizing processes, and coordinating with regional managers on scaling strategies. Throughout, you're the critical link between field technicians and engineering teams.Amazon offers a full range of benefits that support you and eligible family members, including domestic partners and their children. Benefits can vary by location, the number of regularly scheduled hours you work, length of employment, and job status such as seasonal or temporary employment. The benefits that generally apply to regular, full-time employees include: Medical, Dental, and Vision Coverage Maternity and Parental Leave Options Paid Time Off (PTO) 401(k) PlanIf you are not sure that every qualification on the list above describes you exactly, we'd still love to hear from you! At Amazon, we value people with unique backgrounds, experiences, and skillsets. If you’re passionate about this role and want to make an impact on a global scale, please apply!About The TeamRTS Field Hardware Support Engineers (FHSE) ensure that our customers—site Reliability and Maintenance Engineers—are equipped to independently maintain Amazon Robotics technologies. Our team achieves this by identifying deficiencies, communicating risk, and proposing mitigation strategies. Our hands-on approach to testing, troubleshooting, and investigating puts us in the shoes of operators and technicians in the field. We work backwards from these insights to satisfy engineering requirements, partnering with safety, hardware, software, and cross-functional support teams.Basic Qualifications Bachelor's degree or above in Mechanical, Electrical, Industrial Engineering, or related STEM field Knowledge of networking fundamentals Experience working in a 24/7 production environment Knowledge of Six Sigma tools, Lean techniques, PMP or similar standards preferred Knowledge of configuration management systems, such as Puppet, Chef, Ansible, or related systems Experience in Linux systems administration and/or developmentPreferred Qualifications 2+ years of site reliability engineering (SRE), systems engineering, systems administration, DevOps, security administration, or network administration experience 1+ years of building scripts, tooling, and automation for large-scale computing environments experience Experience in site reliability engineering (SRE), systems engineering, systems administration, DevOps, security administration, or network administration Experience in network capture and systems troubleshooting Experience building scripts, tooling, and automation for large-scale computing environmentsAmazon is an equal opportunity employer and does not discriminate on the basis of protected veteran status, disability, or other legally protected status.Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit https://amazon.jobs/content/en/how-we-hire/accommodations for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner.The base salary range for this position is listed below. Your Amazon package will include sign-on payments and restricted stock units (RSUs). Final compensation will be determined based on factors including experience, qualifications, and location. Amazon also offers comprehensive benefits including health insurance (medical, dental, vision, prescription, Basic Life & AD&D insurance and option for Supplemental life plans, EAP, Mental Health Support, Medical Advice Line, Flexible Spending Accounts, Adoption and Surrogacy Reimbursement coverage), 401(k) matching, paid time off, and parental leave. Learn more about our benefits at https://amazon.jobs/en/benefits.USA, IN, Franklin - 82,400.00 - 144,100.00 USD annuallyUSA, KY, Erlanger - 82,400.00 - 144,100.00 USD annuallyUSA, MI, Caledonia - 82,400.00 - 144,100.00 USD annuallyUSA, MI, Detroit - 82,400.00 - 144,100.00 USD annuallyUSA, MI, Pontiac - 82,400.00 - 144,100.00 USD annuallyUSA, OH, Etna - 82,400.00 - 144,100.00 USD annuallyUSA, OH, North Randall - 82,400.00 - 144,100.00 USD annuallyUSA, OH, West Jefferson - 82,400.00 - 144,100.00 USD annuallyUSA, PA, Pittsburgh - 82,400.00 - 144,100.00 USD annuallyCompany - Amazon.com Services LLCJob ID: A10567860",
+            "seniority_level": "Associate",
+            "employment_type": "Full-time",
+            "job_function": null,
+            "job_function_v2": null,
+            "job_specialty": null,
+            "raw_industries": "Software Development",
+            "standard_industries": [
+              "Software"
+            ],
+            "compensation_range": null,
+            "annual_salary_usd": null,
+            "years_of_experience": {
+              "gte": 2,
+              "lte": null
+            },
+            "standardized_location": {
+              "street_address": null,
+              "neighborhood": null,
+              "city": "North Randall",
+              "state_name": "Ohio",
+              "state_code": "OH",
+              "county": "Cuyahoga County",
+              "postal_code": null,
+              "country_code": "USA",
+              "country_name": "United States",
+              "coordinates": {
+                "lat": 41.435143,
+                "lon": -81.52639
+              },
+              "timezone": "America/New_York",
+              "full_address": "North Randall, Ohio, United States",
+              "formatted_address": "North Randall"
+            },
+            "job_location_type": "On-site",
+            "modality": "On-site",
+            "status": "active"
+          }
+        ],
+        "nextCursor": "gAAAAABrAyiiAURqTrwxxSQoqqP8pIG6vDrnCAxRFGiERM31vD9cAVnjuXsPfpaKy8YxIlKTZSrKBW8busZobJ76L1VMuz7Xbg=="
+      },
+      "chargeInfo": {
+        "method": "charged-now",
+        "creditsCharged": 0
+      },
+      "advice": [
+        "Fiber scrapes LinkedIn job postings with structured compensation data, applicant counts, and geo-located results.",
+        "Use job search to identify companies that are actively hiring for roles matching your ICP.",
+        "Combine job search with company search to find companies both matching your criteria AND actively hiring."
+      ]
+    }
+  }
+}

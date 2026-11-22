@@ -2,13 +2,15 @@
 
 Read §§3–8 for repository rules, sponsor floors, shared contracts and gateway policy. Follow §10 for dispatch and scope cuts. [Atlas implementation plan](../docs/IMPLEMENTATION_PLAN.md)
 
-Start WP4 in wave 1 as soon as WP1 stubs are ready. In wave 2, build WP6 against WP1 operations. In wave 4, build the synthetic share-card slice if time permits. Own the final rehearsal in wave 5.
+WP4 (thread) moved to person-3 at 18:15 UTC. Build WP6 against WP1 operations. In wave 4, build the synthetic share-card slice if time permits. Own the final rehearsal in wave 5.
 
 Use one Codevisor worktree and branch per package. Open a PR when the acceptance checks pass and record the checks you ran.
 
 Send and receive worker messages on the [pinned GitHub board](https://github.com/Marcus-Yu/elevenlabs/issues/1) using `person-4` as your address. [Agent handoff format](../docs/COORDINATION.md#agent-to-agent-handoffs)
 
 ## Current priority (scope change, 2026-11-22 18:10 UTC)
+
+**WP4 moved to person-3 (18:15 UTC).** Give person-3 the card and opt-in data shapes the thread must render.
 
 The core demo is now the two-user double-opt-in match, so WP13 is the centrepiece. [Scope change](../docs/IMPLEMENTATION_PLAN.md#scope-change-2026-11-22-1810-utc-two-user-double-opt-in-is-the-core-demo)
 
@@ -17,8 +19,7 @@ The core demo is now the two-user double-opt-in match, so WP13 is the centrepiec
    - The card flow: draft → user edits and approves the exact card (the gateway strips disallowed fields) → matcher → anonymous match → each side accepts separately → each picks which identity fields to reveal → introduction drafted → approval.
    - The audit view with all six steps from real log rows.
    - Label both users as synthetic.
-2. **Next, WP4:** thread cards for the calibration profiles, the shortlist, the share-card review, the opt-in prompt and the approval card.
-3. **Then:** WP6 (the approvals inbox and the activity log with the denied filter; the briefing is Tier 2), then the WP15 runbook for the new demo.
+2. **Next:** WP6 (the approvals inbox and the activity log with the denied filter; the briefing is Tier 2), then the WP15 runbook for the new demo.
 
 ## Handoffs
 
@@ -26,19 +27,6 @@ The core demo is now the two-user double-opt-in match, so WP13 is the centrepiec
 - Own `src/features/connect/cards/`. Use Person 1's gateway without editing provider connection code.
 - Record when the demo goals are actually started as soon as the goal pipeline supports them. Collect fixture coverage and fallback steps from each owner while they build. Coordinate edits to provider fixtures and seeds with their owners.
 - Keep the demo runbook in `docs/DEMO_RUNBOOK.md`. Use measured outputs and real gateway log rows from the other owners to substantiate the demo claims.
-
-## WP4 — Thread and chat endpoint
-
-**Depends:** WP0, WP1 (stubs suffice). **Owns:** `src/features/thread/`.
-
-- [ ] `POST /api/chat` as a Wasp `api` route using AI SDK v7 `streamText`, authenticated, CORS via namespace middleware.
-- [ ] Tools: `propose_goal`, `list_matches`, `explain_match`, `draft_outreach`, `request_send`, `test_pitch`, `get_briefing`, `remember`, `forget`. Every `execute` builds an `ActionRequest` and calls the gateway. No tool calls an adapter.
-- [ ] assistant-ui thread with tool UIs: match list, draft card, approval card (bound to the `Approval` row, Approve and Deny call `decideApproval`), denied-action notice.
-- [ ] System prompt: Atlas proposes; it cannot approve; denied means stop and explain.
-
-**Acceptance**
-
-- [ ] a typed request produces a goal proposal; `request_send` on a PREPARE goal renders a pending card; approving it from the thread or from the inbox updates the same card; a denied action is shown as denied with its rule id.
 
 ## WP6 — Approvals inbox, briefing, activity log, goal settings
 
