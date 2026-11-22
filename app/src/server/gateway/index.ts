@@ -14,7 +14,7 @@ let instance: Gateway | null = null;
 function getGateway(): Gateway {
   instance ??= createGateway({
     store: createPrismaStore(prisma),
-    registry: createRegistry(createHandlerMap(process.env, { memoryItems: prisma.memoryItem })),
+    registry: createRegistry(createHandlerMap(process.env, { memoryItems: prisma.memoryItem, matchDatabase: prisma })),
     env: gatewayEnvFrom(process.env),
   });
   return instance;

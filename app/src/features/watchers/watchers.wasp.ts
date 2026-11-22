@@ -1,8 +1,12 @@
-import { page, route, type Spec } from "@wasp.sh/spec";
+import { api, page, route, type Spec } from "@wasp.sh/spec";
 import { WatchersPage } from "./WatchersPage" with { type: "ref" };
+import { watcherBrief, watcherReport, watcherTool } from "./routes" with { type: "ref" };
 
-// Wasp declarations for the "watchers" feature: routes, pages, queries, actions, apis and jobs.
-// The owning work package adds entries here; main.wasp.ts already includes this spec.
+const tokenAuth = { auth: false, entities: ["Goal", "Match", "WatcherRun"] };
+
 export const watchersSpec: Spec = [
   route("WatchersRoute", "/watchers", page(WatchersPage, { authRequired: true })),
+  api("GET", "/api/watch/:goalId/brief", watcherBrief, tokenAuth),
+  api("POST", "/api/watch/:goalId/tool", watcherTool, tokenAuth),
+  api("POST", "/api/watch/:goalId/run", watcherReport, tokenAuth),
 ];

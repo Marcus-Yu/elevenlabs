@@ -129,8 +129,7 @@ const SearchShape = z
     countryCodes: z.array(z.string()).optional(),
     employeeCount: z.object({ min: z.number().optional(), max: z.number().optional() }).optional(),
     pageSize: z.number().optional(),
-  })
-  .passthrough();
+  });
 
 /** What the box needs and nothing more: no profile facts, no contacts, no credentials. */
 /**
