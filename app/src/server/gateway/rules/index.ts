@@ -7,6 +7,7 @@ import { firstContact } from "./firstContact";
 import { individuals } from "./individuals";
 import { introductions } from "./introductions";
 import { needToKnow } from "./needToKnow";
+import { optInOnly } from "./optInOnly";
 import { optOut } from "./optOut";
 import { ownership } from "./ownership";
 import { paidReveal } from "./paidReveal";
@@ -29,6 +30,7 @@ export const RULES: readonly Rule[] = [
   consent,
   callTarget,
   individuals,
+  optInOnly,
   taint,
   needToKnow,
   privateLeak,
@@ -51,6 +53,7 @@ export const ENGINE_RULE_IDS = {
   schema: "schema",
   unknownAction: "unknown_action",
   sandbox: "sandbox",
+  cardFields: "card_fields",
   default: "default",
   payloadHash: "payload_hash",
   approvalState: "approval_state",
