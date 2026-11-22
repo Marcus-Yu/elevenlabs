@@ -10,6 +10,7 @@
     "@anthropic-ai/sdk": "^1.8.0",
     "@assistant-ui/ai-sdk": "0.0.12",
     "@assistant-ui/react": "0.15.37",
+    "@elevenlabs/react": "1.22.0",
     "ai": "7.0.173",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",

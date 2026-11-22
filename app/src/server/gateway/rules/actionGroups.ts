@@ -22,6 +22,7 @@ export const PROVIDER_BOUND: ReadonlySet<ActionType> = new Set<ActionType>([
   "contact.search",
   "contact.reveal_email",
   "web.read",
+  "voice.speak",
   "calibration.profiles",
   "thread.chat",
 ]);
@@ -38,6 +39,8 @@ export const GOAL_REQUIRED: ReadonlySet<ActionType> = new Set<ActionType>([
 export const ACTION_CONSENT: Partial<Record<ActionType, ConsentKind>> = {
   "thread.chat": "model_processing",
   "meeting.listen": "meeting_listening",
+  "voice.scribe_token": "model_processing",
+  "voice.speak": "model_processing",
   "call.place": "phone_calls",
   "card.publish": "matching",
   "card.reveal": "identity_reveal",

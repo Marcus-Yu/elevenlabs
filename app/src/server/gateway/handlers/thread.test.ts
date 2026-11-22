@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { createChatTools } from "../../../features/thread/chat-tools";
 import { createWorld, request, USER } from "../testing/world";
 import { createCalibrationHandlers } from "./calibration";
+import { createStubHandlers } from "./stubs";
 import { createGoalProposalHandler } from "./threadChat";
 
 const need = "Find a robotics engineer for private project Cobalt.";
@@ -18,6 +19,26 @@ describe("thread gateway handlers", () => {
     expect(result).toMatchObject({ kind: "allowed", data: proposal });
     expect(store.goals.size).toBe(1);
     expect(store.logs.at(-1)).toMatchObject({ actionType: "thread.propose_goal", inputSummary: null });
+  });
+
+  it("blocks assistant messages and voice requests before reaching providers after consent is revoked", async () => {
+    const run = vi.fn();
+    const requests = [
+      request("thread.chat", { messages: [{ role: "user", content: need }] }),
+      request("voice.scribe_token", {}),
+      request("voice.speak", { text: "The shortlist has two candidates." }),
+    ];
+    const handlers = createStubHandlers();
+    const world = createWorld({ handlers: Object.fromEntries(requests.map(({ actionType }) => [
+      actionType, { ...handlers[actionType], run },
+    ])) });
+    world.store.consents.delete(USER);
+    for (const action of requests) {
+      const result = await world.gateway.execute(action);
+      expect(result.decision).toMatchObject({ outcome: "deny", ruleId: "consent" });
+    }
+    expect(run).not.toHaveBeenCalled();
+    expect(world.store.logs.map(({ inputSummary }) => inputSummary)).toEqual([null, null, null]);
   });
 
   it("redacts private chat content for denied and allowed calls", async () => {

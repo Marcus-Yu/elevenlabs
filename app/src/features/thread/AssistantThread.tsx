@@ -54,7 +54,7 @@ function chatErrorMessage(error: Error): string {
   return 'Chat is unavailable. Check your connection or model configuration and try again.';
 }
 
-export function AssistantThread({ onReviewHiringGoal }: { onReviewHiringGoal: (need: string) => void }) {
+export function AssistantThread({ canSend, onReviewHiringGoal }: { canSend: boolean; onReviewHiringGoal: (need: string) => void }) {
   const transport = useMemo(() => new DefaultChatTransport({ api: `${config.apiUrl}/api/chat`,
     headers: (): Record<string, string> => { const session = getSessionId(); return session ? { Authorization: `Bearer ${session}` } : {}; },
   }), []);
@@ -73,8 +73,8 @@ export function AssistantThread({ onReviewHiringGoal }: { onReviewHiringGoal: (n
         }}</MessagePrimitive.Parts>
       </MessagePrimitive.Root>}</ThreadPrimitive.Messages>
     </ThreadPrimitive.Viewport>
-    <ComposerPrimitive.Root onSubmit={() => setError('')} className="space-y-2"><ComposerPrimitive.Input aria-label="Message Atlas" placeholder="Ask Atlas about your goal" className="w-full border p-2" />
-      <ComposerPrimitive.Send className="rounded border px-3 py-1 disabled:opacity-40">Send</ComposerPrimitive.Send></ComposerPrimitive.Root>
+    {canSend ? <ComposerPrimitive.Root onSubmit={() => setError('')} className="space-y-2"><ComposerPrimitive.Input aria-label="Message Atlas" placeholder="Ask Atlas about your goal" className="w-full border p-2" />
+      <ComposerPrimitive.Send className="rounded border px-3 py-1 disabled:opacity-40">Send</ComposerPrimitive.Send></ComposerPrimitive.Root> : <p>Allow model processing to send an assistant message.</p>}
     </ThreadPrimitive.Root>{error && <p role="alert">{error}</p>}
   </section></AssistantRuntimeProvider>;
 }

@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { MemoryItemDelegate } from "../../../features/memory/memoryStore";
 import { FixtureMissError } from "../../adapters/http";
 import { createGateway } from "../engine";
@@ -28,15 +28,27 @@ function replayGateway() {
 }
 
 describe("createHandlerMap", () => {
-  it("registers the real discovery and memory handlers and keeps stubs for the rest", () => {
+  it("registers the real discovery, memory, watcher, voice, and thread handlers", () => {
     const stubs = createStubHandlers();
     const map = createHandlerMap(REPLAY_ENV, deps);
-    for (const type of ["company.search", "jobs.search", "contact.search", "contact.reveal_email", "web.read", "memory.read", "memory.write", "memory.delete", "match.submit"] as const) {
+    for (const type of ["company.search", "jobs.search", "contact.search", "contact.reveal_email", "web.read", "memory.read", "memory.write", "memory.delete", "match.submit", "voice.scribe_token", "voice.speak", "thread.chat", "thread.propose_goal", "calibration.profiles", "calibration.criteria"] as const) {
       expect(map[type], type).not.toBe(stubs[type]);
       expect(map[type]).toBeDefined();
     }
     for (const type of ["draft.create", "outreach.send", "call.place", "meeting.listen", "card.publish", "card.reveal"] as const) {
       expect(map[type]?.payload, type).toBe(stubs[type]?.payload);
+    }
+  });
+
+  it("keeps voice offline in replay mode even when an ElevenLabs key is present", async () => {
+    const fetcher = vi.fn();
+    vi.stubGlobal("fetch", fetcher);
+    try {
+      const handlers = createHandlerMap({ ...REPLAY_ENV, ELEVENLABS_API_KEY: "test-key" }, deps);
+      await expect(handlers["voice.scribe_token"]!.run({}, {} as never)).rejects.toThrow("Voice service is not configured");
+      expect(fetcher).not.toHaveBeenCalled();
+    } finally {
+      vi.unstubAllGlobals();
     }
   });
 
