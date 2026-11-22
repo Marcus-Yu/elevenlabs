@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import type { CriteriaChange, HireCriteriaInput } from '../matches/candidates';
 import type { HireRun, HireShortlistEntry } from '../matches/hireFlow';
 import type { SourceRef } from '../../shared/contracts';
+import { candidateLabel, hideCandidateIdentity, sourceSummary } from './candidate-display';
 import { CalibrationCard, type CalibrationProfile, type CalibrationReaction } from './CalibrationCard';
 import { CalibrationCriteriaReview } from './CalibrationCriteriaReview';
 import { ThreadApprovalCard } from './ThreadApprovalCard';
@@ -20,9 +21,7 @@ export type HiringTransport = {
   runs(input: { goalId: string }): Promise<HireRun[]>;
 };
 function Evidence({ source }: { source: SourceRef }) {
-  let href: string | undefined;
-  try { if (source.url && ['https:', 'http:'].includes(new URL(source.url).protocol)) href = source.url; } catch { /* display claim without a link */ }
-  return <span>{source.provider}: {source.claim}{href && <> · <a href={href} target="_blank" rel="noreferrer" className="underline">Source</a></>} · retrieved {source.fetchedAt}</span>;
+  return <span>{sourceSummary(source)}</span>;
 }
 
 /** Uses only authorized operation results. All shortlist data is presented with its returned sources. */
@@ -49,6 +48,16 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const lock = useRef(false);
+  const knownEntries = useRef(new Map<string, HireShortlistEntry>());
+  function showShortlist(next: HireShortlistEntry[]) {
+    for (const entry of next) {
+      if (!knownEntries.current.has(entry.matchId)) knownEntries.current.set(entry.matchId, entry);
+    }
+    setEntries(next);
+  }
+  const known = [...knownEntries.current.values()];
+  const safe = (text: string) => hideCandidateIdentity(text, known);
+  const labelFor = (id: string) => candidateLabel([...knownEntries.current.keys()].indexOf(id));
   const appliedDraft = useRef<typeof reviewedDraft>(undefined);
   useEffect(() => {
     if (!reviewedDraft || appliedDraft.current === reviewedDraft || goalId || busy) return;
@@ -128,6 +137,7 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
     ].includes(criterion)));
     setGoalId('');
     setEntries(null);
+    knownEntries.current.clear();
     setProposal(null);
     setReasons({});
     setComparison(null);
@@ -138,7 +148,7 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
     if (!goalId) return;
     await execute(async () => {
       try {
-        setEntries(await transport.shortlist({ goalId }));
+        showShortlist(await transport.shortlist({ goalId }));
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Shortlist research failed.';
         if (!shortlistReplay || message.startsWith('contact.search denied')) throw error;
@@ -157,7 +167,7 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
     if (!goalId || !proposal) return;
     await execute(async () => {
       const next = await transport.confirm({ goalId, proposedChange: proposal });
-      setEntries(next); setProposal(null); setComparison(null); setComparisonError(false);
+      showShortlist(next); setProposal(null); setComparison(null); setComparisonError(false);
       try { const runs = await transport.runs({ goalId }); setComparison(runs.at(-1) ?? null); }
       catch { setComparisonError(true); }
     });
@@ -186,9 +196,9 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
     {approvalId && <ThreadApprovalCard approvalId={approvalId} />}
     {busy && <p role="status">Working…</p>}{error && <p role="alert">{error}</p>}
     {proposal && <section aria-label="Confirm proposed preference" className="rounded border p-3 space-y-2"><h3 className="font-semibold">Confirm proposed preference</h3>
-      <p>{proposal.explanation}</p><p>Based on rejection: “{proposal.basedOn.reason}”</p>
+      <p>Review the proposed criteria change based on your rejection.</p><p>Based on rejection: “{safe(proposal.basedOn.reason)}”</p>
       {proposal.basedOn.source && <p><Evidence source={proposal.basedOn.source} /></p>}
-      <ul>{proposal.changes.map((change, i) => <li key={i}>{change.field}: {JSON.stringify(change.from)} → {JSON.stringify(change.to)}</li>)}</ul>
+      <ul>{proposal.changes.map((change, i) => <li key={i}>{change.field}: {safe(JSON.stringify(change.from))} → {safe(JSON.stringify(change.to))}</li>)}</ul>
       <button type="button" disabled={busy} onClick={() => void confirm()}>Confirm and rerank</button>{' '}
       <button type="button" disabled={busy} onClick={() => setProposal(null)}>Not now</button>
     </section>}
@@ -198,9 +208,9 @@ export function HiringWorkflow({ transport, initialDraft = '', reviewedDraft, sh
       {shortlistReplay && <p>Replay of recorded Fiber results from public sources.</p>}
       {entries.length === 0 && <p>No candidates returned.</p>}
       <ol className="space-y-4">{entries.map((entry) => <li key={entry.matchId} className="rounded border p-3 space-y-2">
-        <h4 className="font-semibold">{entry.candidate.fullName} · {entry.candidate.title}</h4>
-        <p>Rule-based score: {entry.score}/100 · {entry.rationale}</p>
-        <ul className="list-disc pl-5">{entry.reasons.map((reason, i) => <li key={i}>{reason.text} ({reason.points >= 0 ? '+' : ''}{reason.points}) {reason.source && <Evidence source={reason.source} />}</li>)}</ul>
+        <h4 className="font-semibold">{labelFor(entry.matchId)} · {safe(entry.candidate.title || 'Title unavailable')} · {entry.candidate.yearsExperience === undefined ? 'Experience unavailable' : `${entry.candidate.yearsExperience} years of experience`}</h4>
+        <p>Rule-based score: {entry.score}/100 · {safe(entry.rationale)}</p>
+        <ul className="list-disc pl-5">{entry.reasons.map((reason, i) => <li key={i}>{safe(reason.text)} ({reason.points >= 0 ? '+' : ''}{reason.points}) {reason.source && <Evidence source={reason.source} />}</li>)}</ul>
         <details><summary>Profile sources</summary><ul>{entry.candidate.sources.map((source, i) => <li key={i}><Evidence source={source} /></li>)}</ul></details>
         <label>Reason for rejection <input className="border p-1" value={reasons[entry.matchId] ?? ''} disabled={busy || !!proposal} maxLength={300}
           onChange={(e) => setReasons((old) => ({ ...old, [entry.matchId]: e.target.value }))} /></label>{' '}
