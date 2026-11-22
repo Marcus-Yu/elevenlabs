@@ -8,6 +8,18 @@ Atlas's demo UI is a desktop overlay, not a web page. It stays invisible until s
 
 Run commands and env (`ATLAS_DATA`, `ATLAS_SERVER_URL`, `ATLAS_USER`, `ATLAS_PASSWORD`, `SIM_URL`) are filled in by the implementing agents.
 
+## Run as a macOS app (microphone prompt)
+
+`npm start` runs the bare Electron binary from your shell. macOS attributes that to the parent process, so the microphone prompt never appears and voice stays deaf. Build and launch the overlay as its own app instead:
+
+```bash
+cd overlay && npm install
+scripts/build-dev-app.sh    # builds dist/Atlas.app (gitignored): own bundle id, mic usage text, ad-hoc signed
+ATLAS_SERVER_URL=http://localhost:3003 ATLAS_CLIENT_URL=http://localhost:3000 scripts/open-dev-app.sh
+```
+
+macOS asks for the microphone once for "Atlas". The bundle only requires this checkout's `main/main.js`, so code changes need a relaunch, not a rebuild. Voice reads `ELEVENLABS_API_KEY` and `ELEVENLABS_AGENT_ID` from `overlay/.env`. The default hotkey is Option+Space; set `ATLAS_HOTKEY` to change it.
+
 ## Live data
 
 `main/providers/atlas.js` is the live provider (`ATLAS_DATA=live`). It runs in the main process and uses only the Wasp server's public wire API: `POST /auth/username/login`, then `POST /operations/<kebab-name>` with a superjson body `{"json": args}` and `Authorization: Bearer <sessionId>`. The session stays in memory. If the server is unreachable or login fails, it throws an `AtlasProviderError`, and the shell falls back to mock (`mode: "mock"`).
