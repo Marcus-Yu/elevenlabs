@@ -50,7 +50,7 @@
  * @property {string} [approvalId]
  *
  * @typedef {Object} Snapshot
- * @property {BriefCard} brief
+ * @property {BriefCard|null} brief          // null until a need is set (set_need)
  * @property {ResearchCard} research
  * @property {ShortlistCard} shortlist
  * @property {GatewayCard} gateway
@@ -59,7 +59,9 @@
  * @property {string} updatedAt
  *
  * @typedef {{type:"approve_brief"} | {type:"run_research"} | {type:"reject_candidate", alias:string, reason:string}
- *   | {type:"confirm_change"} | {type:"open_intro"} | {type:"refresh"}} OverlayAction
+ *   | {type:"confirm_change"} | {type:"open_intro"} | {type:"refresh"}
+ *   | {type:"set_need", text:string, kind?:"hire"|"customers"|"investors"|"manufacturer"|"partner"|"other", role?:string, criteria?:string[]}} OverlayAction
+ * research, shortlist and gateway are null or empty until the brief is approved.
  *
  * A provider lives in the Electron main process:
  *   createProvider(env) → { snapshot(): Promise<Snapshot>, act(action: OverlayAction): Promise<Snapshot> }
