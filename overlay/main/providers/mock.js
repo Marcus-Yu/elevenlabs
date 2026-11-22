@@ -51,6 +51,10 @@ function createProvider(_env = {}) {
     async act(action = {}) {
       const handler = handlers[action.type];
       if (handler) handler(action);
+      // Mirror the live provider: a reject proposes a criteria change to confirm.
+      if (action.type === "reject_candidate" && action.alias) {
+        return { ...current(), proposedChange: { explanation: "Raise the minimum to 5 years?" } };
+      }
       return current();
     },
   };

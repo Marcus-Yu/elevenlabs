@@ -12,6 +12,10 @@ const voice = voiceConfig(process.env);
 if (!voice) console.warn("[atlas] voice disabled: set ELEVENLABS_API_KEY and ELEVENLABS_AGENT_ID (env or overlay/.env)");
 
 const HOTKEY = process.env.ATLAS_HOTKEY || "Alt+Space";
+// Test runs: ATLAS_HEADLESS=1 never shows a window or registers a hotkey;
+// ATLAS_USER_DATA_DIR keeps the single-instance lock separate from the real overlay.
+const HEADLESS = process.env.ATLAS_HEADLESS === "1";
+if (process.env.ATLAS_USER_DATA_DIR) app.setPath("userData", process.env.ATLAS_USER_DATA_DIR);
 const LEAVE_MS = 1000; // design: leaving holds 1000 ms, then hidden
 const PROVIDER_TIMEOUT_MS = Number(process.env.ATLAS_TIMEOUT_MS) || 20000; // live research can take a while
 
@@ -28,7 +32,7 @@ function loadProvider() {
     return mockProvider;
   }
 }
-const provider = loadProvider();
+let provider = loadProvider();
 
 function withTimeout(promise) {
   return Promise.race([
@@ -37,18 +41,30 @@ function withTimeout(promise) {
   ]);
 }
 
-// Live provider errors fall back to the labelled mock so the demo never shows a blank card.
+// Startup probe: the only place live falls back to mock. If the server is unreachable
+// at launch, the whole session runs on the labelled mock (cards say "Synthetic · mock").
+const providerReady =
+  provider === mockProvider
+    ? Promise.resolve()
+    : withTimeout(Promise.resolve().then(() => provider.snapshot({ state: "probe" }))).then(
+        () => console.log("[atlas] live server reachable"),
+        (err) => {
+          console.warn(`[atlas] live server unreachable at startup, using mock for this session: ${err.message}`);
+          provider = mockProvider;
+        },
+      );
+
+// After startup, live errors are reported to the card that asked (no silent mock fallback mid-flow).
 async function call(method, arg) {
-  if (provider !== mockProvider) {
-    try {
-      return await withTimeout(Promise.resolve().then(() => provider[method](arg)));
-    } catch (err) {
-      console.warn(`[atlas] live ${method} failed, using mock: ${err.message}`);
-      // Cards still get the labelled mock; error lets voice say "Denied" instead of claiming success.
-      if (method === "act") return { ...(await mockProvider.act(arg)), error: err.message };
-    }
+  await providerReady;
+  try {
+    return await withTimeout(Promise.resolve().then(() => provider[method](arg)));
+  } catch (err) {
+    if (provider === mockProvider || method !== "act") throw err;
+    // A showable demo beats a dead button: advance with labelled demo data.
+    console.warn(`[atlas] live act failed, showing demo data: ${err.message}`);
+    return { ...(await mockProvider.act(arg)), error: err.message, demoData: true };
   }
-  return mockProvider[method](arg);
 }
 
 // ---------- window + state ----------
@@ -62,8 +78,8 @@ function go(next) {
   if (!win || win.isDestroyed()) return;
   win.setIgnoreMouseEvents(ignoresMouse(next), { forward: true });
   if (next === "listening") {
-    if (process.platform === "darwin") app.focus({ steal: true });
-    win.focus(); // so Escape reaches the renderer
+    if (!HEADLESS && process.platform === "darwin") app.focus({ steal: true });
+    if (!HEADLESS) win.focus(); // so Escape reaches the renderer
   }
   console.log(`[atlas] state → ${next}`);
   win.webContents.send("atlas:state", next);
@@ -108,7 +124,7 @@ function createWindow() {
   win.loadFile(path.join(__dirname, "..", "renderer", "index.html"));
   win.once("ready-to-show", () => {
     win.setBounds({ x, y, width, height });
-    win.showInactive(); // transparent and click-through until summoned
+    if (!HEADLESS) win.showInactive(); // transparent and click-through until summoned
   });
 }
 
@@ -147,10 +163,12 @@ if (!app.requestSingleInstanceLock()) {
     }
     createWindow();
     if (process.platform === "darwin" && app.dock) app.dock.hide();
-    if (!globalShortcut.register(HOTKEY, () => send("toggle"))) {
+    if (HEADLESS) {
+      console.log("[atlas] headless test run: no window shown, no hotkey");
+    } else if (!globalShortcut.register(HOTKEY, () => send("toggle"))) {
       console.warn(`[atlas] could not register hotkey ${HOTKEY}; set ATLAS_HOTKEY to another accelerator`);
     } else {
-      console.log(`[atlas] ready · press ${HOTKEY} to summon · data: ${provider === mockProvider ? "mock" : "live"} · voice: ${voice ? "on" : "off"}`);
+      console.log(`[atlas] ready · press ${HOTKEY} to summon · data: ${provider === mockProvider ? "mock" : "live (probing)"} · voice: ${voice ? "on" : "off"}`);
     }
   });
 

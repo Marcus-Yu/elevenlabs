@@ -21,6 +21,8 @@ const DEMO_HIRE_CRITERIA = {
   countryCodes: ["USA"],
 };
 
+const { eventText, strippedText, runLabelText } = require("./humanize");
+
 const ALIASES = ["A", "B", "C"];
 const SOURCE_LABELS = { fiber: "People search (Fiber)", ploid: "People search (Ploid)", web: "Public web pages", synthetic: "Synthetic profiles" };
 
@@ -90,9 +92,7 @@ function fitOf(entry, criteria) {
 function runLabelOf(runs) {
   if (!runs?.length) return "Not run yet";
   const last = runs[runs.length - 1];
-  const ratio = (e) => (e.k ? e.fitAtK / e.k : 0).toFixed(2);
-  const k = last.evaluation.k;
-  return last.comparedTo ? `Run ${runs.length} · fit@${k} ${ratio(last.comparedTo)} → ${ratio(last.evaluation)}` : `Run ${runs.length} · fit@${k} ${ratio(last.evaluation)}`;
+  return runLabelText(runs.length, last.evaluation, last.comparedTo);
 }
 
 /** Top three as anonymous A/B/C. Never a name, company or profile URL (names stay hidden until double opt-in). */
@@ -119,7 +119,7 @@ const RULE_EVENTS = {
   introductions: { kind: "pending", text: () => "Introduction waiting for both sides" },
 };
 
-const STUB = " · recorded (stub)";
+const STUB = " (demo data)";
 const isStub = (reason) => typeof reason === "string" && reason.includes("stub_handler");
 const DONE = new Set(["APPROVED", "EXECUTED"]);
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -134,14 +134,14 @@ function mapMatch(md, revealRows) {
   const events = [];
   for (const [card, whose] of [[md.cardA, "your"], [md.cardB, "B's"]]) {
     for (const field of card?.stripped ?? []) {
-      events.push({ ruleId: "card_fields", kind: "stripped", text: `${cap(field)} removed from ${whose} share card${isStub(card.logReason) ? STUB : ""}` });
+      events.push({ ruleId: "card_fields", kind: "stripped", text: strippedText(field, whose, card.logReason) });
     }
   }
   const m = md.match;
   if (m) {
     const both = m.aAccepted && m.bAccepted;
     const progress = both ? "both sides accepted" : m.aAccepted ? "A accepted, waiting for B" : m.bAccepted ? "B accepted, waiting for A" : "anonymous match, no one accepted yet";
-    events.push(both ? { ruleId: "opt_in_only", kind: "allowed", text: `Opt-in: ${progress}` } : { ruleId: "opt_in_only", kind: "hidden", text: `Contact details hidden · ${progress}` });
+    events.push(both ? { ruleId: "opt_in_only", kind: "allowed", text: "Both sides opted in" } : { ruleId: "opt_in_only", kind: "hidden", text: `Contact details stay hidden until both sides opt in (${progress})` });
   }
   const approved = !!m?.revealedAt || (DONE.has(md.revealA?.status) && DONE.has(md.revealB?.status));
   const started = !!(md.revealA || md.revealB) || !!(m?.aAccepted && m?.bAccepted);
@@ -151,8 +151,8 @@ function mapMatch(md, revealRows) {
     const sides = ["A", "B"].filter((x) => DONE.has(md[`reveal${x}`]?.status));
     events.push(
       approved
-        ? { ruleId: "introductions", kind: "allowed", text: `Introduction approved by both sides · draft not sent${stub}` }
-        : { ruleId: "introductions", kind: "pending", text: `Introduction waiting for both sides${sides.length ? ` (${sides.join(", ")} approved)` : ""}${stub}` },
+        ? { ruleId: "introductions", kind: "allowed", text: `Introduction drafted, not sent${stub}` }
+        : { ruleId: "introductions", kind: "pending", text: `Waiting for both sides to approve the introduction${sides.length ? ` (${sides.join(", ")} approved)` : ""}${stub}` },
     );
   }
   return { events, introStatus };
@@ -163,12 +163,12 @@ function mapGateway(rows, approvals, match = mapMatch(null)) {
   const events = [...match.events];
   for (const r of rows ?? []) {
     const rule = RULE_EVENTS[r.ruleId];
-    if (rule) events.push({ ruleId: r.ruleId, kind: rule.kind, text: rule.text(r) });
+    if (rule) events.push({ ruleId: r.ruleId, kind: rule.kind, text: eventText(r, modeOf(rows)) });
   }
   for (const r of rows ?? []) {
     if (RULE_EVENTS[r.ruleId]) continue;
     const kind = r.decision === "DENY" ? "denied" : r.decision === "NEEDS_APPROVAL" ? "pending" : "allowed";
-    events.push({ ruleId: r.ruleId, kind, text: `${r.actionType} ${kind} (${r.ruleId})` });
+    events.push({ ruleId: r.ruleId, kind, text: eventText(r, modeOf(rows)) });
   }
   const intro = (approvals ?? []).find((a) => a.actionType === "card.reveal");
   const revealed = (rows ?? []).some((r) => r.actionType === "card.reveal" && r.decision === "ALLOW");
