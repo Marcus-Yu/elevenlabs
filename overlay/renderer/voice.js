@@ -9,6 +9,7 @@ const BAR_GAIN = [0.7, 1, 0.85, 0.95, 0.75]; // per-bar spread so the bars don't
 let conv = null;
 let starting = false;
 let disabled = false;
+let ended = false; // session ended while visible: stay idle until the next summon
 let state = "hidden";
 let raf = 0;
 let deps = null;
@@ -21,8 +22,11 @@ export function initVoice(d) {
 /** Called by app.js on every main-process state change. */
 export function onOverlayState(next) {
   state = next;
-  if (next === "listening" && !conv && !starting) start();
-  if (next === "leaving" || next === "hidden") end();
+  if (next === "listening" && !conv && !starting && !ended) start();
+  if (next === "leaving" || next === "hidden") {
+    ended = false; // the next summon reconnects
+    end();
+  }
 }
 
 async function start() {
@@ -44,10 +48,13 @@ async function start() {
       onMessage: ({ source }) => {
         if (source === "user") window.atlas.voiceState("thinking");
       },
+      // Don't dismiss when the session ends: return the ball to idle; the next summon reconnects.
       onDisconnect: () => {
+        if (!conv) return; // we ended it (leaving/hidden)
         conv = null;
+        ended = true;
         stopBars();
-        window.atlas.nav("dismiss");
+        window.atlas.voiceState("listening");
       },
       onError: (message) => console.error("[atlas] voice error", message),
     });
