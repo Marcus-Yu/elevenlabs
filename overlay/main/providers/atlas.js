@@ -22,7 +22,10 @@ const DEMO_HIRE_CRITERIA = {
 };
 
 const { eventText, strippedText, runLabelText } = require("./humanize");
-const { briefFromNeed, newSend, runSend, displayName, namedProposal } = require("../../shared/contract");
+const { briefFromNeed, newSend, runSend, displayName, namedProposal, createNameBook } = require("../../shared/contract");
+
+/** A candidate's stable identity across reruns (never the list position). */
+const stableId = (entry) => entry?.candidate?.id ?? entry?.candidate?.linkedinUrl ?? entry?.matchId;
 
 const ALIASES = ["A", "B", "C"];
 const SOURCE_LABELS = { fiber: "People search (Fiber)", ploid: "People search (Ploid)", web: "Public web pages", synthetic: "Synthetic profiles" };
@@ -72,16 +75,16 @@ function mapResearch(ranked, runs) {
 }
 
 /** Replaces the candidate's name and employer in text with the alias, so it can't identify them. */
-function anonymise(text, candidate, alias) {
+function anonymise(text, candidate, alias, name) {
   let out = text;
-  if (candidate?.fullName) out = out.split(candidate.fullName).join(displayName(alias));
+  if (candidate?.fullName) out = out.split(candidate.fullName).join(name ?? displayName(alias));
   if (candidate?.currentCompany) out = out.split(candidate.currentCompany).join("a company");
   return out;
 }
 
 /** Anonymises a source: no URL (a LinkedIn URL identifies the person), no name or employer. */
-function anonSource(source, candidate, alias) {
-  return { provider: source.provider, claim: anonymise(source.claim, candidate, alias) };
+function anonSource(source, candidate, alias, name) {
+  return { provider: source.provider, claim: anonymise(source.claim, candidate, alias, name) };
 }
 
 function fitOf(entry, criteria) {
@@ -97,19 +100,19 @@ function runLabelOf(runs) {
 }
 
 /** Top three as anonymous A/B/C. Never a name, company or profile URL (names stay hidden until double opt-in). */
-function mapShortlist(ranked, runs, criteria) {
+function mapShortlist(ranked, runs, criteria, names = createNameBook()) {
   const candidates = (ranked ?? []).slice(0, ALIASES.length).map((entry, i) => {
     const alias = ALIASES[i];
     const c = entry.candidate ?? {};
     const years = c.yearsExperience !== undefined ? `${Math.round(c.yearsExperience)} yrs` : null;
     return {
       alias,
-      displayName: displayName(alias), // fictional pseudonym, shown with an "alias" tag
+      displayName: names.nameFor(stableId(entry)), // fictional pseudonym tied to the person, shown with an "alias" tag
       headline: [c.title || "Candidate", years].filter(Boolean).join(" · "),
       fit: fitOf(entry, criteria),
       sourceCount: (entry.citedSources ?? c.sources ?? []).length,
       matchId: entry.matchId,
-      sources: (entry.citedSources ?? []).map((s) => anonSource(s, c, alias)),
+      sources: (entry.citedSources ?? []).map((s) => anonSource(s, c, alias, names.nameFor(stableId(entry)))),
     };
   });
   return { candidates, runLabel: runLabelOf(runs) };
@@ -202,11 +205,11 @@ function createProvider(env = process.env, deps = {}) {
   const password = env.ATLAS_PASSWORD || "atlas-demo-1";
 
   let token = null;
-  const s = { goalId: null, criteria: DEMO_HIRE_CRITERIA, ranked: [], runs: [], proposedChange: null, need: null, otherApproved: false, send: newSend(), last: null };
+  const s = { goalId: null, criteria: DEMO_HIRE_CRITERIA, ranked: [], runs: [], proposedChange: null, need: null, otherApproved: false, send: newSend(), last: null, names: createNameBook() };
   const isHire = () => s.need && briefFromNeed(s.need).kind === "hire";
   /** Fresh session: no need, no goal (called on every new summon and on a stale goal). */
   function reset() {
-    Object.assign(s, { goalId: null, criteria: DEMO_HIRE_CRITERIA, ranked: [], runs: [], proposedChange: null, need: null, otherApproved: false, send: newSend(), last: null });
+    Object.assign(s, { goalId: null, criteria: DEMO_HIRE_CRITERIA, ranked: [], runs: [], proposedChange: null, need: null, otherApproved: false, send: newSend(), last: null, names: createNameBook() });
   }
   /** A stale-goal reset returns the neutral snapshot instead of an error. */
   async function guarded(fn) {
@@ -337,7 +340,7 @@ function createProvider(env = process.env, deps = {}) {
     return remember({
       brief: mapBrief(s.criteria, s.goalId),
       research: mapResearch(s.ranked, s.runs),
-      shortlist: mapShortlist(s.ranked, s.runs, s.criteria),
+      shortlist: mapShortlist(s.ranked, s.runs, s.criteria, s.names),
       gateway: mapGateway(rows, approvals, match),
       mode: modeOf(rows),
       // The seeded demo user's profile and the demo criteria are synthetic; replay data is recorded, not live.
@@ -380,7 +383,7 @@ function createProvider(env = process.env, deps = {}) {
         // The server drops the rejected candidate from later rankings; mirror that until the rerun.
         s.ranked = s.ranked.filter((r) => r.matchId !== entry.matchId);
         const snap = await read();
-        return proposedChange ? { ...snap, proposedChange: { explanation: namedProposal(anonymise(proposedChange.explanation, entry.candidate, action.alias), action.alias), changes: proposedChange.changes } } : snap;
+        return proposedChange ? { ...snap, proposedChange: { explanation: namedProposal(anonymise(proposedChange.explanation, entry.candidate, action.alias, s.names.nameFor(stableId(entry))), action.alias, s.names.nameFor(stableId(entry))), changes: proposedChange.changes } } : snap;
       }
       case "confirm_change":
         if (!s.proposedChange) throw new AtlasProviderError("No criteria change is waiting for confirmation; reject a candidate with a reason first");

@@ -148,3 +148,22 @@ test("a non-hire need is approved honestly, with no research results", async () 
   assert.equal(s1.shortlist, null);
   assert.equal(srv.calls.filter((c) => c.path === "/operations/create-hire-goal").length, 0);
 });
+
+test("names follow the person: reject B, rerun, and nobody else becomes Jordan Ellis", async () => {
+  const srv = fakeServer();
+  const p = createProvider({ ATLAS_SERVER_URL: "http://atlas.test:3003" }, { fetch: srv.fetch });
+  await p.act({ type: "set_need", text: "I need to hire an engineer", kind: "hire" });
+  await p.act({ type: "approve_brief" });
+  const s1 = await p.act({ type: "run_research" });
+  const first = Object.fromEntries(s1.shortlist.candidates.map((c) => [c.alias, c.displayName]));
+  assert.deepEqual(first, { A: "Maya Chen", B: "Jordan Ellis", C: "Priya Raman" });
+  const keptA = s1.shortlist.candidates[0].matchId;
+  await p.act({ type: "reject_candidate", alias: "B", reason: "too junior" });
+  const s2 = await p.act({ type: "confirm_change" });
+  const names = s2.shortlist.candidates.map((c) => c.displayName);
+  assert.ok(!names.includes("Jordan Ellis"), `Jordan Ellis was reassigned: ${names}`);
+  assert.deepEqual(names, ["Maya Chen", "Priya Raman", "Theo Marsh"], "B's slot keeps Priya (same person); the new person gets the next unused name");
+  const a = s2.shortlist.candidates.find((c) => c.matchId === keptA);
+  if (a) assert.equal(a.displayName, "Maya Chen", "a person keeps their name across reruns");
+  for (const c of s2.shortlist.candidates) if (!Object.values(first).includes(c.displayName)) assert.ok(["Theo Marsh", "Lena Okafor", "Ravi Kapoor"].includes(c.displayName));
+});

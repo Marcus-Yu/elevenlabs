@@ -16,3 +16,10 @@ test("aliasFor maps a spoken name or alias to the alias", () => {
   assert.equal(aliasFor("Sam Rivera"), "");
   assert.equal(aliasFor(undefined), "");
 });
+
+test("aliasFor resolves names against the live mapping, not the letter", () => {
+  const candidates = [{ alias: "A", displayName: "Maya Chen" }, { alias: "B", displayName: "Priya Raman" }, { alias: "C", displayName: "Theo Marsh" }];
+  assert.equal(aliasFor("Priya", candidates), "B");
+  assert.equal(aliasFor("Theo Marsh", candidates), "C");
+  assert.equal(aliasFor("Jordan Ellis", candidates), "", "a rejected person's name no longer resolves");
+});
