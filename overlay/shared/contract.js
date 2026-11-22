@@ -175,10 +175,27 @@ async function runSend(send, runStep, onProgress = () => {}) {
 const DISPLAY_NAMES = { A: "Maya Chen", B: "Jordan Ellis", C: "Priya Raman" };
 const displayName = (alias) => DISPLAY_NAMES[alias] ?? `Candidate ${alias}`;
 
-/** "...Raise the minimum to 4 years?" → "Jordan Ellis looks too junior. Raise the minimum to 4 years?" */
-function namedProposal(explanation, alias) {
-  const m = /raise the minimum to \d+ years?\??/i.exec(explanation || "");
-  return m ? `${displayName(alias)} looks too junior. ${m[0].replace(/^r/, "R")}` : explanation;
+/** Names in the order new people get them. */
+const NAME_POOL = ["Maya Chen", "Jordan Ellis", "Priya Raman", "Theo Marsh", "Lena Okafor", "Ravi Kapoor", "Nora Lindqvist", "Sami Haddad", "Iris Moreau", "Kofi Mensah"];
+
+/**
+ * Names follow the PERSON, not the list position: each stable id (profile id, URL or matchId) gets
+ * the next unused name once, and keeps it for the whole goal. A rejected person's name is never reused.
+ */
+function createNameBook() {
+  const byId = new Map();
+  return {
+    nameFor(id) {
+      if (!byId.has(id)) byId.set(id, NAME_POOL[byId.size] ?? `Candidate ${byId.size + 1}`);
+      return byId.get(id);
+    },
+  };
 }
 
-module.exports = { DISPLAY_NAMES, displayName, namedProposal, SAMPLE_SNAPSHOT, NEED_LABELS, inferKind, briefFromNeed, SEND_STEPS, newSend, runSend };
+/** "...Raise the minimum to 4 years?" → "Jordan Ellis looks too junior. Raise the minimum to 4 years?" */
+function namedProposal(explanation, alias, name = displayName(alias)) {
+  const m = /raise the minimum to \d+ years?\??/i.exec(explanation || "");
+  return m ? `${name} looks too junior. ${m[0].replace(/^r/, "R")}` : explanation;
+}
+
+module.exports = { DISPLAY_NAMES, NAME_POOL, createNameBook, displayName, namedProposal, SAMPLE_SNAPSHOT, NEED_LABELS, inferKind, briefFromNeed, SEND_STEPS, newSend, runSend };
