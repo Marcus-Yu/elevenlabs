@@ -45,7 +45,8 @@ async function execute(deps: GatewayDeps, raw: unknown): Promise<GatewayResult> 
   }
   const coreSchema = CORE_PAYLOADS[request.actionType as keyof typeof CORE_PAYLOADS];
   const validated = validatePayload(handler.payload, coreSchema, request.payload);
-  if (!validated.ok) return denyResult(deps, fallbackSubject(request), ENGINE_RULE_IDS.schema, validated.reason);
+  // An invalid payload's text isn't useful in the log and may hold private values.
+  if (!validated.ok) return denyResult(deps, fallbackSubject(request), ENGINE_RULE_IDS.schema, validated.reason, true);
   return decideAndRun(deps, { ...request, payload: validated.payload }, handler, "request");
 }
 
