@@ -1,9 +1,10 @@
 import { defineConfig } from "vitest/config";
 
-// Unit tests for server and shared logic (gateway rules, adapters, contracts).
+// Unit tests for server, shared logic and pure component rendering.
 // Kept separate from vite.config.ts so tests run without a compiled Wasp SDK.
-// React component tests can use `wasp test client` instead.
+// These source files otherwise inherit Wasp’s preserved JSX, which Vitest cannot execute.
 export default defineConfig({
+  oxc: { jsx: { runtime: "automatic" } },
   test: {
     environment: "node",
     include: ["src/**/*.test.ts"],

@@ -10,6 +10,8 @@ import { readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { createDiscoveryHandlersFromEnv } from "../src/server/gateway/handlers/discovery";
 import {
+  DEMO_CANDIDATE_SEARCH,
+  DEMO_RESEARCH_AGENT_SEARCHES,
   DEMO_CUSTOMER_SEARCH,
   DEMO_JOB_SEARCH,
   DEMO_MANUFACTURER_SEARCH,
@@ -33,7 +35,15 @@ console.log(`manufacturers: ${manufacturers.data.companies.map((c) => c.domain).
 
 for (const company of customers.data.companies.slice(0, 3)) {
   const contacts = await handlers["contact.search"].run(demoContactSearch(company), ctx);
-  console.log(`contacts at ${company.domain}: ${contacts.data.contacts.length} (${contacts.data.provider})`);
+  if ("contacts" in contacts.data) console.log(`contacts at ${company.domain}: ${contacts.data.contacts.length} (${contacts.data.provider})`);
+}
+
+const candidates = await handlers["contact.search"].run(DEMO_CANDIDATE_SEARCH, ctx);
+if ("candidates" in candidates.data) console.log(`hire candidates: ${candidates.data.candidates.length} (${candidates.data.provider})`);
+
+for (const search of DEMO_RESEARCH_AGENT_SEARCHES) {
+  const agent = await handlers["contact.search"].run(search, ctx);
+  if ("candidates" in agent.data) console.log(`research agent "${search.titles[0]}": ${agent.data.candidates.length}`);
 }
 
 const jobs = await handlers["jobs.search"].run(DEMO_JOB_SEARCH, ctx);
@@ -60,15 +70,20 @@ for (const file of await readdir(fiberDir)) {
 console.log(`trimmed ${trimmed} people-search fixtures`);
 
 function trimPerson(p: Record<string, unknown>) {
-  const experiences = Array.isArray(p.experiences) ? p.experiences : [];
+  type Exp = { is_current?: boolean; title?: string; company_name?: string; start_date?: string; seniority?: string };
+  const experiences = (Array.isArray(p.experiences) ? p.experiences : []) as Exp[];
   return {
     name: p.name ?? null,
     first_name: p.first_name ?? null,
     last_name: p.last_name ?? null,
     url: p.url ?? null,
     primary_slug: p.primary_slug,
-    experiences: experiences
-      .filter((e: { is_current?: boolean }) => e.is_current)
-      .map((e: { title?: string; company_name?: string }) => ({ is_current: true, title: e.title ?? null, company_name: e.company_name ?? null })),
+    // Current role in full; past roles keep only title, start date and seniority (for years of experience).
+    experiences: experiences.map((e) =>
+      e.is_current
+        ? { is_current: true, title: e.title ?? null, company_name: e.company_name ?? null, start_date: e.start_date ?? null, seniority: e.seniority ?? null }
+        : { is_current: false, title: e.title ?? null, start_date: e.start_date ?? null, seniority: e.seniority ?? null },
+    ),
+    skills: Array.isArray(p.skills) ? p.skills : [],
   };
 }

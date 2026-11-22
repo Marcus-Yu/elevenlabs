@@ -3,6 +3,10 @@ import { z } from "zod";
 // Gateway contract (docs/IMPLEMENTATION_PLAN.md §7). Owned by WP0; import, don't redefine.
 
 export const ACTION_TYPES = [
+  "thread.chat",
+  "thread.propose_goal",
+  "calibration.profiles",
+  "calibration.criteria",
   "company.search",
   "jobs.search",
   "contact.search",
@@ -12,6 +16,8 @@ export const ACTION_TYPES = [
   "draft.create",
   "outreach.send",
   "call.place",
+  "voice.scribe_token",
+  "voice.speak",
   "memory.read",
   "memory.write",
   "memory.delete",

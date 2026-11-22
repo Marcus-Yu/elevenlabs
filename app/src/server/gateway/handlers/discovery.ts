@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { CompanyRecord, ContactRecord, UntrustedText } from "../../../shared/contracts";
-import { createFiberAdapter, type FiberAdapter, type JobPostingRecord } from "../../adapters/fiber";
+import { createFiberAdapter, type CandidateRecord, type FiberAdapter, type JobPostingRecord } from "../../adapters/fiber";
 import { createHttpClient, resolveAdapterMode, type AdapterMode, type HttpClient } from "../../adapters/http";
 import { createPloidAdapter, PloidError, type PloidAdapter } from "../../adapters/ploid";
 import { createWebAdapter, UNTRUSTED_INSTRUCTION_REASON, type WebAdapter } from "../../adapters/web";
@@ -54,6 +54,19 @@ export const ContactSearchPayload = z.object({
   limit: z.number().int().min(1).max(3).optional(),
 });
 
+/** Hire goals (scope change 2026-11-22): research a shortlist of public profiles by criteria. */
+export const CandidateSearchPayload = z.object({
+  mode: z.literal("criteria"),
+  titles: z.array(z.string().min(2).max(120)).min(1).max(10),
+  skills: z.array(z.string().min(1).max(60)).max(10).optional(),
+  minYearsExperience: z.number().min(0).max(40).optional(),
+  countryCodes: z.array(z.string().length(3)).max(10).optional(),
+  pageSize: z.number().int().min(1).max(25).optional(),
+});
+
+/** contact.search takes either a company (outreach goals) or criteria (hire goals). */
+export const ContactOrCandidateSearchPayload = z.union([CandidateSearchPayload, ContactSearchPayload]);
+
 export const RevealEmailPayload = z.object({
   fullName: z.string().min(1),
   companyDomain: domain,
@@ -87,23 +100,35 @@ export function createDiscoveryHandlers(deps: DiscoveryDeps) {
       },
     }),
 
-    "contact.search": defineHandler<typeof ContactSearchPayload, { contacts: ContactRecord[]; provider: "ploid" | "fiber" }>({
-      payload: ContactSearchPayload,
+    "contact.search": defineHandler<
+      typeof ContactOrCandidateSearchPayload,
+      { contacts: ContactRecord[]; provider: "ploid" | "fiber" } | { candidates: CandidateRecord[]; provider: "ploid" | "fiber"; fallback?: string }
+    >({
+      payload: ContactOrCandidateSearchPayload,
       async run(payload) {
+        if ("mode" in payload && payload.mode === "criteria") {
+          // Ploid stays the primary people search once a key exists; until then Fiber is the labelled fallback.
+          const { mode: _mode, ...query } = payload;
+          const candidates = await deps.fiber.searchCandidates(query);
+          return {
+            data: { candidates, provider: "fiber" as const, ...(deps.ploid ? {} : { fallback: "fiber_people_search_no_ploid_key" }) },
+            ...(deps.ploid ? {} : { logReason: "ploid_not_configured_used_fiber" }),
+          };
+        }
         let contacts: ContactRecord[];
         let provider: "ploid" | "fiber" = "fiber";
         let logReason: string | undefined;
         if (deps.ploid) {
           try {
-            contacts = await deps.ploid.searchContacts(payload);
+            contacts = await deps.ploid.searchContacts(payload as z.infer<typeof ContactSearchPayload>);
             provider = "ploid";
           } catch (error) {
             if (!(error instanceof PloidError)) throw error;
             logReason = `ploid_failed_used_fiber: HTTP ${error.status}`;
-            contacts = await deps.fiber.searchPeople(payload);
+            contacts = await deps.fiber.searchPeople(payload as z.infer<typeof ContactSearchPayload>);
           }
         } else {
-          contacts = await deps.fiber.searchPeople(payload);
+          contacts = await deps.fiber.searchPeople(payload as z.infer<typeof ContactSearchPayload>);
         }
         // Email stays absent until contact.reveal_email succeeds, whatever a provider returns.
         const withoutEmail = contacts.map(({ email: _email, ...rest }) => rest);

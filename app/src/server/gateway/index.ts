@@ -22,7 +22,14 @@ function getGateway(): Gateway {
     instance = traceGateway(
       createGateway({
         store: withLogStamp(createPrismaStore(prisma), executionBackendFrom(process.env)),
-        registry: createRegistry(createHandlerMap(process.env, prisma)),
+        registry: createRegistry(
+          createHandlerMap(process.env, {
+            memoryItems: prisma.memoryItem,
+            matchDatabase: prisma,
+            executeThreadTool: (request) => getGateway().execute(request),
+            prisma,
+          }),
+        ),
         env: gatewayEnvFrom(process.env),
       }),
     );

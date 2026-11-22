@@ -15,6 +15,12 @@ import {
 
 const ctx = { userId: "u1", goalId: "g1" };
 
+/** contact.search returns contacts in company mode and candidates in criteria mode. */
+function contactsOf(data: object) {
+  if (!("contacts" in data)) throw new Error("expected company-mode contacts");
+  return (data as { contacts: { email?: string; sources: { url?: string }[] }[] }).contacts;
+}
+
 // Replays the recorded fixtures in fixtures/fiber and fixtures/web. No network, no key needed.
 describe("discovery handlers in replay mode", () => {
   const handlers = createDiscoveryHandlersFromEnv({ ADAPTER_MODE: "replay" });
@@ -36,8 +42,8 @@ describe("discovery handlers in replay mode", () => {
     const target = customers.companies.find((c) => c.domain === "locusrobotics.com")!;
     const { data } = await handlers["contact.search"].run(demoContactSearch(target), ctx);
     expect(data.provider).toBe("fiber");
-    expect(data.contacts.length).toBeGreaterThan(0);
-    for (const contact of data.contacts) {
+    expect(contactsOf(data).length).toBeGreaterThan(0);
+    for (const contact of contactsOf(data)) {
       ContactRecordSchema.parse(contact);
       expect(contact.email).toBeUndefined();
       expect(contact.sources[0].url).toMatch(/linkedin\.com\/in\//);
@@ -70,6 +76,7 @@ describe("discovery handlers with stub adapters", () => {
     const fiber = {
       searchCompanies: vi.fn(),
       searchJobs: vi.fn(),
+      searchCandidates: vi.fn(async () => []),
       searchPeople: vi.fn(async () => [{ ...contact, email: "leak@x.com" }]),
       revealWorkEmail: vi.fn(async () => "vp@x.com"),
       getCredits: vi.fn(),
@@ -79,7 +86,7 @@ describe("discovery handlers with stub adapters", () => {
 
   it("strips email from contact.search even if an adapter returns one", async () => {
     const { data } = await createDiscoveryHandlers(deps())["contact.search"].run({ companyDomain: "x.com", roles: ["ops"] }, ctx);
-    expect(data.contacts[0]).not.toHaveProperty("email");
+    expect(contactsOf(data)[0]).not.toHaveProperty("email");
   });
 
   it("contact.reveal_email is the only path that returns an email", async () => {

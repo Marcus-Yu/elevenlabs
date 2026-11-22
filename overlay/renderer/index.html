@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: data:; worker-src 'self' blob: data:; media-src 'self' blob: data:; connect-src 'self' https://api.elevenlabs.io wss://api.elevenlabs.io; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:">
+<title>Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&amp;family=Inter:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="atl" class="atl is-hidden">
+  <button type="button" class="scrim" id="scrim" aria-label="Dismiss Atlas" tabindex="-1"></button>
+  <div class="cluster">
+    <div class="ball-wrap">
+      <div class="halo" aria-hidden="true"></div>
+      <div class="ring r1" aria-hidden="true"></div>
+      <div class="ring r2" aria-hidden="true"></div>
+      <div class="ring r3" aria-hidden="true"></div>
+      <div class="orbit" aria-hidden="true"><span class="orbit-dot"></span></div>
+      <div class="scan" aria-hidden="true"></div>
+      <button type="button" class="ball-btn" id="ball" aria-label="Atlas"><span class="orb"><span class="swirl"></span><span class="swirl s2"></span><span class="gloss"></span></span></button>
+    </div>
+    <span class="bars" aria-hidden="true"><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span></span>
+    <div class="col col-l" id="col-l"></div>
+    <div class="col col-r" id="col-r"></div>
+  </div>
+</div>
+<script src="../node_modules/@elevenlabs/client/dist/lib.iife.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>

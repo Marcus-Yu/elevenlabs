@@ -34,6 +34,10 @@ function stub<T>(data: T) {
 
 export function createStubHandlers(): HandlerMap {
   return {
+    "thread.propose_goal": defineHandler({ payload: AnyObject, run: async () => stub({ available: false }) }),
+    "thread.chat": defineHandler({ payload: AnyObject, run: async () => stub({ available: false }) }),
+    "calibration.profiles": defineHandler({ payload: AnyObject, run: async () => stub({ available: false }) }),
+    "calibration.criteria": defineHandler({ payload: AnyObject, run: async () => stub({ available: false }) }),
     "company.search": defineHandler({ payload: AnyObject, run: async () => stub({ companies: STUB_COMPANIES }) }),
     "jobs.search": defineHandler({ payload: AnyObject, run: async () => stub({ jobs: STUB_JOBS }) }),
     "contact.search": defineHandler({ payload: AnyObject, run: async () => stub({ contacts: STUB_CONTACTS, provider: "fiber" as const }) }),
@@ -57,6 +61,8 @@ export function createStubHandlers(): HandlerMap {
           ...(ctx.approvalId ? { approvalId: ctx.approvalId } : {}),
         }),
     }),
+    "voice.scribe_token": defineHandler({ payload: z.object({}).strict(), run: async () => stub({}) }),
+    "voice.speak": defineHandler({ payload: z.object({ text: z.string().trim().min(1).max(3000) }).strict(), run: async () => stub({}) }),
     "call.place": defineHandler({ payload: CallPlacePayload, run: async () => stub({ placed: false }) }),
     "memory.read": defineHandler({ payload: MemoryReadPayload, run: async () => stub({ items: [] }) }),
     "memory.write": defineHandler({ payload: MemoryWritePayload, run: async (payload) => stub({ stored: false, id: stubId("memory", payload) }) }),
