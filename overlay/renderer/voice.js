@@ -80,20 +80,24 @@ function end() {
 
 // ---------- client tools (names match the agent created by scripts/create-voice-agent.js) ----------
 function tools() {
-  const run = async (action) => {
+  const run = async (action, extra = {}) => {
     window.atlas.voiceState("thinking");
     let snap = await deps.act(action);
     // Approval alone doesn't research ("refresh" only re-reads); run it so the agent can read back the shortlist.
     if (action.type === "approve_brief" && snap && !snap.error) snap = await deps.act({ type: "run_research" });
-    return toolResult(action.type, snap, action);
+    return toolResult(action.type, snap, { ...action, ...extra });
   };
   return {
     set_need: (args = {}) => run(needAction(args)),
     approve_brief: () => run({ type: "approve_brief" }),
     run_research: () => run({ type: "run_research" }),
-    // The agent may say a display name ("Jordan Ellis") or an alias; operations take the alias.
-    reject_candidate: ({ alias, reason } = {}) =>
-      run({ type: "reject_candidate", alias: aliasFor(alias) || String(alias ?? "").trim().toUpperCase(), reason: String(reason ?? "") }),
+    // The agent may say a display name ("Jordan Ellis") or an alias; operations take the current alias.
+    reject_candidate: (args) => {
+      const candidates = deps.snapshot?.()?.shortlist?.candidates;
+      const action = rejectAction(args, candidates);
+      // Capture the name now: the rejected person drops out of the next snapshot.
+      return run(action, { name: candidates?.find((c) => c.alias === action.alias)?.displayName });
+    },
     confirm_change: () => run({ type: "confirm_change" }),
     open_intro: () => run({ type: "open_intro" }),
     approve_send: () => run({ type: "approve_send" }),
@@ -106,6 +110,12 @@ function tools() {
       return "Closing.";
     },
   };
+}
+
+/** Agent args → reject_candidate action; a spoken name resolves to that person's current letter. */
+export function rejectAction({ alias, reason } = {}, candidates) {
+  const ref = String(alias ?? "").trim();
+  return { type: "reject_candidate", alias: aliasFor(ref, candidates) || ref.toUpperCase(), reason: String(reason ?? "") };
 }
 
 const KINDS = ["hire", "customers", "investors", "manufacturer", "partner", "other"];

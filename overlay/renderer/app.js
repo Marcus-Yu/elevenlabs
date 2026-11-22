@@ -206,7 +206,7 @@ function setState(next) {
 
 applyLayout();
 window.addEventListener("resize", applyLayout);
-initVoice({ act, root });
+initVoice({ act, root, snapshot: () => snap });
 window.atlas.onState((next) => {
   setState(next);
   onOverlayState(next);

@@ -8,7 +8,7 @@ function list(items) {
 }
 
 function shortlist(snap) {
-  const aliases = (snap?.shortlist?.candidates ?? []).map((c) => displayName(c.alias));
+  const aliases = (snap?.shortlist?.candidates ?? []).map((c) => c.displayName ?? displayName(c.alias));
   return aliases.length ? `Shortlist has ${list(aliases)}.` : "Research is still running; no candidates yet.";
 }
 
@@ -28,7 +28,7 @@ export function toolResult(type, snap, args = {}) {
     case "run_research":
       return `Research done. ${shortlist(snap)}`;
     case "reject_candidate": {
-      const name = displayName(args.alias);
+      const name = args.name ?? displayName(args.alias);
       const question = snap.proposedChange?.explanation?.match(/[^.?!]*\?\s*$/)?.[0].trim();
       const change = question ? ` Proposed change: ${name} looks ${args.reason || "like a poor fit"}. ${question}` : "";
       return `Rejected ${name}.${change} Ask the user to confirm the change.`;
