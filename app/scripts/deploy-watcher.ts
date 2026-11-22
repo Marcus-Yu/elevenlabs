@@ -2,6 +2,7 @@
 //
 //   cd app
 //   MARITIME_API_KEY=mk_... npx -y tsx scripts/deploy-watcher.ts deploy --goal <goalId> [--atlas-url https://...] [--token <watcherToken>]
+//   MARITIME_API_KEY=mk_... npx -y tsx scripts/deploy-watcher.ts redeploy <agentId>   (new code, keeps /data)
 //   MARITIME_API_KEY=mk_... npx -y tsx scripts/deploy-watcher.ts chat <agentId> status
 //   MARITIME_API_KEY=mk_... npx -y tsx scripts/deploy-watcher.ts env <agentId> --atlas-url https://... --token <watcherToken>
 //   MARITIME_API_KEY=mk_... npx -y tsx scripts/deploy-watcher.ts delete <agentId>
@@ -38,6 +39,11 @@ if (command === "deploy") {
   const env: WatcherEnv = { ATLAS_URL: flag("atlas-url") ?? "", WATCHER_GOAL_ID: goalId, WATCHER_TOKEN: flag("token") ?? "" };
   const agent = await maritime.createWatcher({ goalId, uploadS3Key, env });
   console.log(JSON.stringify({ id: agent.id, name: agent.name, externalId: agent.externalId, status: agent.status }));
+} else if (command === "redeploy") {
+  const zip = await zipFiles(BOX_DIR, BOX_FILES);
+  const { uploadS3Key } = await maritime.uploadZip(new Blob([new Uint8Array(zip)], { type: "application/zip" }));
+  console.log(`uploaded watcher-box (${zip.length} bytes) as ${uploadS3Key}`);
+  console.log(JSON.stringify(await maritime.redeploy(rest[0]!, uploadS3Key)));
 } else if (command === "chat") {
   console.log(JSON.stringify(await maritime.chat(rest[0]!, rest[1] ?? "status")));
 } else if (command === "status") {
@@ -50,7 +56,7 @@ if (command === "deploy") {
   await maritime.deleteWatcher(rest[0]!);
   console.log(`deleted ${rest[0]}`);
 } else {
-  console.error("usage: deploy --goal <id> [--atlas-url URL] [--token T] | status <agentId> | chat <agentId> <message> | env <agentId> ... | delete <agentId>");
+  console.error("usage: redeploy <agentId> | deploy --goal <id> [--atlas-url URL] [--token T] | status <agentId> | chat <agentId> <message> | env <agentId> ... | delete <agentId>");
   process.exit(1);
 }
 

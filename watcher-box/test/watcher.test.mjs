@@ -147,3 +147,90 @@ describe("server contract", () => {
     );
   });
 });
+
+// ---------- one-shot delegated research ----------
+import { loadLatestResearch, runResearch } from "../watcher.mjs";
+
+const person = (name, extra = {}) => ({
+  fullName: name,
+  title: "Robotics Engineer",
+  linkedinUrl: `https://www.linkedin.com/in/${name.toLowerCase()}`,
+  skills: ["ROS", "C++"],
+  sources: [{ provider: "fiber", url: `https://www.linkedin.com/in/${name.toLowerCase()}`, fetchedAt: "t", claim: "role: Robotics Engineer" }],
+  ...extra,
+});
+
+function researchAtlas({ byTitle, failTitle } = {}) {
+  const calls = [];
+  const reports = [];
+  return {
+    calls,
+    reports,
+    async run(report) {
+      reports.push(report);
+      return report.phase === "start" ? { runId: "run-r1" } : { ok: true };
+    },
+    async brief() {
+      return {
+        statement: "Hire a robotics engineer",
+        research: { kind: "hire", searches: [{ mode: "criteria", titles: ["robotics engineer"] }, { mode: "criteria", titles: ["robotics software engineer"] }] },
+      };
+    },
+    async tool(tool, args) {
+      calls.push([tool, args.titles?.[0]]);
+      if (args.titles?.[0] === failTitle) throw new Error("HTTP 502");
+      return { decision: { outcome: "allow", ruleId: "default" }, data: { candidates: byTitle[args.titles[0]] ?? [], provider: "fiber" } };
+    },
+  };
+}
+
+describe("delegated research", () => {
+  it("runs one agent per search, merges by LinkedIn URL, drops emails and unsourced profiles", async () => {
+    const atlas = researchAtlas({
+      byTitle: {
+        "robotics engineer": [person("Ada"), person("Bo", { email: "bo@x.com" }), person("NoSrc", { sources: [] })],
+        "robotics software engineer": [person("Ada"), person("Cy")],
+      },
+    });
+    const run = await runResearch({ config, atlas });
+    assert.deepEqual(atlas.calls.map((c) => c[0]), ["contact.search", "contact.search"]);
+    assert.deepEqual(run.shortlist.map((c) => c.fullName), ["Ada", "Bo", "Cy"]);
+    assert.equal(run.shortlist.find((c) => c.fullName === "Bo").email, undefined);
+    assert.deepEqual(run.agents.map((a) => a.found), [3, 2]);
+
+    const finish = atlas.reports.find((r) => r.phase === "finish");
+    assert.equal(finish.runId, "run-r1");
+    assert.equal(finish.stats.mode, "research");
+    assert.equal(finish.stats.shortlist.length, 3);
+  });
+
+  it("keeps the shortlist on disk across a restart", async () => {
+    await runResearch({ config, atlas: researchAtlas({ byTitle: { "robotics engineer": [person("Ada")] } }) });
+    const latest = await loadLatestResearch({ ...config });
+    assert.equal(latest.runId, "run-r1");
+    assert.deepEqual(latest.shortlist.map((c) => c.fullName), ["Ada"]);
+    assert.equal((await loadState(config)).lastResearch.shortlistCount, 1);
+  });
+
+  it("one failing agent does not sink the run", async () => {
+    const run = await runResearch({ config, atlas: researchAtlas({ byTitle: { "robotics engineer": [person("Ada")] }, failTitle: "robotics software engineer" }) });
+    assert.deepEqual(run.shortlist.map((c) => c.fullName), ["Ada"]);
+    assert.match(run.errors[0], /agent-2: HTTP 502/);
+  });
+
+  it("answers research and shortlist over /chat", async () => {
+    const atlas = researchAtlas({ byTitle: { "robotics engineer": [person("Ada")] } });
+    const box = createWatcherServer({ config, atlas, log: () => {} });
+    await new Promise((resolve) => box.server.listen(0, "127.0.0.1", resolve));
+    const base = `http://127.0.0.1:${box.server.address().port}`;
+    try {
+      const started = await (await fetch(`${base}/chat`, { method: "POST", body: JSON.stringify({ message: "research" }) })).json();
+      assert.deepEqual(started, { response: "Research started." });
+      await box.idle();
+      const body = await (await fetch(`${base}/chat`, { method: "POST", body: JSON.stringify({ message: "shortlist" }) })).json();
+      assert.deepEqual(JSON.parse(body.response).shortlist.map((c) => c.fullName), ["Ada"]);
+    } finally {
+      await new Promise((resolve) => box.server.close(resolve));
+    }
+  });
+});

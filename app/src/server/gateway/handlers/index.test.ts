@@ -7,19 +7,21 @@ import { createRegistry } from "../registry";
 import { MemoryGatewayStore } from "../testing/memoryStore";
 import { GOAL, request, USER } from "../testing/world";
 import { DEMO_CUSTOMER_SEARCH } from "./discovery.demo";
-import { createHandlerMap } from "./index";
+import { createHandlerMap, type HandlerDeps } from "./index";
 import { createStubHandlers } from "./stubs";
 
 // Replay mode with no provider keys and no Anthropic key: the demo request must come from fixtures.
 const REPLAY_ENV = { ADAPTER_MODE: "replay" } as NodeJS.ProcessEnv;
 const unusedMemory = new Proxy({}, { get: () => () => Promise.reject(new Error("memory not used in this test")) }) as MemoryItemDelegate;
 
+const deps: HandlerDeps = { memoryItems: unusedMemory, matchDatabase: {} as HandlerDeps["matchDatabase"] };
+
 function replayGateway() {
   const store = new MemoryGatewayStore();
   store.goals.set(GOAL, { id: GOAL, userId: USER, status: "ACTIVE", kind: "customers", autonomy: "PREPARE", rules: {} });
   const gateway = createGateway({
     store,
-    registry: createRegistry(createHandlerMap(REPLAY_ENV, { memoryItems: unusedMemory })),
+    registry: createRegistry(createHandlerMap(REPLAY_ENV, deps)),
     env: { outreachMode: "sandbox", redirectTo: "sandbox@atlas.example", adapterMode: "replay" },
   });
   return { store, gateway };
@@ -28,12 +30,12 @@ function replayGateway() {
 describe("createHandlerMap", () => {
   it("registers the real discovery and memory handlers and keeps stubs for the rest", () => {
     const stubs = createStubHandlers();
-    const map = createHandlerMap(REPLAY_ENV, { memoryItems: unusedMemory });
-    for (const type of ["company.search", "jobs.search", "contact.search", "contact.reveal_email", "web.read", "memory.read", "memory.write", "memory.delete"] as const) {
+    const map = createHandlerMap(REPLAY_ENV, deps);
+    for (const type of ["company.search", "jobs.search", "contact.search", "contact.reveal_email", "web.read", "memory.read", "memory.write", "memory.delete", "match.submit"] as const) {
       expect(map[type], type).not.toBe(stubs[type]);
       expect(map[type]).toBeDefined();
     }
-    for (const type of ["match.submit", "draft.create", "outreach.send", "call.place", "meeting.listen", "card.publish", "card.reveal"] as const) {
+    for (const type of ["draft.create", "outreach.send", "call.place", "meeting.listen", "card.publish", "card.reveal"] as const) {
       expect(map[type]?.payload, type).toBe(stubs[type]?.payload);
     }
   });

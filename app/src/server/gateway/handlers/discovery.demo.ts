@@ -49,3 +49,6 @@ export const DEMO_HIRE_CRITERIA: HireCriteria = HireCriteria.parse({
 });
 
 export const DEMO_CANDIDATE_SEARCH = { mode: "criteria" as const, ...candidateQueryFor(DEMO_HIRE_CRITERIA) };
+
+/** The research brief's per-title agent searches (watchApi.buildResearchBrief), one per title. */
+export const DEMO_RESEARCH_AGENT_SEARCHES = DEMO_HIRE_CRITERIA.titles.map((title) => ({ mode: "criteria" as const, ...candidateQueryFor({ ...DEMO_HIRE_CRITERIA, titles: [title] }) }));
