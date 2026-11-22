@@ -36,14 +36,14 @@ export interface HireDeps {
   saveState(goalId: string, state: HireState): Promise<void>;
 }
 
-export interface HireRun {
+export type HireRun = {
   at: string;
   criteria: HireCriteria;
   topK: string[];
   evaluation: { k: number; fitAtK: number; meanScore: number };
   /** Set on a rerun: the earlier run judged by the same (new) criteria. */
   comparedTo?: { k: number; fitAtK: number; meanScore: number };
-}
+};
 
 export interface HireState {
   hireCriteria: HireCriteria;

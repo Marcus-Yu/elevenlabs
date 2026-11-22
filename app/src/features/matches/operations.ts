@@ -2,7 +2,7 @@ import { HttpError } from "wasp/server";
 import type { ConfirmCriteriaChange, CreateHireGoal, GetHireRuns, RejectMatchWithReason, RunHireShortlist } from "wasp/server/operations";
 import type { ActionRequest, GatewayResult } from "../../shared/contracts";
 import { gateway } from "../../server/gateway";
-import type { CriteriaChange } from "./candidates";
+import type { CriteriaChange, HireCriteriaInput } from "./candidates";
 import * as flow from "./hireFlow";
 
 // Wasp operations for the hiring flow (WP5, scope change 2026-11-22). Names agreed on the board so
@@ -36,7 +36,7 @@ async function run<T>(fn: () => Promise<T>): Promise<T> {
 }
 
 /** The approved criteria from person-3's /calibrate/criteria → a hire goal (PREPARE). */
-export const createHireGoal: CreateHireGoal<{ criteria: unknown }, { goalId: string }> = (args, context) =>
+export const createHireGoal: CreateHireGoal<{ criteria: HireCriteriaInput }, { goalId: string }> = (args, context) =>
   run(() => flow.createHireGoal(requireUser(context), args?.criteria, depsFor(context)));
 
 /** Research the shortlist for a hire goal and rank it with cited sources. */
@@ -48,7 +48,7 @@ export const rejectMatchWithReason: RejectMatchWithReason<{ matchId: string; rea
   run(() => flow.rejectMatchWithReason(requireUser(context), args.matchId, args.reason, depsFor(context)));
 
 /** preference_confirm: apply the proposed change and return the rerun. */
-export const confirmCriteriaChange: ConfirmCriteriaChange<{ goalId: string; proposedChange: unknown }, flow.HireShortlistEntry[]> = (args, context) =>
+export const confirmCriteriaChange: ConfirmCriteriaChange<{ goalId: string; proposedChange: CriteriaChange }, flow.HireShortlistEntry[]> = (args, context) =>
   run(() => flow.confirmCriteriaChange(requireUser(context), args.goalId, args.proposedChange, depsFor(context)));
 
 /** Both runs with their evaluation (fit@k before and after), for the comparison view and TraceRoot. */
