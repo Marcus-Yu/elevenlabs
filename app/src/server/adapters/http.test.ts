@@ -38,7 +38,7 @@ describe("http adapter", () => {
 
     await expect(attempt).rejects.toBeInstanceOf(FixtureMissError);
     await expect(attempt).rejects.toThrow(
-      /Replay miss for fiber POST https:\/\/api\.example\.test\/v1\/company-search.*no fixture at .*fiber\/[0-9a-f]{16}\.json.*ADAPTER_MODE=record/,
+      /Replay miss for fiber POST https:\/\/api\.example\.test\/v1\/company-search.*no fixture at .*fiber[\\/][0-9a-f]{16}\.json.*ADAPTER_MODE=record/,
     );
     await expect(attempt).rejects.not.toThrow(SECRET);
     expect(fetch).not.toHaveBeenCalled();
@@ -68,6 +68,9 @@ describe("http adapter", () => {
     const replayed = await replayer.request({ ...companySearch, body: { ...(companySearch.body as object), apiKey: "a-different-key" } });
 
     expect(replayed).toMatchObject({ status: 200, ok: true, mode: "replay", body: recorded.body });
+    // Replay reports when the data was recorded, not when it was replayed.
+    expect(replayed.recordedAt).toBe(JSON.parse(onDisk).recordedAt);
+    expect(recorded.recordedAt).toBe(JSON.parse(onDisk).recordedAt);
     expect(offlineFetch).not.toHaveBeenCalled();
   });
 });

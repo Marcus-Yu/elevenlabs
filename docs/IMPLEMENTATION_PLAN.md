@@ -344,26 +344,37 @@ Watcher API (bearer token scoped to one goal, hash stored on `Goal`):
 
 `gateway.execute(req)` validates the payload, evaluates rules in order, writes an `ActionLog` row for every outcome, opens a TraceRoot span, then runs the handler when allowed. Unknown action types are denied. Each rule is one pure function in `src/server/gateway/rules/` with its own unit test.
 
+Rules run in this order. Every deny rule comes before every approval rule. `card_fields` rewrites a `card.publish` payload before the rules run. When an approved `Approval` executes, only the deny rules run again. Rules marked *(added)* came from the team notes or the 2026-11-22 scope change.
+
 | Id | Rule | Outcome |
 |---|---|---|
-| `schema` | Payload fails validation | deny |
-| `ownership` | Goal missing, inactive or not owned by `userId` | deny |
+| `schema` | Payload fails the handler's schema or the gateway's core payload contract (`gateway/payloads.ts`) | deny |
+| `unknown_action` | Action type outside §7, or no handler registered | deny |
+| `ownership` | Goal missing, inactive or not owned by `userId`; a goal-bound action without `goalId`; a draft or match from another goal | deny |
 | `consent` | `meeting.listen`, `call.place`, `card.publish`, `card.reveal`, or any model call using profile facts lacks the matching active `Consent` | deny |
 | `call_target` | `call.place` to a number other than the user's verified phone | deny |
 | `individuals` | `contact.search` on a goal whose kind seeks private individuals (intern) | deny, with a pointer to opt-in channels (`jobs.search`, share cards) |
+| `opt_in_only` *(added)* | `contact.reveal_email` or `outreach.send` on a `hire` goal, or to a person found by research for a hire goal (a `Contact` on a hire-goal match, by email, LinkedIn URL, or name and company domain) | deny; people are contacted only through a double-opt-in `card.reveal` introduction |
 | `taint` | `tainted` request for anything except read actions, `match.submit`, `draft.create` | deny |
-| `need_to_know` | `draft.create` or a model call is given a `ProfileFact` whose `allowedPurposes` excludes this purpose | deny |
-| `private_leak` | Outgoing text contains the value of a `private` fact (normalised match, including number formats) | deny |
+| `need_to_know` | `draft.create` or a model call is given a `ProfileFact` whose `allowedPurposes` excludes this purpose. The purpose is the action type, or `model:<name>` for model calls outside the gateway | deny |
+| `private_leak` | Outgoing text contains the value of a `private` fact (normalised match, including number formats) | deny; the log row omits the text |
+| `provider_minimum` *(added)* | A payload bound for a provider (`company.search`, `jobs.search`, `contact.search`, `contact.reveal_email`, `web.read`) or any watcher request contains the value of a `private` fact, or of a fact whose `allowedPurposes` excludes that action | deny |
 | `opt_out` | Recipient or domain is in `OptOut` | deny |
 | `personalization` | `outreach.send` whose draft has no `personalizationRefs`, or whose refs do not belong to that match | deny |
-| `daily_cap` | Sends for this goal today ≥ `rules.dailyCap` (default 10) | deny |
+| `daily_cap` | Allowed sends for this goal since 00:00 UTC ≥ `rules.dailyCap` (default 10) | deny |
 | `autonomy_watch` | `outreach.send` or `contact.reveal_email` on a WATCH goal | deny |
+| `selected_prospect` *(added)* | `contact.reveal_email` for a match whose status is not `APPROVED` | deny |
 | `first_contact` | `outreach.send` to a recipient with no prior approved send | needs_approval |
 | `tainted_draft` | `outreach.send` whose draft cites web-sourced evidence | needs_approval |
 | `autonomy_prepare` | `outreach.send` on a PREPARE goal | needs_approval |
 | `introductions` | `card.reveal` | needs_approval from each side separately |
-| `sandbox` | `OUTREACH_MODE=sandbox` | allow, with recipient rewritten and logged |
+| `preference_confirm` *(added)* | `memory.write` of kind `preference` whose actor is not `user` | needs_approval; on approval the write runs with the user as actor |
+| `paid_reveal` *(added)* | `contact.reveal_email` on PREPARE and ACT goals (each reveal is billed; WATCH is already denied) | needs_approval |
+| `card_fields` *(added)* | `card.publish`: drop each field built from a fact that is private or not allowed for matching (`allowedPurposes` has neither `matching` nor `card.publish`), or whose text contains such a fact's value. Fields declare their facts in `fieldFacts` | allow with the stripped fields named in the log; deny if no field is left |
+| `sandbox` | `OUTREACH_MODE=sandbox` (anything other than `live`) | allow, with recipient rewritten and logged; deny if `OUTREACH_REDIRECT_TO` is unset |
 | `default` | Read actions and anything that passed the rules above | allow |
+
+Approval lifecycle ids: `payload_hash` (the stored payload, user or goal changed after the approval was created), `approval_state` (already decided), `approval_expired` (pending for more than 24 hours), `user_denied` (the user said no), and `ownership` (the approval belongs to someone else, or doesn't exist).
 
 A model-based check may flag possible private details in a draft. Its only effect is to add a warning and force `needs_approval`. It can never turn a deny into an allow.
 
